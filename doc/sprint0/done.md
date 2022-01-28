@@ -1,0 +1,1 @@
+We consider something “done” when a feature accomplishes the goal we sought out for. More specifically, a feature is finished if it can accomplish the “so” portion of the user story. As long as the application works most of the time, we consider it done. However, bugs that arise from this feature should not be “application breaking” or introduce a security flaw.
