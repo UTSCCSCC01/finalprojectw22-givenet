@@ -1,21 +1,16 @@
 import express from "express";
+import dbInit from "./database/init";
 
 const app: express.Application = express();
 const PORT = 8000;
 
-// Test (for sprint1)
-const testRoute: express.Router = require("./routes/Test.ts");
-app.use("/test", testRoute);
+/* Server Setup */
 
-// Connect to the database
-const db = require("./database");
-db.authenticate()
-	.then(() => {
-		console.log("Connected to database");
-	})
-	.catch((error: Error) =>
-		console.log("Error connecting to database", error)
-	);
-// db.sync({ force: true });
+/* Intialize the database */
+dbInit();
+
+/* Routes */
+const accountRoute = require("./routes/account.ts");
+app.use("/account", accountRoute);
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
