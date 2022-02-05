@@ -1,12 +1,19 @@
 import express from "express";
 
-const Test = require("../model/TestModel.ts");
+import {
+	create,
+	update,
+	getById,
+	getAll,
+	getByUsername,
+	deleteById,
+} from "../database/dal/account";
+
 module.exports = {
 	get: async (req: express.Request, res: express.Response) => {
 		res.send("Hello");
 	},
 	post: async (req: express.Request, res: express.Response) => {
-		await Test.create({ firstAttribute: 1234 });
 		res.send(200);
 	},
 };
