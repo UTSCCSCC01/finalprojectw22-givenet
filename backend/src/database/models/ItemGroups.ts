@@ -1,48 +1,42 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 
-interface AccountAttributes {
-	acc_id: number;
-	username: string;
-	password: string;
-	type: number;
+interface GroupAttributes {
+	item_group: number;
+	desc: string;
+	name: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface AccountInput extends AccountAttributes {}
-export interface AccountOutput extends Required<AccountAttributes> {}
+export interface GroupInput extends GroupAttributes {}
+export interface GroupOutput extends Required<GroupAttributes> {}
 
-class Account
-	extends Model<AccountAttributes, AccountInput>
-	implements AccountAttributes
+class Group
+	extends Model<GroupAttributes, GroupInput>
+	implements GroupAttributes
 {
-	public acc_id!: number;
-	public username!: string;
-	public password!: string;
-	public type!: number;
+	public item_group!: number;
+	public desc!: string;
+	public name!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Account.init(
+Group.init(
 	{
-		acc_id: {
+		item_group: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		username: {
-			type: DataTypes.STRING,
+		desc: {
+			type: DataTypes.INTEGER,
 			unique: true,
 			allowNull: false,
 		},
-		password: {
+		name: {
 			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		type: {
-			type: DataTypes.INTEGER,
 		},
 		createdAt: {
 			type: "TIMESTAMP",
@@ -59,4 +53,4 @@ Account.init(
 	}
 );
 
-export default Account;
+export default Group;

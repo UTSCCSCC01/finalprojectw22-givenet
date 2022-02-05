@@ -1,48 +1,58 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 
-interface AccountAttributes {
+interface UserAttributes {
 	acc_id: number;
-	username: string;
-	password: string;
-	type: number;
+	name: string;
+	location: string;
+	hours: string;
+	phone: string;
+	email: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface AccountInput extends AccountAttributes {}
-export interface AccountOutput extends Required<AccountAttributes> {}
+export interface UserInput extends UserAttributes {}
+export interface UserOutput extends Required<UserAttributes> {}
 
-class Account
-	extends Model<AccountAttributes, AccountInput>
-	implements AccountAttributes
+class User
+	extends Model<UserAttributes, UserInput>
+	implements UserAttributes
 {
 	public acc_id!: number;
-	public username!: string;
-	public password!: string;
-	public type!: number;
+	public name!: string;
+	public location!: string;
+	public hours!: string;
+	public phone!: string;
+	public email!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Account.init(
+User.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		username: {
+		name: {
 			type: DataTypes.STRING,
 			unique: true,
 			allowNull: false,
 		},
-		password: {
+		location: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		type: {
-			type: DataTypes.INTEGER,
+		hours: {
+			type: DataTypes.STRING,
+		},
+		phone: {
+			type: DataTypes.STRING,
+		},
+		email: {
+			type: DataTypes.STRING,
 		},
 		createdAt: {
 			type: "TIMESTAMP",
@@ -59,4 +69,4 @@ Account.init(
 	}
 );
 
-export default Account;
+export default User;
