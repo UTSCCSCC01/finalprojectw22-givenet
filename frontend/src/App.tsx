@@ -1,13 +1,49 @@
+
 async function test() {
 	await fetch("/test", { method: "POST" });
 }
 
-async function fetchDonorData() {
+async function fetchUserData() {
 	var accID = (document.getElementById("AccID") as HTMLInputElement).value;
 
-	console.log(accID);
-	// await fetch("/test", { method: "POST" });
+	const response = await fetch("/user/" + String(accID) + "/profile", { method: "GET" });
+	const result = await response.json();
+
+	console.log(result);
+	(document.getElementById("Name") as HTMLInputElement).value = result.name;
+	(document.getElementById("Location") as HTMLInputElement).value = result.location;
+	(document.getElementById("HoO") as HTMLInputElement).value = result.hours;
+	(document.getElementById("Phone") as HTMLInputElement).value = result.phone;
+	(document.getElementById("Email") as HTMLInputElement).value = result.email;
+
 }
+
+
+async function updateUserData() {
+
+	const newData = {
+		name: (document.getElementById("Name") as HTMLInputElement).value,
+		location: (document.getElementById("Location") as HTMLInputElement).value,
+		hours: (document.getElementById("HoO") as HTMLInputElement).value,
+		email: (document.getElementById("Phone") as HTMLInputElement).value,
+		phone: (document.getElementById("Email") as HTMLInputElement).value
+	};
+
+	
+	const options = {
+		method: 'POST',
+    	query: JSON.stringify( newData )  
+	}; 
+
+
+	console.log(options);
+
+	var accID = (document.getElementById("AccID") as HTMLInputElement).value;
+	const response = await fetch("/user/" + String(accID) + "/profile", options);
+
+	//console.log(response)
+}
+
 
 function App() {
 	return (
@@ -18,29 +54,27 @@ function App() {
 			<hr />
 			<label htmlFor="AccID">AccID: </label>
 			<input type="text" name="AccID" id="AccID" ></input> <br /> <br />
-			<button onClick={fetchDonorData}>Populate Data</button> <br /><br />
+			<button onClick={fetchUserData}>Populate Data</button> <br /><br />
 			<hr />
 			<form>
-				<label htmlFor="Name">Name: </label>
-				<input type="text" name="Name"></input> <br /><br />
+				<label htmlFor="name">Name: </label>
+				<input type="text" name="name" id="Name"></input> <br /><br />
 				
-				<label htmlFor="Location">Location: </label>
-				<input type="text" name="Location"></input> <br /><br />
+				<label htmlFor="location">Location: </label>
+				<input type="text" name="location" id="Location"></input> <br /><br />
 
-				<label htmlFor="HoO">HoO: </label>
-				<input type="text" name="HoO"></input> <br /><br />
+				<label htmlFor="hours">HoO: </label>
+				<input type="text" name="hours" id="HoO"></input> <br /><br />
 
-				<label htmlFor="Phone">Phone: </label>
-				<input type="text" name="Phone"></input> <br /><br />
+				<label htmlFor="phone">Phone: </label>
+				<input type="text" name="phone" id="Phone"></input> <br /><br />
 
-				<label htmlFor="Email">Email: </label>
-				<input type="email" name="Email"></input> <br /><br />
+				<label htmlFor="email">Email: </label>
+				<input type="email" name="email" id="Email"></input> <br /><br />
 
-				<label htmlFor="Description">Description: </label>
-				<input type="text" name="Description"></input> <br /><br />
-
-				<input type="submit" name="UpdateData" value="Submit Changes" />
 			</form>
+			<button onClick={updateUserData}>Submit Changes</button> 
+			
 		</div>
 	);
 }

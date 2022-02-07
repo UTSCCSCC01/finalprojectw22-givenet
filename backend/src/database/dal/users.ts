@@ -13,7 +13,7 @@ export const update = async (
 ): Promise<UserInput> => {
 	const user = await User.findByPk(id);
 	if (!User) {
-		throw new Error(`User intsance with acc_id ${id} not found`);
+		throw new Error(`User instance with acc_id ${id} not found`);
 	}
 	const updatedUser = await (user as User).update(payload);
 	return updatedUser;
@@ -22,7 +22,7 @@ export const update = async (
 export const getById = async (id: number): Promise<UserOutput> => {
 	const user = await User.findByPk(id);
 	if (!user) {
-		throw new Error(`User intance with acc_id ${id} not found`);
+		throw new Error(`User instance with acc_id ${id} not found`);
 	}
 	return user;
 };
