@@ -49,21 +49,17 @@ function App() {
 	return (
 		<div className="App">
 			<header className="App-header">
-        /*
-				{/* <SignUpPage /> */}
-				<TokenContext.Provider value={{ tokenState, setTokenState }}>
-					<LoginPage />
-				</TokenContext.Provider>
-         */
+				
 			</header>
        
-				<button onClick={test}>Test</button> 
-			</header> <br />
+			<br />
 			<hr />
+			<h1>FETCH ACC DATA</h1>
 			<label htmlFor="AccID">AccID: </label>
 			<input type="text" name="AccID" id="AccID" ></input> <br /> <br />
 			<button onClick={fetchUserData}>Populate Data</button> <br /><br />
 			<hr />
+			<h1>UPDATE ACC DATA</h1>
 			<form>
 				<label htmlFor="name">Name: </label>
 				<input type="text" name="name" id="Name"></input> <br /><br />
@@ -82,6 +78,11 @@ function App() {
 
 			</form>
 			<button onClick={updateUserData}>Submit Changes</button> 
+
+			<SignUpPage />
+			<TokenContext.Provider value={{ tokenState, setTokenState }}>
+				<LoginPage />
+			</TokenContext.Provider>
 			
 		</div>
 	);
