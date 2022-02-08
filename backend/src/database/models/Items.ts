@@ -1,10 +1,10 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
+import ItemGroups from './ItemGroups';
 
 interface ItemAttributes {
 	item_id: number;
 	name: string;
-	group: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -18,10 +18,18 @@ class Item
 {
 	public item_id!: number;
 	public name!: string;
-	public group!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
+
+// Citation: https://sequelize.org/master/manual/assocs.html
+ItemGroups.hasOne(Item, {
+	foreignKey: {
+		name: 'groupID',
+		allowNull: false
+	}
+});
+Item.belongsTo(ItemGroups);
 
 Item.init(
 	{
@@ -33,10 +41,6 @@ Item.init(
 		name: {
 			type: DataTypes.STRING,
 			unique: true,
-			allowNull: false,
-		},
-		group: {
-			type: DataTypes.STRING,
 			allowNull: false,
 		},
 		createdAt: {
