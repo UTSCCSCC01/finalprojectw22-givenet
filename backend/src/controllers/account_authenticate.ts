@@ -65,6 +65,7 @@ module.exports = {
 			location: req.body.location,
 			hours: req.body.hours,
 			email: req.body.email,
+			phone: req.body.phone,
 		};
 		const newUser = await createUser(userPayload as UserInput);
 		if (!newUser) {
