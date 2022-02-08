@@ -31,17 +31,15 @@ async function updateUserData() {
 
 	
 	const options = {
+		headers: {'Content-Type': 'application/json'},
 		method: 'POST',
-    	query: JSON.stringify( newData )  
+    	body: JSON.stringify(newData),
 	}; 
-
-
-	console.log(options);
 
 	var accID = (document.getElementById("AccID") as HTMLInputElement).value;
 	const response = await fetch("/user/" + String(accID) + "/profile", options);
 
-	//console.log(response)
+	console.log(response)
 }
 
 

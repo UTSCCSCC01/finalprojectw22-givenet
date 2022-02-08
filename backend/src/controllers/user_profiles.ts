@@ -1,6 +1,8 @@
 import express from "express";
 import user from "../database/models/Users"
 
+
+
 import {
 	create,
 	update,
@@ -16,21 +18,19 @@ module.exports = {
 
 		fetched.then(
 			value => {res.send(value)}
-		)
-		
+		)		
 	},
 	post: async (req: express.Request, res: express.Response) => {
 		let id = Number(req.params.id);
 
-		let queried = req.query;
-		
+		let queried = req.body;
 		console.log(queried);
 
-		/*queried['updatedAt'] = Date.toString();
+		queried['updatedAt'] = Date.toString();
 		let updated = update(id, queried);
 
 		updated.then(
 			value => {res.send(value)}
-		) */
+		)
 	},
 };
