@@ -40,7 +40,10 @@ export default function LoginForm({}: Props) {
 	};
 
 	return (
-		<div>
+		<body>
+        <div className='LoginPage'></div>
+        <div className="Container">
+            <div className="Input">
 			<input
 				type="text"
 				name="username"
@@ -55,7 +58,15 @@ export default function LoginForm({}: Props) {
 				value={formState.password}
 				onChange={handleFormStateChange}
 			/>
-			<button onClick={() => handle_login(formState)}>log in</button>
+			
+			<div className='Buttons'>
+				<button onClick={() => handle_login(formState)}>log in</button>
+                <label>
+                    <input type="checkbox" name="remember"/>Remember me
+                </label>
+            </div>
 		</div>
+		</div>
+		</body>
 	);
 }
