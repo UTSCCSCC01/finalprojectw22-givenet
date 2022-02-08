@@ -1,12 +1,18 @@
-async function test() {
-	await fetch("/test", { method: "POST" });
-}
+import { useState } from "react";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import { TokenContext } from "./TokenContext";
 
 function App() {
+	const [tokenState, setTokenState] = useState("");
+
 	return (
 		<div className="App">
 			<header className="App-header">
-				<button onClick={test}>Test</button>
+				{/* <SignUpPage /> */}
+				<TokenContext.Provider value={{ tokenState, setTokenState }}>
+					<LoginPage />
+				</TokenContext.Provider>
 			</header>
 		</div>
 	);

@@ -1,10 +1,8 @@
-import { Op } from "sequelize";
 import Account from "../models/Account";
 import { AccountInput, AccountOutput } from "../models/Account";
 
 export const create = async (payload: AccountInput): Promise<AccountOutput> => {
-	const account = await Account.create(payload);
-	return account;
+	return await Account.create(payload);
 };
 
 export const update = async (
@@ -29,10 +27,10 @@ export const getById = async (id: number): Promise<AccountOutput> => {
 
 export const getByUsername = async (
 	username: string
-): Promise<AccountOutput> => {
+): Promise<AccountOutput | null> => {
 	const account = await Account.findOne({ where: { username: username } });
 	if (!account) {
-		throw new Error(`Account instance with username ${username} not found`);
+		return null;
 	}
 	return account;
 };
