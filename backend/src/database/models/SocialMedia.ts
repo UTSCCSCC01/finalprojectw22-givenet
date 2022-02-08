@@ -1,48 +1,50 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 
-interface AccountAttributes {
+interface SocialAttributes {
 	acc_id: number;
-	username: string;
-	password: string;
-	type: number;
+	website: string;
+	twitter: string;
+	instagram: string;
+	facebook: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface AccountInput extends AccountAttributes {}
-export interface AccountOutput extends Required<AccountAttributes> {}
+export interface SocialInput extends SocialAttributes {}
+export interface SocialOutput extends Required<SocialAttributes> {}
 
-class Account
-	extends Model<AccountAttributes, AccountInput>
-	implements AccountAttributes
+class Social
+	extends Model<SocialAttributes, SocialInput>
+	implements SocialAttributes
 {
 	public acc_id!: number;
-	public username!: string;
-	public password!: string;
-	public type!: number;
+	public website!: string;
+	public twitter!: string;
+	public instagram!: string;
+	public facebook!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Account.init(
+Social.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		username: {
+		website: {
 			type: DataTypes.STRING,
-			unique: true,
-			allowNull: false,
 		},
-		password: {
+		twitter: {
 			type: DataTypes.STRING,
-			allowNull: false,
 		},
-		type: {
-			type: DataTypes.INTEGER,
+		instagram: {
+			type: DataTypes.STRING,
+		},
+		facebook: {
+			type: DataTypes.STRING,
 		},
 		createdAt: {
 			type: "TIMESTAMP",
@@ -59,4 +61,4 @@ Account.init(
 	}
 );
 
-export default Account;
+export default Social;

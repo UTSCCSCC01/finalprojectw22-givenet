@@ -1,48 +1,37 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 
-interface AccountAttributes {
+interface WantedAttributes {
 	acc_id: number;
-	username: string;
-	password: string;
-	type: number;
+	items: Array<number>;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface AccountInput extends AccountAttributes {}
-export interface AccountOutput extends Required<AccountAttributes> {}
+export interface WantedInput extends WantedAttributes {}
+export interface WantedOutput extends Required<WantedAttributes> {}
 
-class Account
-	extends Model<AccountAttributes, AccountInput>
-	implements AccountAttributes
+class Wanted
+	extends Model<WantedAttributes, WantedInput>
+	implements WantedAttributes
 {
 	public acc_id!: number;
-	public username!: string;
-	public password!: string;
-	public type!: number;
+	public items!: Array<number>;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Account.init(
+Wanted.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		username: {
-			type: DataTypes.STRING,
+		items: {
+			type: DataTypes.ARRAY(DataTypes.INTEGER),
 			unique: true,
 			allowNull: false,
-		},
-		password: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		type: {
-			type: DataTypes.INTEGER,
 		},
 		createdAt: {
 			type: "TIMESTAMP",
@@ -59,4 +48,4 @@ Account.init(
 	}
 );
 
-export default Account;
+export default Wanted;

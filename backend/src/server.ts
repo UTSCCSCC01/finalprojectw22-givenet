@@ -3,8 +3,12 @@ import dbInit from "./database/init";
 import expressSession from "express-session";
 import jwt from "jsonwebtoken";
 
+const bodyParser = require("body-parser");
 const app: express.Application = express();
 const PORT = 8000;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 /* Server Setup */
 app.use(express.json());
@@ -41,10 +45,14 @@ const authenticateToken = (
 
 /* Routes */
 const accountRoute = require("./routes/account.ts");
+const userRoute = require("./routes/user.ts");
+
 app.use("/account", accountRoute);
+app.use("/user", userRoute);
 
 app.get("/testlogin", authenticateToken, async (req, res) => {
 	res.send(200);
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
