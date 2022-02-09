@@ -1,7 +1,4 @@
 import express from "express";
-import user from "../database/models/Users"
-
-
 
 import {
 	create,
@@ -14,11 +11,15 @@ module.exports = {
 	get: async (req: express.Request, res: express.Response) => {
 		let id = Number(req.params.id);
 
-		let fetched = getById(id);
+		let fetched = await getById(id);
 
-		fetched.then(
-			value => {res.send(value)}
-		)		
+		if (fetched) {
+			res.send(fetched)
+		}
+		else {
+			res.send(412)
+		}
+		
 	},
 	post: async (req: express.Request, res: express.Response) => {
 		let id = Number(req.params.id);
@@ -29,8 +30,11 @@ module.exports = {
 		queried['updatedAt'] = Date.toString();
 		let updated = update(id, queried);
 
-		updated.then(
-			value => {res.send(value)}
-		)
+		if (updated) {
+			res.send(updated)
+		}
+		else {
+			res.send(413)
+		}
 	},
 };

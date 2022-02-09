@@ -41,7 +41,10 @@ const authenticateToken = (
 
 /* Routes */
 const accountRoute = require("./routes/account.ts");
+const userRoute = require("./routes/user.ts");
+
 app.use("/account", accountRoute);
+app.use("/user", userRoute);
 
 app.get("/testlogin", authenticateToken, async (req, res) => {
 	res.send(200);
