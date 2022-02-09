@@ -2,7 +2,7 @@ import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 
 interface GroupAttributes {
-	item_group: number;
+	item_group_id: number;
 	desc: string;
 	name: string;
 	createdAt: Date;
@@ -16,7 +16,7 @@ class Group
 	extends Model<GroupAttributes, GroupInput>
 	implements GroupAttributes
 {
-	public item_group!: number;
+	public item_group_id!: number;
 	public desc!: string;
 	public name!: string;
 	public createdAt!: Date;
@@ -25,7 +25,7 @@ class Group
 
 Group.init(
 	{
-		item_group: {
+		item_group_id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,

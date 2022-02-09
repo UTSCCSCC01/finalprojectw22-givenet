@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import { AccountInput } from "../models/Account";
 import Items from "../models/Items";
-import { ItemInput, ItemOutput } from "../models/Items";
+import Items, { ItemInput, ItemOutput } from "../models/Items";
 
 export const create = async (payload: ItemInput): Promise<ItemOutput> => {
     const item = await Items.create(payload);
@@ -26,4 +26,15 @@ export const getByItemId = async (id: number): Promise<ItemOutput> => {
 		throw new Error(`Item instance with itemID ${id} not found`);
 	}
 	return item;
+};
+
+export const deleteByItemId = async (id: number): Promise<boolean> => {
+    const itemToDelete = await Items.destroy({
+        where: {item_id: id},
+    });
+    return !!itemToDelete;
+};
+
+export const getAll = async (): Promise<ItemOutput[]> => {
+    return await Items.findAll();
 };

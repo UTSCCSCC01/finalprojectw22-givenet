@@ -3,9 +3,15 @@ import { Router } from "express";
 
 const router: Router = Router();
 
-const authenticateController = require("../controllers/account_authenticate.ts");
+const itemsController = require("../controllers/ItemsController.ts");
 
-router.get("/authenticate", authenticateController.get);
-router.post("/authenticate", authenticateController.post);
+// Create a new item tag
+router.post("/item", itemsController.post);
+
+// Update an item tag
+router.put("/item", itemsController.put);
+
+// Remove an item tag
+router.delete("/item", itemsController.delete);
 
 module.exports = router;
