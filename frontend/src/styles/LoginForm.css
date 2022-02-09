@@ -1,38 +1,100 @@
-*:after{
-    padding:0;
-    margin:0;
-    box-sizing:border-box;
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow&display=swap');
+
+.App {
+    height: 100%;
 }
-body{
-    background-color: black;
+
+html {
+    height: 100%;
 }
-.Container{
-    height: 600px;
-    width: 400px;
-    position: absolute;
-    transform:translate(-50%,-50%);
-    top: 50%;
-    left: 50%;
-    border-radius: 20px;
-    border: 5px, solid gray;
-    background-color: rgb(82, 82, 82);
-    color:whitesmoke;
+
+#root {
+    height: 100%;
 }
-.Input{
-    height: 30px;
-    width: 300px;
-    position: relative;
+
+#subrootdiv {
+    height: 45%;
+    min-height:250px;
+    margin-top: 20%;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:100%;
+    color: #fff;
+    background: #ffe259;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ffa751, #ffe259);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ffa751, #ffe259); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    width: 450px;
+    height: 100%;
+    padding: 20px;
+    background-color: white;
+    color: black;
+}
+
+#formInputs {
+    display: flex;
+    justify-content:center;
+}
+
+#prompttext {
+    font-family: Archivo Narrow, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 48px;
+    line-height: 4rem;
+
+    color: #000000;
+}
+
+label {
     text-align: center;
-    transform:translate(-50%,-50%);
-    top: 50%;
-    left: 50%;
 }
-.Input input[type="text"]{
-    width:200px;
+
+.form {
+    padding: 25px 25px 0;
+    display: flex;
+    background-color: transparent;
+    flex-direction: column;
 }
-.Buttons{
-    position: relative;
-    transform:translate(-50%,-50%);
-    top: 60%;
-    left: 80%;
+
+.textinput{
+    margin-bottom: 2%;
+    width: 70%;
+    align-self: center;
+}
+
+.hidden{
+    border: 0;
+    clip: rect(0,0,0,0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+#loginbtn {
+    width: 40%;
+    height: 2rem;
+    align-self: center;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
 }

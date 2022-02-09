@@ -13,16 +13,20 @@ type form = {
 	type: boolean;
 };
 
+
 export default function SignUpForm({}: Props) {
+	function isCharity(item:String) {
+		if (item ==="type") {    return "Are you a charity?";  }}
+	
 	let formItems = [
 		"username",
 		"password",
 		"name",
-		"type",
 		"location",
 		"hours",
 		"phone",
 		"email",
+		"type",
 	];
 	const [formState, setFormState] = useState<form>({
 		username: "",
@@ -69,23 +73,32 @@ export default function SignUpForm({}: Props) {
 	};
 
 	return (
-		<div>
-			<h1>SignUp</h1>
-			<form action="" onSubmit={(e) => e.preventDefault()}>
+		<div className="container">
+			<h1>GiveNet</h1>
+			<h2>Sign Up</h2>
+			<form id="signupform" action="" onSubmit={(e) => e.preventDefault()}>
+
 				{formItems.map((item: string) => (
+					<div id="formInputs">
+				
+					<label>{isCharity(item)}</label>
 					<input
-						placeholder={item}
+						placeholder={item.charAt(0).toUpperCase() + item.slice(1)}
 						name={item}
 						type={getInputType(item)}
 						value={formState[item as keyof form].toString()}
-						checked={item === "type" ? formState.type : false}
 						onChange={handleFormStateChange}
+						checked={item === "type" ? formState.type : false }
+						required
 					/>
+					</div>
 				))}
-				<button type="submit" onClick={() => handle_signup(formState)}>
-					submit
+				<button id="signupbtn" type="submit" onClick={() => handle_signup(formState)}>
+					Sign Up
 				</button>
+				
 			</form>
 		</div>
+					
 	);
 }
