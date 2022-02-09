@@ -1,24 +1,24 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { ItemInput, ItemOutput } from "../database/models/Items";
+import { ItemGroupInput, ItemGroupOutput } from "../database/models/ItemGroups";
 
 import {
   create,
   update,
-  getByItemId,
+  getByItemGroupId,
   getAll,
-  deleteByItemId,
-} from "../database/dal/ItemsDAL";
+  deleteByItemGroupId,
+} from "../database/dal/ItemGroupsDAL";
 import { nextTick } from "process";
 
 module.exports = {
   post: async (req: express.Request, res: express.Response) => {
     try {
-      const itemInput: ItemInput = req.body;
-      const newItem: ItemOutput = await create(itemInput);
+      const itemGroupInput: ItemGroupInput = req.body;
+      const newItemGroup: ItemGroupOutput = await create(itemGroupInput);
       res.status(StatusCodes.CREATED);
-      res.json(newItem);
+      res.json(newItemGroup);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -27,9 +27,9 @@ module.exports = {
   put: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const updatedItem: ItemOutput = await update(id, req.body);
+      const updatedItemGroup: ItemGroupOutput = await update(id, req.body);
       res.status(StatusCodes.OK);
-      res.json(updatedItem);
+      res.json(updatedItemGroup);
     } catch (error) {
       console.log(error);
       res.send(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -38,8 +38,8 @@ module.exports = {
   delete: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const itemIsDeleted: boolean = await deleteByItemId(id);
-      if (itemIsDeleted) {
+      const itemGroupIsDeleted: boolean = await deleteByItemGroupId(id);
+      if (itemGroupIsDeleted) {
         res.sendStatus(StatusCodes.OK);
       } else {
         res.sendStatus(StatusCodes.NOT_FOUND);

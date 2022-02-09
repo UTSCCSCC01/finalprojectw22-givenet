@@ -9,9 +9,9 @@ const itemsController = require("../controllers/ItemsController.ts");
 router.post("/item", itemsController.post);
 
 // Update an item tag
-router.put("/item", itemsController.put);
+router.put("/item/:id", itemsController.put);
 
 // Remove an item tag
-router.delete("/item", itemsController.delete);
+router.delete("/item/:id", itemsController.delete);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 import express from "express";
+import { StatusCodes } from "http-status-codes";
 
 import {
 	create,
@@ -14,6 +15,6 @@ module.exports = {
 		res.send("Hello");
 	},
 	post: async (req: express.Request, res: express.Response) => {
-		res.send(200);
+		res.send(StatusCodes.CREATED);
 	},
 };
