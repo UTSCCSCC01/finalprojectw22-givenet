@@ -1,0 +1,31 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+}
+
+.photo {
+    height: 250px;
+    width: 350px;
+}
+
+.background {
+    background-color:black;
+    color:whitesmoke;
+}
+
+.menu_background {
+    background-color:rgb(32, 32, 32);
+    color:whitesmoke;
+}
+
+.icon_arrow {
+    background-color:whitesmoke;
+    color: whitesmoke;
+}
+
+.toolbar {
+    background-color:rgb(32, 32, 32);
+    color:whitesmoke;
+    max-width: 34;
+}
