@@ -14,4 +14,10 @@ router.put("/item/:id", itemsController.put);
 // Remove an item tag
 router.delete("/item/:id", itemsController.delete);
 
+// Get an item group by id
+router.get("/item/:id", itemsController.get);
+
+// Return all item groups
+router.get("/allitems", itemsController.getAll);
+
 module.exports = router;

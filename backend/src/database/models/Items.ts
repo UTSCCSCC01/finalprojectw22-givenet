@@ -1,4 +1,3 @@
-import { serializeUser } from "passport";
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 import ItemGroups from "./ItemGroups";
@@ -6,7 +5,7 @@ import ItemGroups from "./ItemGroups";
 interface ItemAttributes {
   item_id: number;
   name: string;
-  group_id: number;
+  group: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,7 +16,7 @@ export interface ItemOutput extends Required<ItemAttributes> {}
 class Items extends Model<ItemAttributes, ItemInput> implements ItemAttributes {
   public item_id!: number;
   public name!: string;
-  public group_id!: number;
+  public group!: number;
   public createdAt!: Date;
   public updatedAt!: Date;
 }
@@ -25,7 +24,7 @@ class Items extends Model<ItemAttributes, ItemInput> implements ItemAttributes {
 Items.init(
   {
     item_id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -33,6 +32,13 @@ Items.init(
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+    },
+    group: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "ItemGroups",
+        key: "item_group_id",
+      },
     },
     createdAt: {
       type: "TIMESTAMP",
@@ -42,29 +48,22 @@ Items.init(
       type: "TIMESTAMP",
       defaultValue: literal("CURRENT_TIMESTAMP"),
     },
-    group_id: {
-      type: DataTypes.NUMBER,
-      references: {
-        model: ItemGroups,
-        key: "item_group_id",
-      },
-    },
   },
   {
     // timestamps: true,
     sequelize: sequelizeConnection,
+    modelName: "Items",
   }
 );
 
 // Citation: https://sequelize.org/v3/docs/associations/
-
 /*
     Adds groupID to Item as a foreign key into ItemGroups
     (don't forget to add the reference in the init attributes definition)
 */
 Items.belongsTo(ItemGroups, {
   foreignKey: {
-    name: "group_id",
+    name: "group",
     allowNull: false,
   },
 });

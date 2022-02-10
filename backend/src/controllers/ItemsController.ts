@@ -2,6 +2,7 @@ import express from "express";
 import { StatusCodes } from "http-status-codes";
 
 import { ItemInput, ItemOutput } from "../database/models/Items";
+import Items from "../database/models/Items";
 
 import {
   create,
@@ -32,7 +33,7 @@ module.exports = {
       res.json(updatedItem);
     } catch (error) {
       console.log(error);
-      res.send(StatusCodes.INTERNAL_SERVER_ERROR);
+      res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
   delete: async (req: express.Request, res: express.Response) => {
@@ -46,7 +47,28 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
-      res.send(StatusCodes.INTERNAL_SERVER_ERROR);
+      res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
+  get: async (req: express.Request, res: express.Response) => {
+    const id: number = +req.params.id;
+    try {
+      const item: ItemOutput = await getByItemId(id);
+      res.status(StatusCodes.OK);
+      res.json(item);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(StatusCodes.NOT_FOUND);
+    }
+  },
+  getAll: async (req: express.Request, res: express.Response) => {
+    try {
+      const allItems: ItemOutput[] = await getAll();
+      res.status(StatusCodes.OK);
+      res.json(allItems);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
 };

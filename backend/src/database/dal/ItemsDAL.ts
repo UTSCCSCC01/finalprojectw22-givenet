@@ -13,7 +13,7 @@ export const update = async (
   if (!item) {
     throw new Error(`Item instance with itemID ${id} not found`);
   }
-  const updatedItem = await (item as Items).update(payload);
+  const updatedItem = await item.update(payload);
   return updatedItem;
 };
 

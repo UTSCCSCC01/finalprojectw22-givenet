@@ -50,6 +50,7 @@ ItemGroup.init(
   {
     // timestamps: true,
     sequelize: sequelizeConnection,
+    modelName: "ItemGroups",
   }
 );
 
