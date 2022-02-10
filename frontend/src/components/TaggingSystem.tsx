@@ -8,6 +8,11 @@ let tagItems = [
     "canned beans"
 ];
 
+let tagCategories = [
+    "canned meat",
+    "canned vegetables"
+];
+
 export default function TaggingSystem() {
     return (
         <div className="container">
@@ -19,6 +24,15 @@ export default function TaggingSystem() {
 
             <div id="tagview">
                 {tagItems.map((item: string) => (
+					<div className="tags">
+                        <label className="tagLabel">{item}</label>
+                        <button className="tagDel" /*onCheckpending*/>X</button>
+					</div>
+				))}
+            </div>
+
+            <div id="tagview">
+                {tagCategories.map((item: string) => (
 					<div className="tags">
                         <label className="tagLabel">{item}</label>
                         <button className="tagDel" /*onCheckpending*/>X</button>

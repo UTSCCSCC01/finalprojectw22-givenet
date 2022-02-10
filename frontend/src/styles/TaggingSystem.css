@@ -47,6 +47,10 @@ body{
     padding-right: 2%;
 }
 
+#tagview {
+    margin-bottom: 1em;
+}
+
 .tagLabel {
     font-family: 'Archivo Narrow', 'Courier New', Courier, monospace;
     width: min-content;
