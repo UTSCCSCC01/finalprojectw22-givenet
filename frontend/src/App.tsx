@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ProfilePage from "./ProfilePage";
 import { TokenContext } from "./TokenContext";
+import { Routes, Route, Link } from "react-router-dom";
 
 async function fetchUserData() {
 	var accID = (document.getElementById("AccID") as HTMLInputElement).value;
@@ -53,14 +54,22 @@ function App() {
 	return (
 		<div className="App">
 			<header className="App-header"></header>
-			<SignUpPage />
-			<TokenContext.Provider value={{ tokenState, setTokenState }}>
-				<LoginPage />
-			</TokenContext.Provider>
+			<Routes>
+			<Route path="/" element={<SignUpStuff />} />
+        <Route path="profile" element={<Profile />} />
+			</Routes>
+			
+		</div>
+	);
+}
 
-			<br />
-			<hr />
-			<h1>FETCH ACC DATA</h1>
+function SignUpStuff() {
+
+	const [tokenState, setTokenState] = useState("");
+
+	return (
+		<div>
+		<h1>FETCH ACC DATA</h1>
 			<label htmlFor="AccID">AccID: </label>
 			<input type="text" name="AccID" id="AccID"></input> <br /> <br />
 			<button onClick={fetchUserData}>Populate Data</button> <br />
@@ -88,11 +97,19 @@ function App() {
 			</form>
 			<button onClick={updateUserData}>Submit Changes</button>
 			
-			<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-			<ProfilePage />
+			<SignUpPage />
+			<TokenContext.Provider value={{ tokenState, setTokenState }}>
+				<LoginPage />
+			</TokenContext.Provider>
+
 			<button>Logout</button>
-		</div>
-	);
+			</div>
+	)
 }
 
+function Profile() {
+	return (
+		<ProfilePage />
+	)
+}
 export default App;
