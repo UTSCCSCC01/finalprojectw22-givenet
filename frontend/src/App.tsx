@@ -1,6 +1,7 @@
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import TaggingPage from "./pages/TaggingPage";
 import { TokenContext } from "./TokenContext";
 
 async function fetchUserData() {
@@ -78,7 +79,7 @@ function App() {
 
 			</form>
 			<button onClick={updateUserData}>Submit Changes</button> 
-
+			<TaggingPage />
 			<SignUpPage />
 			<TokenContext.Provider value={{ tokenState, setTokenState }}>
 				<LoginPage />
