@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow&display=swap');
 body {
     padding: 0;
     margin: 0;
     background-color: black;
+    font-family: Archivo Narrow, Arial, Helvetica, sans-serif;
+    font-family: Archivo Narrow, Arial, Helvetica, sans-serif;
 }
 
 .photo {
@@ -20,7 +23,7 @@ body {
 }
 
 .icon_arrow {
-    background-color:whitesmoke;
+    background-color: rgb(32, 32, 32);
     color: whitesmoke;
 }
 
@@ -29,3 +32,25 @@ body {
     color:whitesmoke;
     max-width: 34;
 }
+
+.changeinfo{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content:center;
+    font-size: large;
+    font-weight: 200;
+}
+.columnleft{
+    align-self: center;
+    flex-wrap:wrap;
+    width: 19.5%;
+    padding: 10px;
+}
+.columnright{
+    align-self: center;
+    flex-wrap:wrap;
+    width: 19.5%;
+    padding: 10px;
+}
+
