@@ -22,6 +22,10 @@ body{
     height: 1rem;
 }
 
+.addBtn:hover {
+    cursor: pointer;
+}
+
 #tagview {
     /* background-color: rgb(126, 10, 194); */
     background-color: grey;
@@ -55,6 +59,10 @@ body{
     color: white;
     border: none;
     border-radius: 5px;
+}
+
+.tagDel:hover {
+    cursor: pointer;
 }
 
 

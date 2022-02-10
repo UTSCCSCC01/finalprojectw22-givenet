@@ -112,3 +112,7 @@ input {
     background-color: black;
     color: white;
 }
+
+#signupbtn:hover {
+    cursor: pointer;
+}
