@@ -1,3 +1,7 @@
+import './pp_styles.css'
+
+async function test() {
+	await fetch("/test", { method: "POST" });
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -49,6 +53,10 @@ function App() {
 	const [tokenState, setTokenState] = useState("");
 
 	return (
+		<div>
+			<header className="App-header">
+				<button onClick={test}>Test</button>
+			</header>
 		<div className="App">
 			<header className="App-header"></header>
 			<br />
