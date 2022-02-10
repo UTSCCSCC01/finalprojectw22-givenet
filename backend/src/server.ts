@@ -50,4 +50,10 @@ app.get("/testlogin", authenticateToken, async (req, res) => {
 	res.send(200);
 });
 
+const itemsRoute = require("./routes/ItemsRoutes");
+app.use(itemsRoute);
+
+const itemGroupsRoute = require("./routes/ItemGroupsRoutes");
+app.use(itemGroupsRoute);
+
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

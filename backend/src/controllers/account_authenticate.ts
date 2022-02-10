@@ -1,4 +1,5 @@
 import express from "express";
+import { StatusCodes } from "http-status-codes";
 import { AccountInput, AccountOutput } from "../database/models/Account";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -31,7 +32,9 @@ module.exports = {
 			res.send(401);
 		}
 	},
-
+	post: async (req: express.Request, res: express.Response) => {
+		res.send(StatusCodes.CREATED);
+	},
 	// Signing up
 	postSignup: async (
 		req: express.Request,
