@@ -1,67 +1,90 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Narrow&display=swap");
 
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    padding: 0;
-    margin: 0;
-    background: #ffe259;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #ffa751, #ffe259);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #ffa751, #ffe259); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    font-family: Archivo Narrow, Arial, Helvetica, sans-serif;
-    font-family: Archivo Narrow, Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  background: #ffe259; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #ffa751,
+    #ffe259
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ffa751,
+    #ffe259
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  font-family: Archivo Narrow, Arial, Helvetica, sans-serif;
+  font-family: Archivo Narrow, Arial, Helvetica, sans-serif;
 }
 
 .photo {
-    height: 250px;
-    width: 350px;
-    border-radius: 25px;
+  height: 250px;
+  width: 350px;
+  border-radius: 25px;
 }
 
 .background {
-    background: #ffe259;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #ffa751, #ffe259);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #ffa751, #ffe259); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #ffe259; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #ffa751,
+    #ffe259
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ffa751,
+    #ffe259
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .menu_background {
-    background-color: white;
+  background-color: white;
 }
 
 .icon_arrow {
-    color: black;
-    background-color: white;
+  color: black;
+  background-color: white;
 }
 
 .toolbar {
-    background-color: white;
-    color:black;
-    max-width: 34;
+  background-color: white;
+  color: black;
+  max-width: 34;
 }
 
-.changeinfo{
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content:center;
-    font-size: large;
-    font-weight: 200;
+.changeinfo {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  font-size: large;
+  font-weight: 200;
 }
 
-.columnleft{
-    align-self: center;
-    flex-wrap:wrap;
-    width: 19.5%;
-    padding: 10px;
+.columnleft {
+  align-self: center;
+  flex-wrap: wrap;
+  width: 19.5%;
+  padding: 10px;
 }
 
-.columnright{
-    align-self: center;
-    flex-wrap:wrap;
-    width: 19.5%;
-    padding: 10px;
+.columnright {
+  align-self: center;
+  flex-wrap: wrap;
+  width: 19.5%;
+  padding: 10px;
 }
 
+.inputfield {
+  text-align: center;
+  margin-left: auto;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}

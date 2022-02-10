@@ -10,20 +10,38 @@ export default function ProfilePage(props) {
                 <img className="photo" src="https://food.fnr.sndimg.com/content/dam/images/food/plus/fullset/2021/08/05/0/FN_PAM_ANDERSON_BACON_WRAPPED_MEATLOAF_H_f_s4x3.jpg.rend.hgtvcom.616.462.suffix/1628171184383.jpeg"/>
                 <br/> <br/>
             </center>
+            <form>
             <div className="changeinfo">
-                <div className="columnleft">
-                    <div><label>Profile type: </label> </div> 
-                    <div><label>Hours:</label></div>
-                    <div><label>Address:</label></div>
-                    <div><label>Phone Number: </label></div>
-                </div>
-                <div className="columnright">   
-                    <div><label>Donor</label></div>
-                    <div className="inputfield"><input type="hours"/><button>submit</button></div>
-                    <div className="inputfield"><input type="address"/><button>submit</button></div>
-                    <div className="inputfield"><input type="phone_number"/><button>submit</button></div>
-                </div> 
+                
+                    <div class="columnleft">
+                        <label htmlFor="name">Name: </label> <br />
+                        <label htmlFor="location">Location: </label> <br />
+                        <label htmlFor="hours">HoO: </label> <br />
+                        <label htmlFor="phone">Phone: </label> <br />
+                        <label htmlFor="email">Email: </label> <br />
+                    </div>
+
+                    <div class="columnright">
+                    <input class="inputfield" type="text" name="name" id="Name"></input>
+                    <br />
+                    
+                    <input class="inputfield" type="text" name="location" id="Location"></input>
+                    <br />
+                    
+                    <input class="inputfield" type="text" name="hours" id="HoO"></input>
+                    <br />
+                    
+                    <input class="inputfield" type="text" name="phone" id="Phone"></input>
+                    <br />
+                    
+                    <input class="inputfield" type="email" name="email" id="Email"></input> 
+                    <br />
+                    </div>
+
+                    
+                                   
             </div>
+            </form>
         </div>
       
     )

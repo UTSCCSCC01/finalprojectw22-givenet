@@ -37,6 +37,7 @@ export default function LoginForm({}: Props) {
 		} else {
 			const { accessToken } = await response.json();
 			setTokenState(accessToken);
+			
 		}
 	};
 
