@@ -1,10 +1,8 @@
 import './pp_styles.css'
-
-async function test() {
-	await fetch("/test", { method: "POST" });
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import ProfilePage from "./ProfilePage";
 import { TokenContext } from "./TokenContext";
 
 async function fetchUserData() {
@@ -53,12 +51,13 @@ function App() {
 	const [tokenState, setTokenState] = useState("");
 
 	return (
-		<div>
-			<header className="App-header">
-				<button onClick={test}>Test</button>
-			</header>
 		<div className="App">
 			<header className="App-header"></header>
+			<SignUpPage />
+			<TokenContext.Provider value={{ tokenState, setTokenState }}>
+				<LoginPage />
+			</TokenContext.Provider>
+
 			<br />
 			<hr />
 			<h1>FETCH ACC DATA</h1>
@@ -67,6 +66,8 @@ function App() {
 			<button onClick={fetchUserData}>Populate Data</button> <br />
 			<br />
 			<hr />
+
+		
 			<h1>UPDATE ACC DATA</h1>
 			<form>
 				<label htmlFor="name">Name: </label>
@@ -86,10 +87,9 @@ function App() {
 				<br />
 			</form>
 			<button onClick={updateUserData}>Submit Changes</button>
-			<SignUpPage />
-			<TokenContext.Provider value={{ tokenState, setTokenState }}>
-				<LoginPage />
-			</TokenContext.Provider>
+			
+			<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+			<ProfilePage />
 			<button>Logout</button>
 		</div>
 	);

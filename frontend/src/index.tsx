@@ -6,7 +6,7 @@ import Side_Bar from "./SideBar";
 
 ReactDOM.render(
 	<React.StrictMode>
-		<Side_Bar />
+		<App />
 	</React.StrictMode>,
 	document.getElementById("root")
 );
