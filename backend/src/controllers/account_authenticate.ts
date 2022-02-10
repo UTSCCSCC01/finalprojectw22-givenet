@@ -34,7 +34,7 @@ module.exports = {
 	},
 	post: async (req: express.Request, res: express.Response) => {
 		res.send(StatusCodes.CREATED);
-
+	},
 	// Signing up
 	postSignup: async (
 		req: express.Request,

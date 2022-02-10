@@ -8,8 +8,6 @@ const PORT = 8000;
 
 /* Server Setup */
 app.use(express.json());
-<<<<<<< HEAD
-=======
 app.use(
 	expressSession({
 		secret: "secret",
@@ -18,7 +16,6 @@ app.use(
 	})
 );
 app.use(express.urlencoded({ extended: true }));
->>>>>>> 707c230c73aa36c0cf9f928a52c955cd87f69669
 
 /* Intialize the database */
 dbInit();
