@@ -106,7 +106,7 @@ export default function SideBar(props) {
               '& .MuiDrawer-paper': {
                 width: drawerWidth,
                 boxSizing: 'border-box',
-                backgroundColor: 'rgb(32, 32, 32)'
+                backgroundColor: 'white'
               },
               color: "white"
             }}
@@ -120,7 +120,7 @@ export default function SideBar(props) {
               </IconButton>
             </DrawerHeader>
             <Divider className="background"/>
-            <List sx={{color: "white"}} className="menu_background">
+            <List sx={{color: "black"}} className="menu_background">
               {['Profile Page', 'Donate', 'Current Orders', 'History', 'Log Out'].map((text, index) => (
                 <ListItem button key={text}>
                   <ListItemText primary={text} />
