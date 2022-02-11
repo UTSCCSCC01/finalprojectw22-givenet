@@ -14,7 +14,7 @@ html {
 
 #subrootdiv {
     height: 45%;
-    min-height:250px;
+    min-height:200px;
     margin-top: 20%;
 }
 
@@ -61,6 +61,12 @@ label {
     text-align: center;
 }
 
+h1 {
+    text-align: center;
+    font-family: Archivo Narrow, Arial, Helvetica, sans-serif;
+    font-size: 2.5rem;
+}
+
 .form {
     padding: 25px 25px 0;
     display: flex;
@@ -97,4 +103,8 @@ label {
     border-radius: 5px;
     background-color: black;
     color: white;
+}
+
+#loginbtn:hover {
+    cursor: pointer;
 }

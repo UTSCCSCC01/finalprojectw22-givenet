@@ -2,6 +2,7 @@ import './pp_styles.css'
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import TaggingPage from "./pages/TaggingPage";
 import ProfilePage from "./SideBar";
 import { TokenContext } from "./TokenContext";
 import { Routes, Route, Link } from "react-router-dom";
@@ -22,11 +23,11 @@ function App() {
 }
 
 function SignUpStuff() {
-
 	const [tokenState, setTokenState] = useState("");
 
 	return (
 		<div>		
+      <TaggingPage />
 			<SignUpPage />
 			<TokenContext.Provider value={{ tokenState, setTokenState }}>
 				<LoginPage />

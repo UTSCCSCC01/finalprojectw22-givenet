@@ -1,0 +1,73 @@
+body{
+    margin:0;
+}
+
+
+#edittagcontainer {
+    display:flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.addBtn {
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    padding: 2px;
+    margin: 0;
+    height: 1.5rem;
+}
+
+#addtagname {
+    height: 1rem;
+}
+
+.addBtn:hover {
+    cursor: pointer;
+}
+
+#tagview {
+    /* background-color: rgb(126, 10, 194); */
+    background-color: grey;
+    display: flex;
+    border-radius: 7px;
+    flex-wrap: wrap;
+    padding: 1em;
+    flex-basis: auto;
+}
+
+.tags {
+    background-color: white;
+    margin: 1%;
+    border-radius: 5px;
+    display: flex;
+    padding: .25rem;
+    flex-wrap: no-wrap;
+    box-sizing: border-box;
+    padding-right: 2%;
+}
+
+#tagview {
+    margin-bottom: 1em;
+}
+
+.tagLabel {
+    font-family: 'Archivo Narrow', 'Courier New', Courier, monospace;
+    width: min-content;
+    white-space:nowrap;
+    margin-right: 3%;
+}
+
+.tagDel {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.tagDel:hover {
+    cursor: pointer;
+}
+
+
+

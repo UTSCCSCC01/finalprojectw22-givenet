@@ -46,7 +46,7 @@ export default function LoginForm({}: Props) {
 			
 			<div className="container">
 
-			<label id="prompttext">GiveNet</label>
+			<h1>GiveNet</h1>
 			<div className="form">
 				<input
 					type="text"
