@@ -1,21 +1,59 @@
 import express from "express";
+import dbInit from "./database/init";
+import expressSession from "express-session";
+import jwt from "jsonwebtoken";
 
 const app: express.Application = express();
 const PORT = 8000;
 
-// Test (for sprint1)
-const testRoute: express.Router = require("./routes/Test.ts");
-app.use("/test", testRoute);
-
-// Connect to the database
-const db = require("./database");
-db.authenticate()
-	.then(() => {
-		console.log("Connected to database");
+/* Server Setup */
+app.use(express.json());
+app.use(
+	expressSession({
+		secret: "secret",
+		resave: true,
+		saveUninitialized: true,
 	})
-	.catch((error: Error) =>
-		console.log("Error connecting to database", error)
-	);
-// db.sync({ force: true });
+);
+app.use(express.urlencoded({ extended: true }));
+
+/* Intialize the database */
+dbInit();
+
+/* Authentication Middleware */
+const authenticateToken = (
+	req: express.Request,
+	res: express.Response,
+	next: express.NextFunction
+) => {
+	const authHeader = req.headers["authorization"];
+	console.log(authHeader);
+	const token = authHeader && authHeader.split(" ")[1];
+	if (token == null) return res.sendStatus(401);
+
+	jwt.verify(token, "secret", (err, user) => {
+		// console.log(err);
+		if (err) return res.sendStatus(403);
+		req.user = user;
+		next();
+	});
+};
+
+/* Routes */
+const accountRoute = require("./routes/account.ts");
+const userRoute = require("./routes/user.ts");
+
+app.use("/account", accountRoute);
+app.use("/user", userRoute);
+
+app.get("/testlogin", authenticateToken, async (req, res) => {
+	res.send(200);
+});
+
+const itemsRoute = require("./routes/ItemsRoutes");
+app.use(itemsRoute);
+
+const itemGroupsRoute = require("./routes/ItemGroupsRoutes");
+app.use(itemGroupsRoute);
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
