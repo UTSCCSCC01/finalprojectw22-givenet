@@ -5,6 +5,9 @@ import "../styles/LoginForm.css"
 
 type Props = {};
 
+
+<button>Logout</button>
+
 export default function LoginPage({}: Props) {
 	const { tokenState } = useContext(TokenContext);
 
