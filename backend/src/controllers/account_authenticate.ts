@@ -12,7 +12,7 @@ import {
 	getByUsername,
 	deleteById,
 } from "../database/dal/account";
-import { UserInput } from "../database/models/Users";
+import { AccDetailsInput } from "../database/models/AccountDetails";
 
 module.exports = {
 	// Logging in
@@ -53,7 +53,6 @@ module.exports = {
 		const accountPayload: Partial<AccountInput> = {
 			username: req.body.username,
 			password: hashedPassword,
-			type: req.body.type,
 		};
 		const newAccount = await createAccount(accountPayload as AccountInput);
 		if (!newAccount) {
@@ -62,15 +61,15 @@ module.exports = {
 		}
 
 		/* Create the user tuple in User*/
-		const userPayload: Partial<UserInput> = {
+		const userPayload: Partial<AccDetailsInput> = {
 			acc_id: newAccount.acc_id,
 			name: req.body.name,
 			location: req.body.location,
-			hours: req.body.hours,
+			operating_hours: req.body.hours,
 			email: req.body.email,
 			phone: req.body.phone,
 		};
-		const newUser = await createUser(userPayload as UserInput);
+		const newUser = await createUser(userPayload as AccDetailsInput);
 		if (!newUser) {
 			res.send(409);
 			return next();

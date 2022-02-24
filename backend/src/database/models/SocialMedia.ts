@@ -1,5 +1,6 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
+import Account from "./Account";
 
 interface SocialAttributes {
 	acc_id: number;
@@ -33,6 +34,10 @@ Social.init(
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
+			references: {
+				model: Account.tableName,
+				key: "acc_id",
+			},
 		},
 		website: {
 			type: DataTypes.STRING,

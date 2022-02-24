@@ -1,37 +1,35 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
+import Account from "./Account";
 
-interface WantedAttributes {
+interface DonorAttributes {
 	acc_id: number;
-	items: Array<number>;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface WantedInput extends WantedAttributes {}
-export interface WantedOutput extends Required<WantedAttributes> {}
+export interface DonorInput extends DonorAttributes {}
+export interface DonorOutput extends Required<DonorAttributes> {}
 
-class Wanted
-	extends Model<WantedAttributes, WantedInput>
-	implements WantedAttributes
+class Donor
+	extends Model<DonorAttributes, DonorInput>
+	implements DonorAttributes
 {
 	public acc_id!: number;
-	public items!: Array<number>;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Wanted.init(
+Donor.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
-		},
-		items: {
-			type: DataTypes.ARRAY(DataTypes.INTEGER),
-			unique: true,
-			allowNull: false,
+            references: {
+                model: Account.tableName,
+                key: "acc_id",
+            },
 		},
 		createdAt: {
 			type: "TIMESTAMP",
@@ -48,4 +46,11 @@ Wanted.init(
 	}
 );
 
-export default Wanted;
+Donor.belongsTo(Account, {
+    foreignKey: {
+        name: "acc_id",
+        allowNull: false,
+    },
+});
+
+export default Donor;

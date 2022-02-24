@@ -1,6 +1,6 @@
-import User from "../models/Users";
-import { UserInput, UserOutput } from "../models/Users";
+import AccountDetails from "../models/AccountDetails";
+import { AccDetailsInput, AccDetailsOutput } from "../models/AccountDetails";
 
-export const create = async (payload: UserInput): Promise<UserOutput> => {
-	return await User.create(payload);
+export const create = async (payload: AccDetailsInput): Promise<AccDetailsOutput> => {
+	return await AccountDetails.create(payload);
 };

@@ -1,40 +1,45 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
+import Account from "./Account";
 
-interface UserAttributes {
+interface AccDetailsAttributes {
 	acc_id: number;
 	name: string;
 	location: string;
-	hours: string;
+	operating_hours: string;
 	phone: string;
 	email: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface UserInput extends UserAttributes {}
-export interface UserOutput extends Required<UserAttributes> {}
+export interface AccDetailsInput extends AccDetailsAttributes {}
+export interface AccDetailsOutput extends Required<AccDetailsAttributes> {}
 
-class User
-	extends Model<UserAttributes, UserInput>
-	implements UserAttributes
+class AccountDetails
+	extends Model<AccDetailsAttributes, AccDetailsInput>
+	implements AccDetailsAttributes
 {
 	public acc_id!: number;
 	public name!: string;
 	public location!: string;
-	public hours!: string;
+	public operating_hours!: string;
 	public phone!: string;
 	public email!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-User.init(
+AccountDetails.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
-			autoIncrement: true,
+			// autoIncrement: true,
 			primaryKey: true,
+			references: {
+				model: "Accounts",
+				key: "acc_id"
+			},
 		},
 		name: {
 			type: DataTypes.STRING,
@@ -44,7 +49,7 @@ User.init(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		hours: {
+		operating_hours: {
 			type: DataTypes.STRING,
 		},
 		phone: {
@@ -68,4 +73,11 @@ User.init(
 	}
 );
 
-export default User;
+AccountDetails.belongsTo(Account, {
+	foreignKey: {
+		name: "acc_id",
+		allowNull: false,
+	},
+});
+
+export default AccountDetails;

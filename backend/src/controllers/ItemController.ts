@@ -1,8 +1,8 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { ItemInput, ItemOutput } from "../database/models/Items";
-import Items from "../database/models/Items";
+import { ItemInput, ItemOutput } from "../database/models/Item";
+import Item from "../database/models/Item";
 
 import {
   create,
@@ -10,7 +10,7 @@ import {
   getByItemId,
   getAll,
   deleteByItemId,
-} from "../database/dal/ItemsDAL";
+} from "../database/dal/ItemDAL";
 import { nextTick } from "process";
 
 module.exports = {
