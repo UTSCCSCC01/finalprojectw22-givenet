@@ -6,6 +6,7 @@ import TaggingPage from "./pages/TaggingPage";
 import ProfilePage from "./SideBar";
 import { TokenContext } from "./TokenContext";
 import { Routes, Route, Link } from "react-router-dom";
+import ListingPage from "./pages/Listings";
 
 function App() {
 	const [tokenState, setTokenState] = useState("");
@@ -16,8 +17,9 @@ function App() {
 			<Routes>
 				<Route path="/" element={<SignUpStuff />} />
 				<Route path="profile" element={<Profile />} />
+				<Route path="profile/listings" element={<ListingPage />} />
+				<Route path="profile/listings/delete" element={<Profile />} />
 			</Routes>
-			
 		</div>
 	);
 }
