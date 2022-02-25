@@ -3,9 +3,13 @@ import { Router } from "express";
 
 const router: Router = Router();
 
-const authenticateController = require("../controllers/user_profiles.ts");
+const profileController = require("../controllers/user_profiles.ts");
+const listingsController = require("../controllers/user_listings.ts");
 
-router.get("/:id/profile", authenticateController.get);
-router.post("/:id/profile", authenticateController.post);
+router.get("/:id/profile", profileController.get);
+router.post("/:id/profile", profileController.post);
+
+router.get("/listings/:id", listingsController.get);
+router.post("/listings/:id/edit", listingsController.post);
 
 module.exports = router;

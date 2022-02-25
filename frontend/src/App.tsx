@@ -1,4 +1,3 @@
-import './pp_styles.css'
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";

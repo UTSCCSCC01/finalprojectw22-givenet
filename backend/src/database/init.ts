@@ -3,6 +3,7 @@ import User from "./models/Users";
 import Social_Media from "./models/SocialMedia";
 import Items from "./models/Items";
 import Wanted from "./models/Wanted";
+import Listings from "./models/Listings";
 
 const dbInit = () => {
 	Account.sync({ force: false });
@@ -10,6 +11,7 @@ const dbInit = () => {
 	Social_Media.sync({ force: false });
 	Items.sync({ force: false });
 	Wanted.sync({ force: false });
+	Listings.sync({ force: false });
 };
 
 export default dbInit;
