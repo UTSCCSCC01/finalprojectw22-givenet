@@ -31,3 +31,16 @@ export const getById = async (id: number): Promise<Array<ListingOutput>> => {
 	}
 	return listing;
 };
+
+export const deleteById = async (id: number) => {
+	const listing = await Listing.findByPk(id);
+
+	console.log("got id: " + id + "\n");
+
+	if (!listing) {
+		throw new Error(`Listing id does not exist`);
+	}
+
+	listing.destroy();
+	return true;
+};

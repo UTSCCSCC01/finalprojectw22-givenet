@@ -10,6 +10,7 @@ router.get("/:id/profile", profileController.get);
 router.post("/:id/profile", profileController.post);
 
 router.get("/listings/:id", listingsController.get);
-router.post("/listings/:id/edit", listingsController.post);
+//router.post("/listings/:id/edit", listingsController.post);
+router.post("/listings/:id/delete", listingsController.post);
 
 module.exports = router;

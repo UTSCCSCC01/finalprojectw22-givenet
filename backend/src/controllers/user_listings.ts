@@ -4,6 +4,7 @@ import {
 	create,
 	update,
 	getById,
+	deleteById,
 } from "../database/dal/user_listings";
 
 
@@ -24,17 +25,13 @@ module.exports = {
 	post: async (req: express.Request, res: express.Response) => {
 		let id = Number(req.params.id);
 
-		let queried = req.body;
-		console.log(queried);
+		let fetched = await deleteById(id);
 
-		queried['updatedAt'] = Date.toString();
-		let updated = update(id, queried);
-
-		if (updated) {
-			res.send(updated)
+		if (fetched) {
+			res.sendStatus(200)
 		}
 		else {
-			res.send(413)
+			res.sendStatus(404)
 		}
 	},
 };

@@ -25,7 +25,6 @@ module.exports = {
 		let id = Number(req.params.id);
 
 		let queried = req.body;
-		console.log(queried);
 
 		queried['updatedAt'] = Date.toString();
 		let updated = update(id, queried);

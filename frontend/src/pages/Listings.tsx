@@ -14,26 +14,14 @@ type Listing = {
 
 
 interface listingProps {
-	data: Array<Listing>
+	data: Array<Listing>,
+	deleteFunction: (number: number) => any 
 }
 
-function DeleteListings() {
 
-}
+function GenerateListings({data, deleteFunction}: listingProps) {
 
-function GenerateListings({data}: listingProps) {
-
-
-	const exData = {
-		listing_id: 3,
-		acc_id: 1235,
-		items: ["Fruits", "Bread", "Milk"],
-		weight: ["10kg", "5kg", "66kg"],
-		expiry: ["date", "date", "date"]
-	}
-	const divElements = []
-
-	var element = (
+	return (
 		(data.length) ?
 		<table>
 			<thead>
@@ -55,15 +43,14 @@ function GenerateListings({data}: listingProps) {
 						<td key={"items " +  val.items.toString()}>{val.items.toString()}</td>
 						<td key={"weight " +  val.weight.toString()}>{val.weight.toString()}</td>
 						<td key={"expire " +  val.expiry.toString()}>{val.expiry.toString()}</td>
-						<td key={"edit " +  val.listing_id}><button onClick={DeleteListings}>EDIT</button></td>
-						<td key={"delete " +  val.listing_id}><button onClick={DeleteListings}>DELETE</button></td>
+						<td key={"edit " +  val.listing_id}><button onClick={() => deleteFunction(val.listing_id)}>EDIT</button></td>
+						<td key={"delete " +  val.listing_id}><button onClick={() => deleteFunction(val.listing_id)}>DELETE</button></td>
 					</tr>
 				))}
 			</tbody>
 		</table>
 		: <div>User has no listings or you have not fetched yet.</div>
 	);
-	return element;
 }
 
 function Listings() {
@@ -81,6 +68,34 @@ function Listings() {
 		setUserListings(await response.json());
 	}
 
+	async function DeleteListings(id: number) {
+
+		const options = {
+			headers: { "Content-Type": "application/json" },
+			method: "POST",
+			body: JSON.stringify({}),
+		};
+	
+		fetch(
+			"/user/listings/" + String(id) + "/delete",
+			options
+		)
+		.then(response => {
+			if (response.status != 404) {
+				console.log("Successful delete wahooololoolo");
+				setUserListings(userListings.filter(Listing => Listing.listing_id !== id));
+			} else {
+				alert("You idiot dumb dog looking stupid crap\n");
+			}
+		});
+
+		// if (response == 0) {
+		// 	console.log("Successful delete wahooololoolo")
+		// }
+
+		// setUserListings(userListings.filter(Listing => Listing.listing_id !== id));
+	}
+
 	return (
 		<div>
 			<div id="mainDiv">
@@ -94,7 +109,7 @@ function Listings() {
 				<br />
 				<hr />	
 			</div>
-			<GenerateListings data={userListings}/>
+			<GenerateListings data={userListings} deleteFunction={DeleteListings}/>
 		</div>
 	);
 }
@@ -121,7 +136,6 @@ async function updateUserData() {
 		options
 	);
 
-	console.log(response);
 }
 
 
