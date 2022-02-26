@@ -6,7 +6,7 @@ const router: Router = Router();
 
 const userController = require("../controllers/user_profiles.ts");
 
-router.get("/:id/profile", authenticateToken, userController.get);
-router.post("/:id/profile", authenticateToken, userController.post);
+router.get("/profile", authenticateToken, userController.get);
+router.post("/profile", authenticateToken, userController.post);
 
 module.exports = router;

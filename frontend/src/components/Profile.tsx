@@ -25,7 +25,7 @@ export default function Profile() {
 	const { token } = useContext(TokenContext);
 
 	const fetchUserData = async () => {
-		const response = await fetch("/user/" + String(1) + "/profile", {
+		const response = await fetch("/user/profile", {
 			method: "GET",
 			headers: {
 				authorization: `Bearer ${token}`,
@@ -79,16 +79,13 @@ export default function Profile() {
 			setSuccessState("");
 		}
 
-		const options = {
-			headers: { "Content-Type": "application/json" },
+		const response = await fetch("/user/profile", {
 			method: "POST",
+			headers: {
+				authorization: `Bearer ${token}`,
+			},
 			body: JSON.stringify(profileState),
-		};
-
-		const response = await fetch(
-			"/user/" + String(1) + "/profile",
-			options
-		);
+		});
 
 		if (response.status === 200) {
 			setErrorState("");
