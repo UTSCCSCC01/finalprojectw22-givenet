@@ -1,20 +1,22 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import LoginForm from "../components/LoginForm";
+import Navbar from "../components/Navbar";
 import { TokenContext } from "../TokenContext";
-import "../styles/LoginForm.css"
+import { useNavigate } from "react-router-dom";
 
-type Props = {};
+export default function LoginPage() {
+	const navigate = useNavigate();
+	const { token, setToken } = useContext(TokenContext);
 
-
-<button>Logout</button>
-
-export default function LoginPage({}: Props) {
-	const { tokenState } = useContext(TokenContext);
+	console.log(1, token);
+	if (token) {
+		navigate("/profile");
+	}
 
 	return (
 		<div id="subrootdiv">
+			<Navbar />
 			<LoginForm />
-			{tokenState ? "logged in!" : "invalid login"}
 		</div>
 	);
 }
