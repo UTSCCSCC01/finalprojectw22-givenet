@@ -6,31 +6,33 @@ module.exports = {
 	get: async (req: express.Request, res: express.Response) => {
 		var user: any = req.user;
 		if (user) {
-			let id = Number(user.acc_id);
+			console.log("id", user.dataValues.acc_id);
+			let id = Number(user.dataValues.acc_id);
 
 			let fetched = await getById(id);
 
 			if (fetched) {
-				res.send(fetched);
+				console.log("fetched", fetched);
+				return res.json(JSON.stringify(fetched));
 			} else {
-				res.send(401);
+				return res.send(401);
 			}
 		}
-		res.sendStatus(401);
+		return res.sendStatus(401);
 	},
 	post: async (req: express.Request, res: express.Response) => {
 		const user: any = req.user;
-		
-		let queried = req.body;
-		console.log(queried);
 
+		let queried = await req.body;
+		console.log("queried", queried);
 		queried["updatedAt"] = Date.toString();
-		let updated = update(user.acc_id, queried);
+		let updated = await update(user.dataValues.acc_id, queried);
+		console.log("updatedd", updated);
 
 		if (updated) {
-			res.send(updated);
+			return res.json(JSON.stringify(updated));
 		} else {
-			res.send(401);
+			return res.send(401);
 		}
 	},
 };

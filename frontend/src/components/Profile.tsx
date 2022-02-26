@@ -31,8 +31,13 @@ export default function Profile() {
 				authorization: `Bearer ${token}`,
 			},
 		});
+		console.log(response.status);
 		if (response.status === 200) {
-			const result = await response.json();
+			let result = await response.json();
+			result = JSON.parse(result);
+			console.log(result);
+			console.log(typeof result);
+			console.log(result.name);
 			const p: profile = {
 				name: result.name,
 				location: result.location,
@@ -79,10 +84,12 @@ export default function Profile() {
 			setSuccessState("");
 		}
 
+		console.log("sending", JSON.stringify(profileState));
 		const response = await fetch("/user/profile", {
 			method: "POST",
 			headers: {
 				authorization: `Bearer ${token}`,
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(profileState),
 		});
@@ -94,6 +101,7 @@ export default function Profile() {
 			setErrorState("There was a problem saving your changes");
 			setSuccessState("");
 		}
+		setEditState(false);
 	};
 
 	const handleFormChange = (e: any) => {
@@ -106,7 +114,7 @@ export default function Profile() {
 
 	useEffect(() => {
 		fetchUserData();
-	});
+	}, []);
 
 	return (
 		<div className="container">
