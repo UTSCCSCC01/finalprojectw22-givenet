@@ -1,14 +1,14 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import TaggingSystem from "../components/TaggingSystem";
+import Profile from "../components/Profile";
 
 type Props = {};
 
-export default function TaggingPage({}: Props) {
+export default function ProfilePage({}: Props) {
 	return (
 		<div>
 			<Navbar />
-			<TaggingSystem />
+			<Profile />
 		</div>
 	);
 }
