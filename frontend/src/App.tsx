@@ -4,6 +4,7 @@ import SignUpPage from "./pages/SignUpPage";
 import { TokenContext } from "./TokenContext";
 import { Routes, Route } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage";
+import ListingPage from "./pages/Listings";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import TaggingPage from "./pages/TaggingPage";
@@ -19,6 +20,7 @@ export default function App() {
 					<Route path="/" element={<SignUpPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/profile" element={<ProfilePage />} />
+					<Route path="/profile/listings" element={<ListingPage />} />
 					<Route path="/tagging" element={<TaggingPage />} />
 				</Routes>
 			</TokenContext.Provider>

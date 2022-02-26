@@ -3,6 +3,7 @@ import User from "./models/Users";
 import Social_Media from "./models/SocialMedia";
 import Items from "./models/Items";
 import Wanted from "./models/Wanted";
+import Listings from "./models/Listings";
 import ItemGroups from "./models/ItemGroups";
 
 const force = false;
