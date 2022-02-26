@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
+import { Alert, Button, Form } from "react-bootstrap";
 import { TokenContext } from "../TokenContext";
-import '../styles/LoginForm.css'
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
@@ -14,70 +15,78 @@ export default function LoginForm({}: Props) {
 		username: "",
 		password: "",
 	});
-	const { tokenState, setTokenState } = useContext(TokenContext);
+	const { setToken } = useContext(TokenContext);
+	const [errorState, setErrorState] = useState("");
+	const navigate = useNavigate();
 
 	const handleFormStateChange = (e: any) => {
 		const { name, value } = e.target;
 		setFormState((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handle_login = async (form: form) => {
-		console.log("handling login");
+	const handleLogin = async () => {
+		setErrorState("");
+		if (formState.username === "") {
+			setErrorState("Please enter a username");
+			return;
+		}
+		if (formState.password === "") {
+			setErrorState("Please enter a password");
+			return;
+		}
 
 		const response = await fetch("/account/login", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(form),
+			body: JSON.stringify(formState),
 		});
 
 		if (response.status === 401) {
-			setTokenState("");
+			setToken("");
+			setErrorState("Invalid username or password");
 		} else {
 			const { accessToken } = await response.json();
-			setTokenState(accessToken);
-			
+			setToken(accessToken);
+			setErrorState("");
+			navigate("/profile");
 		}
 	};
 
 	return (
-		<body>
-			
-			<div className="container">
-
-			<h1>GiveNet</h1>
-			<div className="form">
-				<input
-					type="text"
-					name="username"
-					className="textinput"
-					placeholder="Username"
-					required
-					value={formState.username}
-					onChange={handleFormStateChange}
-				/>
-				<span className="hidden"></span>
-				<input
-					type="password"
-					name="password"
-					className="textinput"
-					placeholder="Password"
-					required
-					value={formState.password}
-					onChange={handleFormStateChange}
+		<div className="container">
+			<h1 className="pt-5">Login</h1>
+			{errorState !== "" ? (
+				<Alert variant="danger" className="mt-3 pb-0">
+					<p className="pb-0 pt-0">{errorState}</p>
+				</Alert>
+			) : null}
+			<Form className="mt-4 mb-4">
+				<Form.Group className="mb-3">
+					<Form.Label>Username</Form.Label>
+					<Form.Control
+						onChange={handleFormStateChange}
+						type="text"
+						placeholder="Enter username"
+						name="username"
+						value={formState.username}
 					/>
-				
-					<label>Remember Me
-					<input type="checkbox" name="remember" />
-					</label>
-				<button id="loginbtn" name="loginbtn" onClick={() => handle_login(formState)}>Log In</button>
-				
-			</div>
-
-			</div>
-            
-
-		</body>
+				</Form.Group>
+				<Form.Group className="mb-3">
+					<Form.Label>Password</Form.Label>
+					<Form.Control
+						onChange={handleFormStateChange}
+						type="password"
+						placeholder="Enter password"
+						name="password"
+						value={formState.password}
+					/>
+				</Form.Group>
+			</Form>
+			<Button variant="primary" onClick={handleLogin}>
+				Login!
+			</Button>
+		</div>
 	);
 }
