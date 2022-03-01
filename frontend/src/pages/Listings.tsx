@@ -1,50 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/listings.css";
 
 type Listing = {
-	listing_id: number;
+	listing_id?: number;
 	acc_id: number;
-	location: string;
-	items: Array<string>;
-    weight: Array<string>;
+	items: Array<String>;
+    weight: Array<String>;
     expiry: Array<Date>;
 };
 
-
+type Item = {
+	item: String;
+    weight: String;
+    expiry: Date;
+}
 
 
 interface listingProps {
 	data: Array<Listing>,
-	deleteFunction: (number: number) => any 
+	deleteFunction: (number?: number) => any,
+	
 }
 
+interface newListingProps {
+	data: Array<Item>,
+}
+
+interface templateProp {
+	add: boolean,
+}
+
+var set = 0;
+var lock = 0;
 
 function GenerateListings({data, deleteFunction}: listingProps) {
+	function dateString(data: Array<Date>): string {
+		var s = ""
+		for (let i = 0; i < data.length; i ++) {
+			let date = new Date(data[i]);
+			s += date.toDateString() + ", ";
+		}
+		return s.substring(0, s.length - 2);
+	}
 
 	return (
 		(data.length) ?
 		<table>
 			<thead>
 				<tr>
-					<th>ListingId</th>
-					<th>AccId</th>
-					<th>Items</th>
-					<th>Weight</th>
-					<th>Expiry</th>
-					<th>Edit</th>
-					<th>Delete</th>
+					<th className="tableval">ListingId</th>
+					<th className="tableval">AccId</th>
+					<th className="tableval">Items</th>
+					<th className="tableval">Weight</th>
+					<th className="tableval">Days until expiry</th>
+					<th className="tableval">Edit</th>
+					<th className="tableval">Delete</th>
 				</tr>
 			</thead>
 			<tbody>
 				{data.map((val) => (
-					<tr key={"tr " + val.listing_id}>
-						<td id= "listing_id" key={"listing " + val.listing_id}>{val.listing_id}</td>
-						<td key={"accid " +  val.acc_id}>{val.acc_id}</td>
-						<td key={"items " +  val.items.toString()}>{val.items.toString()}</td>
-						<td key={"weight " +  val.weight.toString()}>{val.weight.toString()}</td>
-						<td key={"expire " +  val.expiry.toString()}>{val.expiry.toString()}</td>
-						<td key={"edit " +  val.listing_id}><button onClick={() => deleteFunction(val.listing_id)}>EDIT</button></td>
-						<td key={"delete " +  val.listing_id}><button onClick={() => deleteFunction(val.listing_id)}>DELETE</button></td>
+					<tr className="tableval" key={"tr " + val.listing_id}>
+						<td className="tableval" id= "listing_id" key={"listing " + val.listing_id}>{val.listing_id}</td>
+						<td className="tableval" key={"accid " +  val.acc_id}>{val.acc_id}</td>
+						<td className="tableval" key={"items " +  val.items.toString()}>{val.items.toString()}</td>
+						<td className="tableval" key={"weight " +  val.weight.toString()}>{val.weight.toString()}</td>
+						<td className="tableval" key={"expire " +  val.expiry.toString()}>{dateString(val.expiry)}</td>
+						<td className="tableval" key={"edit " +  val.listing_id}><button>EDIT</button></td>
+						<td className="tableval" key={"delete " +  val.listing_id}><button onClick={() => deleteFunction(val.listing_id)}>DELETE</button></td>
 					</tr>
 				))}
 			</tbody>
@@ -53,13 +75,178 @@ function GenerateListings({data, deleteFunction}: listingProps) {
 	);
 }
 
-function Listings() {
+function ListingTemplateBuilder({add}: templateProp) {
+	const [newUserListings, setnewUserListings] = useState<Array<Item>>([] as Item[]);
+	useEffect(() => {
+		if (lock == 1) {
+			set = 1;
+		}
+	}, [newUserListings]);
 
-	// var data = [] as Listing[];
+	var newEntryField = <table>
+		<thead>
+			<tr>
+				<th className="tableval">Item</th>
+				<th className="tableval">Weight</th>
+				<th className="tableval">Days until expiry</th>
+			</tr>
+		</thead>
+		<tbody>
+
+				
+			<tr>
+				<td contentEditable="true"className="tableval" id="newitem"></td>
+				<td contentEditable="true" className="tableval" id="neweight"></td>
+				<td contentEditable="true" className="tableval" id="newexpiry"></td>
+			</tr>
+			<tr>
+			<td colSpan={3}><button id="moreItems" onClick={AddListingRow}>Add new item</button></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	async function AddListingRow() {
+
+		var listElement: Item;
+		var newitem = (document.getElementById("newitem") as HTMLInputElement).innerHTML;
+		var new_weight = (document.getElementById("neweight") as HTMLInputElement).innerHTML;
+		var newexpiry = (document.getElementById("newexpiry") as HTMLInputElement).innerHTML;
+		var today = new Date();
+		var expiry;
+		if (parseInt(newexpiry)) {
+			expiry = today.setDate(today.getDate() + parseInt(newexpiry));
+		} else {
+			expiry = today.setDate(today.getDate());
+		}
+		 
+
+		listElement = {
+			item: newitem,
+			weight: new_weight,
+			expiry: new Date(expiry),
+		}
+
+		var listingArray = Array<Item>();
+		for (var i = 0; i < newUserListings.length; i++) {
+			listingArray.push(newUserListings[i]);
+		}
+		listingArray.push(listElement);
+		setnewUserListings(listingArray);
+
+		
+	}
+
+
+	function AddListings({data}: newListingProps) {
+		return (
+			(data.length) ?
+			<table>
+				<thead>
+					<tr>
+						<th className="tableval">Item</th>
+						<th className="tableval">Weight</th>
+						<th className="tableval">Days until expiry</th>
+					</tr>
+				</thead>
+				<tbody>
+					{data.map((val) => (
+						<tr key={val.item.toString()}>
+							<td className="tableval" >{val.item}</td>
+							<td className="tableval" >{val.weight}</td>
+							<td className="tableval" >{val.expiry.toDateString()}</td>
+						</tr>
+					))}
+					<tr>
+						<td contentEditable="true"className="tableval" id="newitem"></td>
+						<td contentEditable="true" className="tableval" id="neweight"></td>
+						<td contentEditable="true" className="tableval" id="newexpiry"></td>
+					</tr>
+					<tr>
+					<td colSpan={3}><button id="moreItems" onClick={AddListingRow}>Add new item</button></td>
+					</tr>
+				</tbody>
+			</table>
+
+			:newEntryField
+		)
+	}	
+
+	//Add = add to database, not add = add row.
+	if (!add) {
+		return (
+			<AddListings data={newUserListings}/>
+		)
+	} 
+		
+	if (newUserListings.length > 0 && set == 0) {
+		var accID = (document.getElementById("Listing_AccID") as HTMLInputElement).value;
+
+		var listingToAdd: Listing = {
+			acc_id: Number(accID),
+			items: [],
+			weight: [],
+			expiry: []
+		}
+
+		for (let i = 0; i < newUserListings.length; i++) {
+			listingToAdd.items.push(newUserListings[i].item)
+			listingToAdd.weight.push(newUserListings[i].weight)
+			listingToAdd.expiry.push(newUserListings[i].expiry)
+		}
+
+		const options = {
+			headers: { "Content-Type": "application/json" },
+			method: "POST",
+			body: JSON.stringify(listingToAdd),
+		};
+		
+		fetch(
+			"/user/listings/" + String(accID),
+			options
+		)
+		.then(response => {
+			if (response.status !== 404) {
+				console.log("im runnning twice again sadge");
+			} else {
+				alert("SERVER ERROR 501\n");
+			}
+		})
+		setnewUserListings([] as Item[]);
+	}
+
+	return newEntryField;
+	
+
+}
+
+function Listings() {
 	const [userListings, setUserListings] = useState<Array<Listing>>([] as Listing[]);
+	const [addListing, setAddListing] = useState<boolean>(false);
+
+	function waitForUpdate() {
+		//if set isnt 1, timeout and wait until it is.
+		if (set !== 1) {
+			setTimeout(waitForUpdate, 50);
+		} else {
+			setAddListing(false);
+			set = 0;
+			lock = 0;
+		}
+	}
+
+	function signalListingAdd() {
+
+		//Lock == 0 implies first call, set = 0, tell listing component to add a listing and mutex lock.
+		set = 0;
+		setAddListing(true);
+		lock = 1;
+
+		//wait until it updates.
+		waitForUpdate();
+	}
 
 	async function fetchUserData() {
-		var accID = (document.getElementById("AccID") as HTMLInputElement).value;
+		var accID = (document.getElementById("Listing_AccID") as HTMLInputElement).value;
 	
 		const response = await fetch("/user/listings/" + String(accID) , {
 			method: "GET",
@@ -68,74 +255,49 @@ function Listings() {
 		setUserListings(await response.json());
 	}
 
-	async function DeleteListings(id: number) {
+	async function DeleteListings(id?: number) {
 
-		const options = {
-			headers: { "Content-Type": "application/json" },
-			method: "POST",
-			body: JSON.stringify({}),
-		};
-	
-		fetch(
-			"/user/listings/" + String(id) + "/delete",
-			options
-		)
-		.then(response => {
-			if (response.status != 404) {
-				console.log("Successful delete wahooololoolo");
-				setUserListings(userListings.filter(Listing => Listing.listing_id !== id));
-			} else {
-				alert("You idiot dumb dog looking stupid crap\n");
-			}
-		});
-
-		// if (response == 0) {
-		// 	console.log("Successful delete wahooololoolo")
-		// }
-
-		// setUserListings(userListings.filter(Listing => Listing.listing_id !== id));
+		if (id) {
+			const options = {
+				headers: { "Content-Type": "application/json" },
+				method: "DELETE",
+				body: JSON.stringify({}),
+			};
+		
+			fetch(
+				"/user/listings/" + String(id) + "/delete",
+				options
+			)
+			.then(response => {	
+				if (response.status != 404) {
+					setUserListings(userListings.filter(Listing => Listing.listing_id !== id));
+				} else {
+					alert("SERVER ERROR 501\n");
+				}
+			})
+		}
 	}
 
 	return (
 		<div>
 			<div id="mainDiv">
-				<br /> <br /><br />
-				<h1>FETCH ACC DATA</h1>
-				<div>
-					<label htmlFor="AccID">AccID: </label>
-					<input type="text" name="AccID" id="AccID"></input> <br /> <br />
-					<button onClick={fetchUserData}>Populate Data</button> <br />
-				</div>
+				<label htmlFor="AccID">AccID: </label>
+				<input type="text" name="AccID" id="Listing_AccID"></input> <br /> <br />
+				<hr />
+				<h1>Add Listing</h1>
+				Add a new listing below and hit Add Listing to add this listing. <br />
+				<button onClick={() => signalListingAdd()}>Add Listing</button> <br /> <br />
+				<ListingTemplateBuilder add={addListing}/>
 				<br />
 				<hr />	
-			</div>
-			<GenerateListings data={userListings} deleteFunction={DeleteListings}/>
+			
+				<h1>FETCH ACC DATA</h1>
+				<button onClick={fetchUserData}>Populate Data</button> <br />
+				<br />
+				<GenerateListings data={userListings} deleteFunction={DeleteListings}/>
+			</div>	
 		</div>
 	);
-}
-
-async function updateUserData() {
-	const newData = {
-		name: (document.getElementById("Name") as HTMLInputElement).value,
-		location: (document.getElementById("Location") as HTMLInputElement)
-			.value,
-		hours: (document.getElementById("HoO") as HTMLInputElement).value,
-		phone: (document.getElementById("Phone") as HTMLInputElement).value,
-		email: (document.getElementById("Email") as HTMLInputElement).value,
-	};
-
-	const options = {
-		headers: { "Content-Type": "application/json" },
-		method: "POST",
-		body: JSON.stringify(newData),
-	};
-
-	var accID = (document.getElementById("AccID") as HTMLInputElement).value;
-	const response = await fetch(
-		"/user/" + String(accID) + "/profile",
-		options
-	);
-
 }
 
 

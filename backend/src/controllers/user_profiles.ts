@@ -12,7 +12,6 @@ module.exports = {
 			let fetched = await getById(id);
 
 			if (fetched) {
-				console.log("fetched", fetched);
 				return res.json(JSON.stringify(fetched));
 			} else {
 				return res.send(401);
@@ -27,7 +26,6 @@ module.exports = {
 		console.log("queried", queried);
 		queried["updatedAt"] = Date.toString();
 		let updated = await update(user.dataValues.acc_id, queried);
-		console.log("updatedd", updated);
 
 		if (updated) {
 			return res.json(JSON.stringify(updated));

@@ -14,6 +14,7 @@ const dbInit = () => {
 	ItemGroups.sync({ force });
 	Items.sync({ force });
 	Wanted.sync({ force });
+	Listings.sync({ force });
 };
 
 export default dbInit;
