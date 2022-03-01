@@ -77,6 +77,12 @@ function GenerateListings({data, deleteFunction}: listingProps) {
 
 function ListingTemplateBuilder({add}: templateProp) {
 	const [newUserListings, setnewUserListings] = useState<Array<Item>>([] as Item[]);
+	useEffect(() => {
+		if (lock == 1) {
+			set = 1;
+		}
+	}, [newUserListings]);
+
 	var newEntryField = <table>
 		<thead>
 			<tr>
@@ -170,46 +176,45 @@ function ListingTemplateBuilder({add}: templateProp) {
 		return (
 			<AddListings data={newUserListings}/>
 		)
-	} else {
+	} 
+		
+	if (newUserListings.length > 0 && set == 0) {
+		var accID = (document.getElementById("Listing_AccID") as HTMLInputElement).value;
 
-		if (newUserListings.length > 0 && set == 0) {
-			var accID = (document.getElementById("Listing_AccID") as HTMLInputElement).value;
-
-			var listingToAdd: Listing = {
-				acc_id: Number(accID),
-				items: [],
-				weight: [],
-				expiry: []
-			}
-
-			for (let i = 0; i < newUserListings.length; i++) {
-				listingToAdd.items.push(newUserListings[i].item)
-				listingToAdd.weight.push(newUserListings[i].weight)
-				listingToAdd.expiry.push(newUserListings[i].expiry)
-			}
-
-			const options = {
-				headers: { "Content-Type": "application/json" },
-				method: "POST",
-				body: JSON.stringify(listingToAdd),
-			};
-			
-			fetch(
-				"/user/listings/" + String(accID),
-				options
-			)
-			.then(response => {
-				if (response.status != 404) {
-				} else {
-					alert("SERVER ERROR 501\n");
-				}
-			})
-			setnewUserListings([]);
+		var listingToAdd: Listing = {
+			acc_id: Number(accID),
+			items: [],
+			weight: [],
+			expiry: []
 		}
-		set = 1;
 
-		return newEntryField;
+		for (let i = 0; i < newUserListings.length; i++) {
+			listingToAdd.items.push(newUserListings[i].item)
+			listingToAdd.weight.push(newUserListings[i].weight)
+			listingToAdd.expiry.push(newUserListings[i].expiry)
+		}
+
+		const options = {
+			headers: { "Content-Type": "application/json" },
+			method: "POST",
+			body: JSON.stringify(listingToAdd),
+		};
+		
+		fetch(
+			"/user/listings/" + String(accID),
+			options
+		)
+		.then(response => {
+			if (response.status !== 404) {
+				console.log("im runnning twice again sadge");
+			} else {
+				alert("SERVER ERROR 501\n");
+			}
+		})
+		setnewUserListings([] as Item[]);
 	}
+
+	return newEntryField;
 	
 
 }
@@ -227,8 +232,6 @@ function Listings() {
 			set = 0;
 			lock = 0;
 		}
-		
-		
 	}
 
 	function signalListingAdd() {
