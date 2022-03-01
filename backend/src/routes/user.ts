@@ -11,7 +11,7 @@ router.get("/profile", authenticateToken, userController.get);
 router.post("/profile", authenticateToken, userController.post);
 
 router.get("/listings/:id", listingsController.get);
-//router.post("/listings/:id/edit", listingsController.post);
-router.post("/listings/:id/delete", listingsController.post);
+router.post("/listings/:id", listingsController.post);
+router.delete("/listings/:id/delete", listingsController.delete);
 
 module.exports = router;
