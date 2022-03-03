@@ -24,10 +24,10 @@ Admin.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
-			autoIncrement: true,
+			// autoIncrement: true,
 			primaryKey: true,
             references: {
-                model: Account.tableName,
+                model: Account,
                 key: "acc_id",
             },
 		},

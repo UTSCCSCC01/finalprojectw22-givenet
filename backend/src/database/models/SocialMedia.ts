@@ -15,7 +15,7 @@ interface SocialAttributes {
 export interface SocialInput extends SocialAttributes {}
 export interface SocialOutput extends Required<SocialAttributes> {}
 
-class Social
+class SocialMedia
 	extends Model<SocialAttributes, SocialInput>
 	implements SocialAttributes
 {
@@ -28,14 +28,14 @@ class Social
 	public updatedAt!: Date;
 }
 
-Social.init(
+SocialMedia.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
 			references: {
-				model: Account.tableName,
+				model: Account,
 				key: "acc_id",
 			},
 		},
@@ -66,4 +66,11 @@ Social.init(
 	}
 );
 
-export default Social;
+SocialMedia.belongsTo(Account, {
+    foreignKey: {
+        name: "acc_id",
+        allowNull: false,
+    },
+});
+
+export default SocialMedia;

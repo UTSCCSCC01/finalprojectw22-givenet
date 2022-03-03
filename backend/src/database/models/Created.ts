@@ -29,7 +29,7 @@ Created.init(
 		donor_id: {
 			type: DataTypes.INTEGER,
             references: {
-                model: Donor.name + "s",
+                model: Donor,
                 key: "acc_id",
             },
 		},
@@ -37,7 +37,7 @@ Created.init(
             type: DataTypes.INTEGER,
 			primaryKey: true,
             references: {
-                model: Listing.name + "s",
+                model: Listing,
                 key: "listing_id",
             },
         },
@@ -63,12 +63,11 @@ Created.belongsTo(Listing, {
     },
 });
 
-Listing.belongsToMany(Donor, {
+Created.hasMany(Listing, {
     foreignKey: {
         name: "donor_id",
         allowNull: false,
     },
-    through: Created.tableName,
 });
 
 export default Created;

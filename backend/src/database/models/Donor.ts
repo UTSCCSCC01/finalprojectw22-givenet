@@ -27,7 +27,7 @@ Donor.init(
 			autoIncrement: true,
 			primaryKey: true,
             references: {
-                model: Account.tableName,
+                model: Account,
                 key: "acc_id",
             },
 		},

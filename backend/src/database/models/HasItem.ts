@@ -37,7 +37,7 @@ HasItem.init(
             type: DataTypes.INTEGER,
             primaryKey: true,
             references: {
-                model: Listing.tableName,
+                model: Listing,
                 key: "listing_id",
             },
         },
@@ -45,7 +45,7 @@ HasItem.init(
             type: DataTypes.INTEGER,
             primaryKey: true,
             references: {
-                model: Item.tableName,
+                model: Item,
                 key: "item_id",
             },
         },
@@ -77,7 +77,7 @@ Listing.belongsToMany(Item, {
         name: "item_id",
         allowNull: false,
     },
-    through: HasItem.tableName,
+    through: HasItem,
 });
 
 Item.belongsToMany(Listing, {
@@ -85,7 +85,7 @@ Item.belongsToMany(Listing, {
         name: "listing_id",
         allowNull: false,
     },
-    through: HasItem.tableName,
+    through: HasItem,
 });
 
 export default HasItem;

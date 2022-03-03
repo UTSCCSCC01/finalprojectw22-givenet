@@ -50,7 +50,6 @@ ItemCategory.init(
   {
     // timestamps: true,
     sequelize: sequelizeConnection,
-    modelName: "ItemCategory"
   }
 );
 

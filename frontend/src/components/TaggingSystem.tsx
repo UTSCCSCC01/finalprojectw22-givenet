@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import ItemOutput from "../../../backend/src/database/models/Items";
-import ItemGroupOutput from "../../../backend/src/database/models/ItemGroups";
+import ItemOutput from "../../../backend/src/database/models/Item";
+import ItemCategoryOutput from "../../../backend/src/database/models/ItemCategory";
 
-async function postItemTag(item_id: number, name: string, group_id: number) {
+async function postItemTag(item_id: number, name: string, category_id: number) {
     try {
         const newItem = {
             item_id: item_id,
             name: name,
-            group: group_id,
+            category: category_id,
         };
         const postResponse = await fetch("/item", {
             method: "POST",
@@ -23,10 +23,10 @@ async function postItemTag(item_id: number, name: string, group_id: number) {
     }
 }
 
-async function addItemTag(items: ItemOutput[], name: string, group_id: number) {
+async function addItemTag(items: ItemOutput[], name: string, category_id: number) {
     // Citation: https://stackoverflow.com/questions/4020796/finding-the-max-value-of-an-attribute-in-an-array-of-objects
     const newItemID = Math.max.apply(Math, items.map(function(o) { return o.item_id; })) + 1;
-    return await postItemTag(newItemID, name, group_id);
+    return await postItemTag(newItemID, name, category_id);
 }
 
 async function getAllItemTags() {
@@ -54,10 +54,10 @@ async function deleteItemTag(tag_id: number) {
 
 async function getAllItemCategories() {
     try {
-        const allCategoriesResponse = await fetch("/allitemgroups", {
+        const allCategoriesResponse = await fetch("/allitemcategories", {
             method: "GET",
         });
-        const allItemCategories: ItemGroupOutput[] = await allCategoriesResponse.json();
+        const allItemCategories: ItemCategoryOutput[] = await allCategoriesResponse.json();
         return allItemCategories;
     } catch (error) {
         console.log(error);
@@ -68,11 +68,11 @@ async function getAllItemCategories() {
 async function postCategory(category_id: number, name: string, desc: string) {
     try {
         const newCategory = {
-            item_group_id: category_id,
+            item_category_id: category_id,
             name: name,
             desc: desc,
         };
-        const postResponse = await fetch("/itemgroup", {
+        const postResponse = await fetch("/itemcategory", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -86,15 +86,15 @@ async function postCategory(category_id: number, name: string, desc: string) {
     }
 }
 
-async function addCategory(categories: ItemGroupOutput[], name: string, desc: string) {
+async function addCategory(categories: ItemCategoryOutput[], name: string, desc: string) {
     // Citation: https://stackoverflow.com/questions/4020796/finding-the-max-value-of-an-attribute-in-an-array-of-objects
-    const newCategoryID = Math.max.apply(Math, categories.map(function(o) { return o.item_group_id; })) + 1;
+    const newCategoryID = Math.max.apply(Math, categories.map(function(o) { return o.item_category_id; })) + 1;
     return await postCategory(newCategoryID, name, desc);
 }
 
 async function deleteItemCategory(category_id: number) {
     try {
-        const deleteItemCategoryResponse = await fetch("/itemgroup/" + String(category_id), {
+        const deleteItemCategoryResponse = await fetch("/itemcategory/" + String(category_id), {
             method: "DELETE",
         });
     } catch (error) {
@@ -105,9 +105,9 @@ async function deleteItemCategory(category_id: number) {
 
 export default function TaggingSystem() {
     const [tagItems, setTagItems] = useState<ItemOutput[]>([]);
-    const [tagCategories, setTagCategories] = useState<ItemGroupOutput[]>([]);
+    const [tagCategories, setTagCategories] = useState<ItemCategoryOutput[]>([]);
     const [newItemName, setNewItemName] = useState("");
-    const [newItemGroupID, setNewItemGroupID] = useState(Number());
+    const [newItemCategoryID, setNewItemCategoryID] = useState(Number());
     const [newCategoryName, setNewCategoryName] = useState("");
     const [newCategoryDesc, setNewCategoryDesc] = useState("");
 
@@ -126,7 +126,7 @@ export default function TaggingSystem() {
     }, []);
 
     const addNewItemTag = async () => {
-        const newItem = await addItemTag(tagItems, newItemName, newItemGroupID);
+        const newItem = await addItemTag(tagItems, newItemName, newItemCategoryID);
         setTagItems([...tagItems, newItem]);
     }
 
@@ -140,7 +140,7 @@ export default function TaggingSystem() {
             <h1>TAGGING SYSTEM</h1>
             <div id="edittagcontainer">
                 <input type="text" placeholder="NEW TAG" id="addtagname" value={newItemName} onChange={e => setNewItemName(e.target.value)}></input>
-                <input type="number" placeholder="GROUP ID FOR NEW TAG" id="addtaggroupid" value={newItemGroupID} onChange={e => setNewItemGroupID(+e.target.value)}></input>
+                <input type="number" placeholder="GROUP ID FOR NEW TAG" id="addtagcategoryid" value={newItemCategoryID} onChange={e => setNewItemCategoryID(+e.target.value)}></input>
                 <button className="addItemBtn" onClick={addNewItemTag}>ADD TAG</button>
             </div>
             <div id="editcategoriescontainer">
@@ -152,7 +152,7 @@ export default function TaggingSystem() {
             <div id="tagview">
                 {tagItems.map((itemTag: ItemOutput) => (
 					<div className="tags">
-                        <label className="tagLabel">{itemTag.name + " | ID: " + itemTag.item_id}</label>
+                        <label className="tagLabel">{itemTag.name + " | Item ID: " + itemTag.item_id}</label>
                         <button className="tagDel" onClick={() => {
                             deleteItemTag(itemTag.item_id);
                             const filteredArray = tagItems.filter(item => item !== itemTag);
@@ -163,11 +163,11 @@ export default function TaggingSystem() {
             </div>
 
             <div id="tagview">
-                {tagCategories.map((itemCategory: ItemGroupOutput) => (
+                {tagCategories.map((itemCategory: ItemCategoryOutput) => (
 					<div className="tags">
-                        <label className="tagLabel">{itemCategory.name + " | ID: " + itemCategory.item_group_id}</label>
+                        <label className="tagLabel">{itemCategory.name + " | Category ID: " + itemCategory.item_category_id}</label>
                         <button className="tagDel" onClick={() => {
-                            deleteItemCategory(itemCategory.item_group_id);
+                            deleteItemCategory(itemCategory.item_category_id);
                             const filteredArray = tagCategories.filter(category => category !== itemCategory);
                             setTagCategories(filteredArray);
                             }}>X</button>

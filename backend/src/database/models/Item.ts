@@ -35,7 +35,7 @@ Item.init(
     category: {
       type: DataTypes.INTEGER,
       references: {
-        model: ItemCategory.name,
+        model: ItemCategory,
         key: "item_category_id",
       },
     },

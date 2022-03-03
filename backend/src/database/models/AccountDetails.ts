@@ -37,7 +37,7 @@ AccountDetails.init(
 			// autoIncrement: true,
 			primaryKey: true,
 			references: {
-				model: "Accounts",
+				model: Account,
 				key: "acc_id"
 			},
 		},

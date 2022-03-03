@@ -33,7 +33,7 @@ GetsClaimedFor.init(
 		charitable_org_id: {
 			type: DataTypes.INTEGER,
             references: {
-                model: CharitableOrg.tableName,
+                model: CharitableOrg,
                 key: "acc_id",
             },
 		},
@@ -41,7 +41,7 @@ GetsClaimedFor.init(
             type: DataTypes.INTEGER,
             primaryKey: true,
             references: {
-                model: Listing.tableName,
+                model: Listing,
                 key: "listing_id",
             },
         },
@@ -49,7 +49,7 @@ GetsClaimedFor.init(
             type: DataTypes.INTEGER,
             primaryKey: true,
             references: {
-                model: Pickup.tableName,
+                model: Pickup,
                 key: "pickup_id",
             },
         },
@@ -82,12 +82,11 @@ GetsClaimedFor.belongsTo(Pickup, {
     },
 });
 
-Pickup.belongsToMany(CharitableOrg, {
+GetsClaimedFor.hasMany(Pickup, {
     foreignKey: {
-        name: "acc_id",
+        name: "charitable_org_id",
         allowNull: false,
     },
-    through: GetsClaimedFor.tableName,
 });
 
 export default GetsClaimedFor;

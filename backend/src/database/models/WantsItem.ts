@@ -30,7 +30,7 @@ WantsItem.init(
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			references: {
-				model: Account.tableName,
+				model: Account,
 				key: "acc_id",
 			},
 		},
@@ -39,7 +39,7 @@ WantsItem.init(
 			allowNull: false,
 			primaryKey: true,
 			references: {
-				model: Item.tableName,
+				model: Item,
 				key: "item_id",
 			},
 		},
@@ -63,7 +63,7 @@ Item.belongsToMany(CharitableOrg, {
 		name: "acc_id",
 		allowNull: false,
 	},
-	through: WantsItem.tableName,
+	through: WantsItem,
 });
 
 CharitableOrg.belongsToMany(Item, {
@@ -71,7 +71,7 @@ CharitableOrg.belongsToMany(Item, {
 		name: "item_id",
 		allowNull: false,
 	},
-	through: WantsItem.tableName,
+	through: WantsItem,
 });
 
 export default WantsItem;
