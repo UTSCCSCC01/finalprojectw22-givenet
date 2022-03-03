@@ -42,3 +42,13 @@ export const deleteById = async (id: number) => {
 	listing.destroy();
 	return true;
 };
+
+export const getAll = async (): Promise<ListingOutput[]> => {
+	const listings = await Listing.findAll();
+
+	if (!listings) {
+		throw new Error("ERROR IN FINDALL");
+	} else{
+		return listings;
+	}
+};

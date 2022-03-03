@@ -5,13 +5,16 @@ import authenticateToken from "../server";
 const router: Router = Router();
 
 const userController = require("../controllers/user_profiles.ts");
-const listingsController = require("../controllers/user_listings.ts");
+const userListingsController = require("../controllers/user_listings.ts");
+const listingsController = require("../controllers/listings.ts");
 
 router.get("/profile", authenticateToken, userController.get);
 router.post("/profile", authenticateToken, userController.post);
 
-router.get("/listings/:id", listingsController.get);
-router.post("/listings/:id", listingsController.post);
-router.delete("/listings/:id/delete", listingsController.delete);
+router.get("/listings/:id", userListingsController.get);
+router.post("/listings/:id", userListingsController.post);
+router.delete("/listings/:id/delete", userListingsController.delete);
+
+router.get("/listings", listingsController.get);
 
 module.exports = router;
