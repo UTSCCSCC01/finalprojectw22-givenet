@@ -6,6 +6,7 @@ const ListingsPage = () => {
   return (
     <div id="subrootdiv">
         <Navbar />
+        <h1 id="view-listings-title">ALL ACTIVE LISTINGS</h1>
         <ViewListings />
     </div>
 
