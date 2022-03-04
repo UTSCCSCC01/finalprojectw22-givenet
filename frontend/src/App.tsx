@@ -8,7 +8,7 @@ import ListingPage from "./pages/Listings";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import TaggingPage from "./pages/TaggingPage";
-import ViewListings from "./components/ViewListings";
+
 import ListingsPage from "./pages/ListingsPage";
 
 export default function App() {
