@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/listings.css";
 
+//Custom types for data iteration
 type Listing = {
 	listing_id?: number;
 	acc_id: number;
@@ -16,6 +17,7 @@ type Item = {
 }
 
 
+//Props
 interface listingProps {
 	data: Array<Listing>,
 	deleteFunction: (number?: number) => any,
@@ -30,10 +32,14 @@ interface templateProp {
 	add: boolean,
 }
 
+//Maybe not necessary anymore
 var set = 0;
 var lock = 0;
 
+//Listings Display Component: Generates the table of user listings.
 function GenerateListings({data, deleteFunction}: listingProps) {
+
+	//Unmaps a datestring to readable date string objects.
 	function dateString(data: Array<Date>): string {
 		var s = ""
 		for (let i = 0; i < data.length; i ++) {
@@ -44,6 +50,7 @@ function GenerateListings({data, deleteFunction}: listingProps) {
 	}
 
 	return (
+		//Build the table based on current information stores in data.
 		(data.length) ?
 		<table>
 			<thead>
@@ -75,6 +82,7 @@ function GenerateListings({data, deleteFunction}: listingProps) {
 	);
 }
 
+//Template componenet: Builds the template form that users interact with to create a nwe listing.
 function ListingTemplateBuilder({add}: templateProp) {
 	const [newUserListings, setnewUserListings] = useState<Array<Item>>([] as Item[]);
 	useEffect(() => {
@@ -83,6 +91,7 @@ function ListingTemplateBuilder({add}: templateProp) {
 		}
 	}, [newUserListings]);
 
+	//Table shell.
 	var newEntryField = <table>
 		<thead>
 			<tr>
@@ -105,6 +114,7 @@ function ListingTemplateBuilder({add}: templateProp) {
 		</tbody>
 	</table>
 	
+	//Adds a new row to the current table build and appends the current row to an array.
 	async function AddListingRow() {
 
 		var listElement: Item;
@@ -119,7 +129,6 @@ function ListingTemplateBuilder({add}: templateProp) {
 			expiry = today.setDate(today.getDate());
 		}
 		 
-
 		listElement = {
 			item: newitem,
 			weight: new_weight,
@@ -136,7 +145,7 @@ function ListingTemplateBuilder({add}: templateProp) {
 		
 	}
 
-
+	//Function which generates the table to be displayed to the user.
 	function AddListings({data}: newListingProps) {
 		return (
 			(data.length) ?
@@ -177,7 +186,7 @@ function ListingTemplateBuilder({add}: templateProp) {
 			<AddListings data={newUserListings}/>
 		)
 	} 
-		
+	//Code that adds the data in newUserListings to the database when the user hits add Listing.
 	if (newUserListings.length > 0 && set == 0) {
 		var accID = (document.getElementById("Listing_AccID") as HTMLInputElement).value;
 
@@ -206,7 +215,6 @@ function ListingTemplateBuilder({add}: templateProp) {
 		)
 		.then(response => {
 			if (response.status !== 404) {
-				console.log("im runnning twice again sadge");
 			} else {
 				alert("SERVER ERROR 501\n");
 			}
@@ -219,10 +227,12 @@ function ListingTemplateBuilder({add}: templateProp) {
 
 }
 
+//Min function, contains two components Listings Display and Template.
 function Listings() {
 	const [userListings, setUserListings] = useState<Array<Listing>>([] as Listing[]);
 	const [addListing, setAddListing] = useState<boolean>(false);
 
+	//Custom "mutex" lock. May not be necessary.
 	function waitForUpdate() {
 		//if set isnt 1, timeout and wait until it is.
 		if (set !== 1) {
@@ -245,6 +255,7 @@ function Listings() {
 		waitForUpdate();
 	}
 
+	//Fetches data and signals Listing Display to rerender.
 	async function fetchUserData() {
 		var accID = (document.getElementById("Listing_AccID") as HTMLInputElement).value;
 	
@@ -255,6 +266,7 @@ function Listings() {
 		setUserListings(await response.json());
 	}
 
+	//Deletes data and signals Listing Display to rerender
 	async function DeleteListings(id?: number) {
 
 		if (id) {
@@ -278,6 +290,7 @@ function Listings() {
 		}
 	}
 
+	//Main page
 	return (
 		<div>
 			<div id="mainDiv">
