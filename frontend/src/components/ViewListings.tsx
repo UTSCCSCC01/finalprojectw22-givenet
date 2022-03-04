@@ -24,7 +24,7 @@ const ViewListings = () => {
     useEffect(() => {
 
         async function getListings() {
-            const response = await fetch("/user/viewlistings" , {
+            const response = await fetch("/user/listings" , {
                 method: "GET",
             });
 

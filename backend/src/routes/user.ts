@@ -15,6 +15,6 @@ router.get("/listings/:id", userListingsController.get);
 router.post("/listings/:id", userListingsController.post);
 router.delete("/listings/:id/delete", userListingsController.delete);
 
-router.get("/viewlistings", listingsController.get);
+router.get("/listings", listingsController.get);
 
 module.exports = router;
