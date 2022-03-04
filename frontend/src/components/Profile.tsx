@@ -11,8 +11,11 @@ type profile = {
 	email: string;
 };
 
+/* Form that contains the profile information */
 export default function Profile() {
+	// Is the form editabale or not
 	const [editState, setEditState] = useState(false);
+	// Values of the profile
 	const [profileState, setProfileState] = useState<profile>({
 		name: "",
 		location: "",
@@ -20,10 +23,15 @@ export default function Profile() {
 		phone: "",
 		email: "",
 	});
+
+	// What a success message would be
 	const [successState, setSuccessState] = useState("");
+	// What an error message would be
 	const [errorState, setErrorState] = useState("");
+	// The token of the logged in user for authentication
 	const { token } = useContext(TokenContext);
 
+	// Fill the profileState form
 	const fetchUserData = async () => {
 		const response = await fetch("/user/profile", {
 			method: "GET",
@@ -53,6 +61,7 @@ export default function Profile() {
 		}
 	};
 
+	// Update the profile data using the form data
 	const updateUserData = async () => {
 		if (profileState.name.length < 2) {
 			setErrorState("Please enter a name");
@@ -104,6 +113,7 @@ export default function Profile() {
 		setEditState(false);
 	};
 
+	// Modify the states based on the values in the form
 	const handleFormChange = (e: any) => {
 		const { name, value } = e.target;
 		console.log(name, value);
@@ -112,6 +122,7 @@ export default function Profile() {
 		console.log(profileState);
 	};
 
+	// On page load, populate the form with the user data
 	useEffect(() => {
 		fetchUserData();
 	}, []);

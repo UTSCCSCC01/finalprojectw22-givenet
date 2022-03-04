@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 const style = { textDecoration: "none" };
 
+// Simple navigation bar
 export default function Navigation() {
 	return (
 		<>
@@ -17,13 +18,13 @@ export default function Navigation() {
 							</Link>
 						</Nav.Link>
 						<Nav.Link>
-							<Link to="/" style={style}>
-								About Us
+							<Link to="/profile" style={style}>
+								Profile
 							</Link>
 						</Nav.Link>
 						<Nav.Link>
-							<Link to="/" style={style}>
-								Contact
+							<Link to="/tagging" style={style}>
+								Tagging
 							</Link>
 						</Nav.Link>
 						<Nav.Link>

@@ -14,6 +14,7 @@ type form = {
 };
 
 export default function SignUpForm() {
+	// The values of all the forms
 	const [formState, setFormState] = useState<form>({
 		username: "",
 		password: "",
@@ -24,9 +25,13 @@ export default function SignUpForm() {
 		email: "",
 		type: false,
 	});
+
 	const navigate = useNavigate();
+
+	// Any form errors for invalid values
 	const [errorState, setErrorState] = useState("");
 
+	// Update the state when the form changes
 	const handleFormStateChange = (e: any) => {
 		const { name } = e.target;
 		console.log(name);
@@ -40,6 +45,7 @@ export default function SignUpForm() {
 		}
 	};
 
+	// Signup the user if the inputs to the form are valid; display errors if needed
 	const handleSignUp = async () => {
 		if (formState.username.length < 5) {
 			setErrorState("Username must be at least 5 characters");

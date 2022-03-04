@@ -6,6 +6,7 @@ import Wanted from "./models/Wanted";
 import Listings from "./models/Listings";
 import ItemGroups from "./models/ItemGroups";
 
+//Turn force to true when you want to reset the database or reload models.
 const force = false;
 const dbInit = () => {
 	Account.sync({ force });

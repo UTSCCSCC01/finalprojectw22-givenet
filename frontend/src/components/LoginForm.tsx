@@ -11,19 +11,23 @@ type form = {
 };
 
 export default function LoginForm({}: Props) {
+	// Login form state
 	const [formState, setFormState] = useState<form>({
 		username: "",
 		password: "",
 	});
 	const { setToken } = useContext(TokenContext);
+	// Error message for form errors
 	const [errorState, setErrorState] = useState("");
 	const navigate = useNavigate();
 
+	// Modify state when the form changes
 	const handleFormStateChange = (e: any) => {
 		const { name, value } = e.target;
 		setFormState((prev) => ({ ...prev, [name]: value }));
 	};
 
+	// On login, handle any errors and login and update token if successfull
 	const handleLogin = async () => {
 		setErrorState("");
 		if (formState.username === "") {

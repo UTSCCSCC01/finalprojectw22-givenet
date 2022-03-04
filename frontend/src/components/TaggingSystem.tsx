@@ -11,6 +11,8 @@ import {
 	Row,
 } from "react-bootstrap";
 
+/* Helpers for CRUD operations */
+
 async function postItemTag(item_id: number, name: string, group_id: number) {
 	try {
 		const newItem = {
@@ -132,6 +134,7 @@ async function deleteItemCategory(category_id: number) {
 }
 
 export default function TaggingSystem() {
+	// State for all the tags/categories etc.
 	const [tagItems, setTagItems] = useState<ItemOutput[]>([]);
 	const [tagCategories, setTagCategories] = useState<ItemGroupOutput[]>([]);
 	const [newItemName, setNewItemName] = useState("");
@@ -139,6 +142,7 @@ export default function TaggingSystem() {
 	const [newCategoryName, setNewCategoryName] = useState("");
 	const [newCategoryDesc, setNewCategoryDesc] = useState("");
 
+	// On page load, populate the item tags and categories on the page
 	useEffect(() => {
 		const fetchTagItems = async () => {
 			const tags = await getAllItemTags();
@@ -153,11 +157,13 @@ export default function TaggingSystem() {
 		fetchTagCategories();
 	}, []);
 
+	// Add an item tag using the current state
 	const addNewItemTag = async () => {
 		const newItem = await addItemTag(tagItems, newItemName, newItemGroupID);
 		setTagItems([...tagItems, newItem]);
 	};
 
+	// Add a new cateogory using the current state
 	const addNewCategory = async () => {
 		const newCategory = await addCategory(
 			tagCategories,
