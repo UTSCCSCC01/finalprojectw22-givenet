@@ -2,6 +2,7 @@ import express from "express";
 
 import { create, update, getById } from "../database/dal/users";
 
+//These functions are simple and need no commenting.
 module.exports = {
 	get: async (req: express.Request, res: express.Response) => {
 		var user: any = req.user;

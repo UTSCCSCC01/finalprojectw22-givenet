@@ -8,6 +8,7 @@ import {
 } from "../database/dal/user_listings";
 
 
+//These functions are simple and need no commenting.
 module.exports = {
 	get: async (req: express.Request, res: express.Response) => {
 		let id = Number(req.params.id);
