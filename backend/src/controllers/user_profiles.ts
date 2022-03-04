@@ -1,40 +1,37 @@
 import express from "express";
 
-import {
-	create,
-	update,
-	getById,
-} from "../database/dal/users";
+import { create, update, getById } from "../database/dal/users";
 
-
+//These functions are simple and need no commenting.
 module.exports = {
 	get: async (req: express.Request, res: express.Response) => {
-		let id = Number(req.params.id);
+		var user: any = req.user;
+		if (user) {
+			console.log("id", user.dataValues.acc_id);
+			let id = Number(user.dataValues.acc_id);
 
-		let fetched = await getById(id);
+			let fetched = await getById(id);
 
-		if (fetched) {
-			res.send(fetched)
+			if (fetched) {
+				return res.json(JSON.stringify(fetched));
+			} else {
+				return res.send(401);
+			}
 		}
-		else {
-			res.send(412)
-		}
-		
+		return res.sendStatus(401);
 	},
 	post: async (req: express.Request, res: express.Response) => {
-		let id = Number(req.params.id);
+		const user: any = req.user;
 
-		let queried = req.body;
-		console.log(queried);
-
-		queried['updatedAt'] = Date.toString();
-		let updated = update(id, queried);
+		let queried = await req.body;
+		console.log("queried", queried);
+		queried["updatedAt"] = Date.toString();
+		let updated = await update(user.dataValues.acc_id, queried);
 
 		if (updated) {
-			res.send(updated)
-		}
-		else {
-			res.send(413)
+			return res.json(JSON.stringify(updated));
+		} else {
+			return res.send(401);
 		}
 	},
 };
