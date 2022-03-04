@@ -290,7 +290,7 @@ function Listings() {
 		}
 	}
 
-	//Main page
+	//Main page with the two componenets.
 	return (
 		<div>
 			<div id="mainDiv">
