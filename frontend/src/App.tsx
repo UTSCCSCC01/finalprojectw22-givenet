@@ -9,6 +9,8 @@ import ListingPage from "./pages/Listings";
 import "bootstrap/dist/css/bootstrap.min.css";
 import TaggingPage from "./pages/TaggingPage";
 
+import ListingsPage from "./pages/ListingsPage";
+
 export default function App() {
 	const [token, setToken] = useState("");
 	const value = useMemo(() => ({ token, setToken }), [token, setToken]);
@@ -22,6 +24,7 @@ export default function App() {
 					<Route path="/profile" element={<ProfilePage />} />
 					<Route path="/profile/listings" element={<ListingPage />} />
 					<Route path="/tagging" element={<TaggingPage />} />
+					<Route path="/viewlistings" element={<ListingsPage />} />
 				</Routes>
 			</TokenContext.Provider>
 		</div>
