@@ -6,6 +6,7 @@ const router: Router = Router();
 
 const userController = require("../controllers/user_profiles.ts");
 const listingsController = require("../controllers/user_listings.ts");
+const listingController = require("../controllers/listings.ts")
 
 //Check if the user exists given the user object.
 router.get("/profile", authenticateToken, userController.get);
@@ -18,5 +19,8 @@ router.get("/listings/:id", listingsController.get);
 router.post("/listings/:id", listingsController.post);
 //Delete the listing with id, id
 router.delete("/listings/:id/delete", listingsController.delete);
+
+//View all listings
+router.get("/listings", listingController.get);
 
 module.exports = router;
