@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { ListGroup, Container, Dropdown } from "react-bootstrap";
-import { ObjectFlags } from 'typescript';
 import "../styles/viewlistings.css";
 
 type Listing = {
@@ -12,10 +11,12 @@ type Listing = {
     acc_name?: string;
     address?: string;
 };
+// Accname and address are filled out in useeffect
 
 
 const ViewListings = () => {
 
+    // This state will be used for storing data retrieved from request for all listings
     const [allListings, setAllListings] = useState<Array<Listing>>([] as Listing[]);
 
 
@@ -23,7 +24,7 @@ const ViewListings = () => {
     useEffect(() => {
 
         async function getListings() {
-            const response = await fetch("/user/listings" , {
+            const response = await fetch("/user/viewlistings" , {
                 method: "GET",
             });
 
@@ -67,7 +68,7 @@ const ViewListings = () => {
 
                             <Dropdown.Menu>
                                 {listing.items.map((i, index) =>
-                                    <Dropdown.Item>{i} // kg: {listing.weight[index]} // Exp: {listing.expiry[index].toDateString()}</Dropdown.Item>
+                                    <Dropdown.Item>{i} || kg: {listing.weight[index]} || Exp: {listing.expiry[index].toDateString()}</Dropdown.Item>
                                 )}
                             </Dropdown.Menu>
                         </Dropdown>
@@ -78,8 +79,10 @@ const ViewListings = () => {
             </Container>
         )
     }
+
+    // Response not received
     return (
-        <div>ViewListings</div>
+        <div>LOADING</div>
     )
 }
 
