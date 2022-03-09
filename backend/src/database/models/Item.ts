@@ -1,11 +1,14 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
-import ItemCategory from "./ItemCategory";
+import ItemCategory from "./Category";
 
 interface ItemAttributes {
   item_id: number;
+  listing_id: number;
+  tag_id: number;
   name: string;
-  category: number;
+  weight: string;
+  expiry: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,8 +18,11 @@ export interface ItemOutput extends Required<ItemAttributes> {}
 
 class Item extends Model<ItemAttributes, ItemInput> implements ItemAttributes {
   public item_id!: number;
+  public listing_id!: number;
+  public tag_id!: number;
   public name!: string;
-  public category!: number;
+  public weight!: string;
+  public expiry!: string;
   public createdAt!: Date;
   public updatedAt!: Date;
 }
@@ -28,16 +34,25 @@ Item.init(
       autoIncrement: true,
       primaryKey: true,
     },
+    listing_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    tag_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    category: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: ItemCategory,
-        key: "item_category_id",
-      },
+    weight: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    expiry: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     createdAt: {
       type: "TIMESTAMP",
@@ -53,17 +68,5 @@ Item.init(
     sequelize: sequelizeConnection,
   }
 );
-
-// Citation: https://sequelize.org/v3/docs/associations/
-/*
-    Adds groupID to Item as a foreign key into ItemGroups
-    (don't forget to add the reference in the init attributes definition)
-*/
-Item.belongsTo(ItemCategory, {
-  foreignKey: {
-    name: "category",
-    allowNull: false,
-  },
-});
 
 export default Item;

@@ -5,6 +5,7 @@ interface AccountAttributes {
 	acc_id: number;
 	username: string;
 	password: string;
+	type: number;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -19,6 +20,7 @@ class Account
 	public acc_id!: number;
 	public username!: string;
 	public password!: string;
+	public type!: number;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -37,6 +39,10 @@ Account.init(
 		},
 		password: {
 			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		type: {
+			type: DataTypes.INTEGER,
 			allowNull: false,
 		},
 		createdAt: {

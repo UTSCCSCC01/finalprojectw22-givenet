@@ -1,31 +1,31 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 
-interface ItemCategoryAttributes {
-  item_category_id: number;
+interface CategoryAttributes {
+  category_id: number;
   desc: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface ItemCategoryInput extends ItemCategoryAttributes {}
-export interface ItemCategoryOutput extends Required<ItemCategoryAttributes> {}
+export interface CategoryInput extends CategoryAttributes {}
+export interface CategoryOutput extends Required<CategoryAttributes> {}
 
-class ItemCategory
-  extends Model<ItemCategoryAttributes, ItemCategoryInput>
-  implements ItemCategoryAttributes
+class Category
+  extends Model<CategoryAttributes, CategoryInput>
+  implements CategoryAttributes
 {
-  public item_category_id!: number;
+  public category_id!: number;
   public desc!: string;
   public name!: string;
   public createdAt!: Date;
   public updatedAt!: Date;
 }
 
-ItemCategory.init(
+Category.init(
   {
-    item_category_id: {
+    category_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
@@ -37,6 +37,7 @@ ItemCategory.init(
     name: {
       type: DataTypes.STRING,
       unique: true,
+      allowNull: false,
     },
     createdAt: {
       type: "TIMESTAMP",
@@ -53,4 +54,4 @@ ItemCategory.init(
   }
 );
 
-export default ItemCategory;
+export default Category;

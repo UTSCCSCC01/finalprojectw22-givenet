@@ -3,6 +3,7 @@ import sequelizeConnection from "../config";
 
 interface ListingAttributes {
   listing_id: number;
+  acc_id: number;
   container: string;
   location: string;
   notes: string;
@@ -15,6 +16,7 @@ export interface ListingOutput extends Required<ListingAttributes> {}
 
 class Listing extends Model<ListingAttributes, ListingInput> implements ListingAttributes {
   public listing_id!: number;
+  public acc_id!: number;
   public container!: string;
   public location!: string;
   public notes!: string;
@@ -28,6 +30,10 @@ Listing.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    acc_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     container: {
       type: DataTypes.STRING,

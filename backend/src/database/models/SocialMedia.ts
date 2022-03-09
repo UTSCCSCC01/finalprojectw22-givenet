@@ -65,12 +65,4 @@ SocialMedia.init(
 		sequelize: sequelizeConnection,
 	}
 );
-
-SocialMedia.belongsTo(Account, {
-    foreignKey: {
-        name: "acc_id",
-        allowNull: false,
-    },
-});
-
 export default SocialMedia;

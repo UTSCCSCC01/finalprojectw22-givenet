@@ -1,22 +1,22 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 import Account from "./Account";
-import CharitableOrg from "./CharitableOrg";
+import CharitableOrg from "./Account";
 import Item from "./Item";
 
-interface WantsItemAttributes {
+interface CharityWantsAttributes {
 	acc_id: number;
 	item_id: number;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface WantsItemInput extends WantsItemAttributes {}
-export interface WantsItemOutput extends Required<WantsItemAttributes> {}
+export interface CharityWantsInput extends CharityWantsAttributes {}
+export interface CharityWantsOutput extends Required<CharityWantsAttributes> {}
 
-class WantsItem
-	extends Model<WantsItemAttributes, WantsItemInput>
-	implements WantsItemAttributes
+class CharityWants
+	extends Model<CharityWantsAttributes, CharityWantsInput>
+	implements CharityWantsAttributes
 {
 	public acc_id!: number;
 	public item_id!: number;
@@ -24,7 +24,7 @@ class WantsItem
 	public updatedAt!: Date;
 }
 
-WantsItem.init(
+CharityWants.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
@@ -63,7 +63,7 @@ Item.belongsToMany(CharitableOrg, {
 		name: "acc_id",
 		allowNull: false,
 	},
-	through: WantsItem,
+	through: CharityWants,
 });
 
 CharitableOrg.belongsToMany(Item, {
@@ -71,7 +71,7 @@ CharitableOrg.belongsToMany(Item, {
 		name: "item_id",
 		allowNull: false,
 	},
-	through: WantsItem,
+	through: CharityWants,
 });
 
-export default WantsItem;
+export default CharityWants;
