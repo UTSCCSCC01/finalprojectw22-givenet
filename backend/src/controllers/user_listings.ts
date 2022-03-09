@@ -5,7 +5,7 @@ import {
 	update,
 	getById,
 	deleteById,
-} from "../database/dal/user_listings";
+} from "../database/dal/listing";
 
 
 //These functions are simple and need no commenting.
@@ -19,9 +19,9 @@ module.exports = {
 			res.send(fetched)
 		}
 		else {
-			res.send(412)
+			res.send(400)
 		}
-		
+
 	},
 	post: async (req: express.Request, res: express.Response) => {
 		let body = req.body;
@@ -36,7 +36,7 @@ module.exports = {
 	},
 	delete: async (req: express.Request, res: express.Response) => {
 		let id = Number(req.params.id);
-		
+
 		let fetched = await deleteById(id);
 
 		if (fetched) {

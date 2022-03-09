@@ -1,10 +1,9 @@
 import { Op } from "sequelize";
-import Listing from "../models/Listings";
-import { ListingInput, ListingOutput } from "../models/Listings";
+import Listing from "../models/Listing";
+import { ListingInput, ListingOutput } from "../models/Listing";
 
 export const create = async (payload: ListingInput): Promise<ListingOutput> => {
-	const listing = await Listing.create(payload);
-	return listing;
+	return await Listing.create(payload);
 };
 
 export const update = async (
@@ -15,16 +14,11 @@ export const update = async (
 	if (!listing) {
 		throw new Error(`User instance with acc_id ${id} not found`);
 	}
-	const updateListing = await (listing as Listing).update(payload);
-	return updateListing;
+	return await (listing as Listing).update(payload);
 };
 
-export const getById = async (id: number): Promise<Array<ListingOutput>> => {
-	const listing = await Listing.findAll({
-		where: {
-			acc_id: id
-		}
-	});
+export const getById = async (id: number): Promise<ListingOutput> => {
+	const listing = await Listing.findByPk(id);
 
 	if (!listing) {
 		throw new Error(`User has no listings`);
@@ -38,8 +32,7 @@ export const deleteById = async (id: number) => {
 	if (!listing) {
 		throw new Error(`Listing id does not exist`);
 	}
-
-	listing.destroy();
+	await listing.destroy();
 	return true;
 };
 
@@ -48,7 +41,7 @@ export const getAll = async (): Promise<ListingOutput[]> => {
 
 	if (!listings) {
 		throw new Error("ERROR IN FINDALL");
-	} else{
-		return listings;
 	}
+
+	return listings;
 };

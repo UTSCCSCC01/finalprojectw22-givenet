@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { AccountInput, AccountOutput } from "../database/models/Account";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { create as createUser } from "../database/dal/user";
+import { create as createUser } from "../database/dal/account_details";
 import {
 	create as createAccount,
 	update,

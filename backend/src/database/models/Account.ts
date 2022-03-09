@@ -55,7 +55,6 @@ Account.init(
 		},
 	},
 	{
-		// timestamps: true,
 		sequelize: sequelizeConnection,
 	}
 );

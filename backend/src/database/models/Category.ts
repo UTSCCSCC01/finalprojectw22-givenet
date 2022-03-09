@@ -49,7 +49,6 @@ Category.init(
     },
   },
   {
-    // timestamps: true,
     sequelize: sequelizeConnection,
   }
 );

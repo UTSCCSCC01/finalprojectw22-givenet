@@ -1,7 +1,7 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { ItemCategoryInput, ItemCategoryOutput } from "../database/models/ItemCategory";
+import { CategoryInput, CategoryOutput } from "../database/models/Category";
 
 import {
   create,
@@ -9,15 +9,15 @@ import {
   getByItemGroupId,
   getAll,
   deleteByItemGroupId,
-} from "../database/dal/ItemCategoryDAL";
+} from "../database/dal/category";
 
 module.exports = {
   post: async (req: express.Request, res: express.Response) => {
     try {
-      const itemCategoryInput: ItemCategoryInput = req.body;
-      const newItemCategory: ItemCategoryOutput = await create(itemCategoryInput);
+      const itemCategoryInput: CategoryInput = req.body;
+      const newCategory: CategoryOutput = await create(itemCategoryInput);
       res.status(StatusCodes.CREATED);
-      res.json(newItemCategory);
+      res.json(newCategory);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -26,9 +26,9 @@ module.exports = {
   put: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const updatedItemCategory: ItemCategoryOutput = await update(id, req.body);
+      const updatedCategory: CategoryOutput = await update(id, req.body);
       res.status(StatusCodes.OK);
-      res.json(updatedItemCategory);
+      res.json(updatedCategory);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.NOT_FOUND);
@@ -51,7 +51,7 @@ module.exports = {
   get: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const itemCategory: ItemCategoryOutput = await getByItemGroupId(id);
+      const itemCategory: CategoryOutput = await getByItemGroupId(id);
       res.status(StatusCodes.OK);
       res.json(itemCategory);
     } catch (error) {
@@ -61,9 +61,9 @@ module.exports = {
   },
   getAll: async (req: express.Request, res: express.Response) => {
     try {
-      const allItemCategory: ItemCategoryOutput[] = await getAll();
+      const allCategory: CategoryOutput[] = await getAll();
       res.status(StatusCodes.OK);
-      res.json(allItemCategory);
+      res.json(allCategory);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);

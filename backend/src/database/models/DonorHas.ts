@@ -52,7 +52,6 @@ DonorHas.init(
         },
     },
     {
-        // timestamps: true,
         sequelize: sequelizeConnection,
     }
 );

@@ -52,7 +52,6 @@ Pickup.init(
     },
   },
   {
-    // timestamps: true,
     sequelize: sequelizeConnection,
   }
 );

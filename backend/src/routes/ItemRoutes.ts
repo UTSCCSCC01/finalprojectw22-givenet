@@ -6,18 +6,18 @@ const router: Router = Router();
 const itemController = require("../controllers/ItemController.ts");
 
 // Create a new item tag
-router.post("/item", itemController.post);
+router.post("/", itemController.post);
 
 // Update an item tag
-router.put("/item/:id", itemController.put);
+router.put("/:id", itemController.put);
 
 // Remove an item tag
-router.delete("/item/:id", itemController.delete);
+router.delete("/:id", itemController.delete);
 
 // Get an item group by id
-router.get("/item/:id", itemController.get);
+router.get("/:id", itemController.get);
 
 // Return all item groups
-router.get("/allitems", itemController.getAll);
+router.get("/all", itemController.getAll);
 
 module.exports = router;

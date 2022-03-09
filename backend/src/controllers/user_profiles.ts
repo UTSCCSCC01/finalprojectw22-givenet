@@ -1,6 +1,6 @@
 import express from "express";
 
-import { create, update, getById } from "../database/dal/users";
+import { create, update, getById } from "../database/dal/account_details";
 
 //These functions are simple and need no commenting.
 module.exports = {

@@ -58,7 +58,6 @@ Listing.init(
     },
   },
   {
-    // timestamps: true,
     sequelize: sequelizeConnection,
   }
 );

@@ -61,7 +61,6 @@ SocialMedia.init(
 		},
 	},
 	{
-		// timestamps: true,
 		sequelize: sequelizeConnection,
 	}
 );

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getAll } from "../database/dal/user_listings";
+import { getAll } from "../database/dal/listing";
 
 
 module.exports = {
@@ -14,6 +14,6 @@ module.exports = {
 		else {
 			res.send(412)
 		}
-		
+
 	},
 };

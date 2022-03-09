@@ -64,7 +64,6 @@ Item.init(
     },
   },
   {
-    // timestamps: true,
     sequelize: sequelizeConnection,
   }
 );

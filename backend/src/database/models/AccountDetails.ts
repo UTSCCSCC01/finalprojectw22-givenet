@@ -34,7 +34,6 @@ AccountDetails.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
-			// autoIncrement: true,
 			primaryKey: true,
 			references: {
 				model: Account,
@@ -72,12 +71,5 @@ AccountDetails.init(
 		sequelize: sequelizeConnection,
 	}
 );
-
-AccountDetails.belongsTo(Account, {
-	foreignKey: {
-		name: "acc_id",
-		allowNull: false,
-	},
-});
 
 export default AccountDetails;

@@ -1,10 +1,8 @@
-import { Op } from "sequelize";
 import AccountDetails from "../models/AccountDetails";
 import { AccDetailsInput, AccDetailsOutput } from "../models/AccountDetails";
 
 export const create = async (payload: AccDetailsInput): Promise<AccDetailsOutput> => {
-	const user = await AccountDetails.create(payload);
-	return user;
+	return await AccountDetails.create(payload);
 };
 
 export const update = async (
@@ -15,8 +13,7 @@ export const update = async (
 	if (!AccountDetails) {
 		throw new Error(`User instance with acc_id ${id} not found`);
 	}
-	const updatedUser = await (user as AccountDetails).update(payload);
-	return updatedUser;
+	return await (user as AccountDetails).update(payload);
 };
 
 export const getById = async (id: number): Promise<AccDetailsOutput> => {

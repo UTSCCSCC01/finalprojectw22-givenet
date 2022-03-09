@@ -1,7 +1,6 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 import Account from "./Account";
-import CharitableOrg from "./Account";
 import Item from "./Item";
 
 interface CharityWantsAttributes {
@@ -53,25 +52,8 @@ CharityWants.init(
 		},
 	},
 	{
-		// timestamps: true,
 		sequelize: sequelizeConnection,
 	}
 );
-
-Item.belongsToMany(CharitableOrg, {
-	foreignKey: {
-		name: "acc_id",
-		allowNull: false,
-	},
-	through: CharityWants,
-});
-
-CharitableOrg.belongsToMany(Item, {
-	foreignKey: {
-		name: "item_id",
-		allowNull: false,
-	},
-	through: CharityWants,
-});
 
 export default CharityWants;
