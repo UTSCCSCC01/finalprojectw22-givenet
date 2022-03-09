@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import Navbar from "../components/Navbar";
 import SignUpForm from "../components/SignUpForm";
-import "../styles/SignUpForm.css"
+import { TokenContext } from "../TokenContext";
+import { useNavigate } from "react-router-dom";
 
-type Props = {};
+export default function SignUpPage() {
+	const { token } = useContext(TokenContext);
+	const navigate = useNavigate();
 
-export default function SignUpPage({}: Props) {
+	useEffect(() => {
+		console.log("signup", token);
+		if (token !== "") {
+			navigate("/profile");
+		}
+	});
+
 	return (
-		<div id="subrootdiv">
+		<div>
+			<Navbar />
 			<SignUpForm />
 		</div>
 	);

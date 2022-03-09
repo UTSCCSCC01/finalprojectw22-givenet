@@ -27,17 +27,20 @@ const authenticateToken = (
 	next: express.NextFunction
 ) => {
 	const authHeader = req.headers["authorization"];
-	console.log(authHeader);
+	if (!authHeader) {
+		return res.sendStatus(401);
+	}
 	const token = authHeader && authHeader.split(" ")[1];
 	if (token == null) return res.sendStatus(401);
 
 	jwt.verify(token, "secret", (err, user) => {
 		// console.log(err);
-		if (err) return res.sendStatus(403);
+		if (err) return res.sendStatus(401);
 		req.user = user;
 		next();
 	});
 };
+export default authenticateToken;
 
 /* Routes */
 const accountRoute = require("./routes/account.ts");

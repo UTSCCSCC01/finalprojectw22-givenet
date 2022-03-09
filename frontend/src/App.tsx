@@ -1,46 +1,32 @@
-import './pp_styles.css'
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
-import TaggingPage from "./pages/TaggingPage";
-import ProfilePage from "./SideBar";
 import { TokenContext } from "./TokenContext";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import ProfilePage from "./pages/ProfilePage";
+import ListingPage from "./pages/Listings";
 
-function App() {
-	const [tokenState, setTokenState] = useState("");
+import "bootstrap/dist/css/bootstrap.min.css";
+import TaggingPage from "./pages/TaggingPage";
 
+import ListingsPage from "./pages/ListingsPage";
+
+export default function App() {
+	const [token, setToken] = useState("");
+	const value = useMemo(() => ({ token, setToken }), [token, setToken]);
 	return (
 		<div className="App">
 			<header className="App-header"></header>
-			<Routes>
-				<Route path="/" element={<SignUpStuff />} />
-				<Route path="profile" element={<Profile />} />
-			</Routes>
-			
+			<TokenContext.Provider value={value}>
+				<Routes>
+					<Route path="/" element={<SignUpPage />} />
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/profile" element={<ProfilePage />} />
+					<Route path="/profile/listings" element={<ListingPage />} />
+					<Route path="/tagging" element={<TaggingPage />} />
+					<Route path="/viewlistings" element={<ListingsPage />} />
+				</Routes>
+			</TokenContext.Provider>
 		</div>
 	);
 }
-
-function SignUpStuff() {
-	const [tokenState, setTokenState] = useState("");
-
-	return (
-		<div>		
-      <TaggingPage />
-			<SignUpPage />
-			<TokenContext.Provider value={{ tokenState, setTokenState }}>
-				<LoginPage />
-			</TokenContext.Provider>
-
-			<button>Logout</button>
-		</div>
-	)
-}
-
-function Profile() {
-	return (
-		<ProfilePage />
-	)
-}
-export default App;

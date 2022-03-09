@@ -44,16 +44,18 @@ async function updateUserData() {
 function Side_Bar() {
 	return (
 		<div className="pp">
-				<br /> <br /><br />
-				<h1>FETCH ACC DATA</h1>
-				<div>
-					<label htmlFor="AccID">AccID: </label>
-					<input type="text" name="AccID" id="AccID"></input> <br /> <br />
-					<button onClick={fetchUserData}>Populate Data</button> <br />
-				</div>
-                <br />
-            <hr />
-			<SideBar/>
+			<br /> <br />
+			<br />
+			<h1>FETCH ACC DATA</h1>
+			<div>
+				<label htmlFor="AccID">AccID: </label>
+				<input type="text" name="AccID" id="AccID"></input> <br />{" "}
+				<br />
+				<button onClick={fetchUserData}>Populate Data</button> <br />
+			</div>
+			<br />
+			<hr />
+			<SideBar />
 			<button onClick={updateUserData}>Update</button>
 		</div>
 	);

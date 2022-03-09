@@ -16,7 +16,6 @@ import Pickup from "./models/Pickup";
 import sequelizeConnection from "./config";
 
 const dbInit = async () => {
-
 	// await sequelizeConnection.sync({ force: true });
 
 	await ItemCategory.sync({ force: true });
@@ -38,7 +37,7 @@ const dbInit = async () => {
 
 	console.log(sequelizeConnection.models);
 
-	for(let [key, value] of Object.entries(sequelizeConnection.models)) {
+	for (let [key, value] of Object.entries(sequelizeConnection.models)) {
 		console.log(value.tableName);
 		console.log(value.associations);
 		console.log(value.prototype);
@@ -46,4 +45,3 @@ const dbInit = async () => {
 };
 
 export default dbInit;
-
