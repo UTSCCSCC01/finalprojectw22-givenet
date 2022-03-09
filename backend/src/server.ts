@@ -45,13 +45,13 @@ export default authenticateToken;
 const accountRoute = require("./routes/account.ts");
 app.use("/account", accountRoute);
 
-const accountDetailsRoute = require("./routes/AccountDetailsRoutes.ts");
-app.use("/user", accountDetailsRoute);
+const listingRouter = require("./routes/listing.ts");
+app.use("/listing", authenticateToken, listingRouter);
 
-const itemRoute = require("./routes/ItemRoutes.ts");
-app.use("/item", itemRoute);
+const tagRoute = require("./routes/tag.ts");
+app.use("/tag", authenticateToken, tagRoute);
 
 const categoryRoute = require("./routes/category.ts");
-app.use("/category", categoryRoute);
+app.use("/category", authenticateToken, categoryRoute);
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

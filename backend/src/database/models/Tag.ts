@@ -3,7 +3,7 @@ import sequelizeConnection from "../config";
 
 interface TagAttributes {
     tag_id: number;
-    category: number;
+    category_id: number;
     name: string;
     createdAt: Date;
     updatedAt: Date;
@@ -18,7 +18,7 @@ class Tag
 {
     public tag_id!: number;
     public name!: string;
-    public category!: number;
+    public category_id!: number;
     public createdAt!: Date;
     public updatedAt!: Date;
 }
@@ -30,7 +30,7 @@ Tag.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        category: {
+        category_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },

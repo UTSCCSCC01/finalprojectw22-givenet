@@ -10,17 +10,18 @@ import {
   getAll,
   deleteByItemGroupId,
 } from "../database/dal/category";
+import {deleteByCategoryId} from "../database/dal/tag";
 
 module.exports = {
   post: async (req: express.Request, res: express.Response) => {
     try {
-      const itemCategoryInput: CategoryInput = req.body;
-      const newCategory: CategoryOutput = await create(itemCategoryInput);
+      const category: CategoryInput = req.body;
+      const newCategory: CategoryOutput = await create(category);
       res.status(StatusCodes.CREATED);
-      res.json(newCategory);
+      return res.json(newCategory);
     } catch (error) {
       console.log(error);
-      res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+      return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
   put: async (req: express.Request, res: express.Response) => {
@@ -28,21 +29,18 @@ module.exports = {
     try {
       const updatedCategory: CategoryOutput = await update(id, req.body);
       res.status(StatusCodes.OK);
-      res.json(updatedCategory);
+      return res.json(updatedCategory);
     } catch (error) {
       console.log(error);
-      res.sendStatus(StatusCodes.NOT_FOUND);
+      return res.sendStatus(StatusCodes.NOT_FOUND);
     }
   },
   delete: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const itemCategoryIsDeleted: boolean = await deleteByItemGroupId(id);
-      if (itemCategoryIsDeleted) {
-        res.sendStatus(StatusCodes.OK);
-      } else {
-        res.sendStatus(StatusCodes.NOT_FOUND);
-      }
+      await deleteByItemGroupId(id);
+      await deleteByCategoryId(id);
+        return res.sendStatus(StatusCodes.OK);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);

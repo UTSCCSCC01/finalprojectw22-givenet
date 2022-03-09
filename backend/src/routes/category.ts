@@ -2,21 +2,21 @@ import { Router } from "express";
 
 const router: Router = Router();
 
-const itemCategoryController = require("../controllers/ItemCategoryController.ts");
+const categoryController = require("../controllers/category.ts");
 
-// Create a new item category
-router.post("/itemcategory", itemCategoryController.post);
+// Create a new category
+router.post("/", categoryController.post);
 
-// Update an item category
-router.put("/itemcategory/:id", itemCategoryController.put);
+// Update a category
+router.put("/:id", categoryController.put);
 
-// Remove an item category
-router.delete("/itemcategory/:id", itemCategoryController.delete);
+// Remove a category
+router.delete("/:id", categoryController.delete);
 
-// Get an item category by id
-router.get("/itemcategory/:id", itemCategoryController.get);
+// Get a category by id
+router.get("/:id", categoryController.get);
 
-// Return all item categories
-router.get("/allitemcategories", itemCategoryController.getAll);
+// Return all categories
+router.get("/all", categoryController.getAll);
 
 module.exports = router;
