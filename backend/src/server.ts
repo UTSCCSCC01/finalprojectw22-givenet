@@ -44,19 +44,19 @@ export default authenticateToken;
 
 /* Routes */
 const accountRoute = require("./routes/account.ts");
-const userRoute = require("./routes/user.ts");
+const accountDetailsRoute = require("./routes/AccountDetailsRoutes.ts");
 
 app.use("/account", accountRoute);
-app.use("/user", userRoute);
+app.use("/user", accountDetailsRoute);
 
 app.get("/testlogin", authenticateToken, async (req, res) => {
 	res.send(200);
 });
 
-const itemsRoute = require("./routes/ItemsRoutes");
-app.use(itemsRoute);
+const itemRoute = require("./routes/ItemRoutes.ts");
+app.use(itemRoute);
 
-const itemGroupsRoute = require("./routes/ItemGroupsRoutes");
-app.use(itemGroupsRoute);
+const itemCategoryRoute = require("./routes/ItemCategoryRoutes.ts");
+app.use(itemCategoryRoute);
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

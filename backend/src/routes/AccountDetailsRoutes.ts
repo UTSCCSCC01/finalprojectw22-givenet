@@ -6,7 +6,7 @@ const router: Router = Router();
 
 const userController = require("../controllers/user_profiles.ts");
 const listingsController = require("../controllers/user_listings.ts");
-const listingController = require("../controllers/listings.ts");
+const listingController = require("../controllers/listings.ts")
 
 //Check if the user exists given the user object.
 router.get("/profile", authenticateToken, userController.get);

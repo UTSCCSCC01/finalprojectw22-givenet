@@ -1,7 +1,7 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { ItemGroupInput, ItemGroupOutput } from "../database/models/ItemGroups";
+import { ItemCategoryInput, ItemCategoryOutput } from "../database/models/ItemCategory";
 
 import {
   create,
@@ -9,15 +9,15 @@ import {
   getByItemGroupId,
   getAll,
   deleteByItemGroupId,
-} from "../database/dal/ItemGroupsDAL";
+} from "../database/dal/ItemCategoryDAL";
 
 module.exports = {
   post: async (req: express.Request, res: express.Response) => {
     try {
-      const itemGroupInput: ItemGroupInput = req.body;
-      const newItemGroup: ItemGroupOutput = await create(itemGroupInput);
+      const itemCategoryInput: ItemCategoryInput = req.body;
+      const newItemCategory: ItemCategoryOutput = await create(itemCategoryInput);
       res.status(StatusCodes.CREATED);
-      res.json(newItemGroup);
+      res.json(newItemCategory);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -26,9 +26,9 @@ module.exports = {
   put: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const updatedItemGroup: ItemGroupOutput = await update(id, req.body);
+      const updatedItemCategory: ItemCategoryOutput = await update(id, req.body);
       res.status(StatusCodes.OK);
-      res.json(updatedItemGroup);
+      res.json(updatedItemCategory);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.NOT_FOUND);
@@ -37,8 +37,8 @@ module.exports = {
   delete: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const itemGroupIsDeleted: boolean = await deleteByItemGroupId(id);
-      if (itemGroupIsDeleted) {
+      const itemCategoryIsDeleted: boolean = await deleteByItemGroupId(id);
+      if (itemCategoryIsDeleted) {
         res.sendStatus(StatusCodes.OK);
       } else {
         res.sendStatus(StatusCodes.NOT_FOUND);
@@ -51,9 +51,9 @@ module.exports = {
   get: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const itemGroup: ItemGroupOutput = await getByItemGroupId(id);
+      const itemCategory: ItemCategoryOutput = await getByItemGroupId(id);
       res.status(StatusCodes.OK);
-      res.json(itemGroup);
+      res.json(itemCategory);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.NOT_FOUND);
@@ -61,9 +61,9 @@ module.exports = {
   },
   getAll: async (req: express.Request, res: express.Response) => {
     try {
-      const allItemGroups: ItemGroupOutput[] = await getAll();
+      const allItemCategory: ItemCategoryOutput[] = await getAll();
       res.status(StatusCodes.OK);
-      res.json(allItemGroups);
+      res.json(allItemCategory);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);

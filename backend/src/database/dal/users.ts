@@ -1,26 +1,26 @@
 import { Op } from "sequelize";
-import User from "../models/Users";
-import { UserInput, UserOutput } from "../models/Users";
+import AccountDetails from "../models/AccountDetails";
+import { AccDetailsInput, AccDetailsOutput } from "../models/AccountDetails";
 
-export const create = async (payload: UserInput): Promise<UserOutput> => {
-	const user = await User.create(payload);
+export const create = async (payload: AccDetailsInput): Promise<AccDetailsOutput> => {
+	const user = await AccountDetails.create(payload);
 	return user;
 };
 
 export const update = async (
 	id: number,
-	payload: Partial<UserInput>
-): Promise<UserInput> => {
-	const user = await User.findByPk(id);
-	if (!User) {
+	payload: Partial<AccDetailsInput>
+): Promise<AccDetailsInput> => {
+	const user = await AccountDetails.findByPk(id);
+	if (!AccountDetails) {
 		throw new Error(`User instance with acc_id ${id} not found`);
 	}
-	const updatedUser = await (user as User).update(payload);
+	const updatedUser = await (user as AccountDetails).update(payload);
 	return updatedUser;
 };
 
-export const getById = async (id: number): Promise<UserOutput> => {
-	const user = await User.findByPk(id);
+export const getById = async (id: number): Promise<AccDetailsOutput> => {
+	const user = await AccountDetails.findByPk(id);
 	if (!user) {
 		throw new Error(`User instance with acc_id ${id} not found`);
 	}

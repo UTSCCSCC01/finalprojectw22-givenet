@@ -1,37 +1,35 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
+import Account from "./Account";
 
-interface WantedAttributes {
+interface AdminAttributes {
 	acc_id: number;
-	items: Array<number>;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface WantedInput extends WantedAttributes {}
-export interface WantedOutput extends Required<WantedAttributes> {}
+export interface AdminInput extends AdminAttributes {}
+export interface AdminOutput extends Required<AdminAttributes> {}
 
-class Wanted
-	extends Model<WantedAttributes, WantedInput>
-	implements WantedAttributes
+class Admin
+	extends Model<AdminAttributes, AdminInput>
+	implements AdminAttributes
 {
 	public acc_id!: number;
-	public items!: Array<number>;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Wanted.init(
+Admin.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
-			autoIncrement: true,
+			// autoIncrement: true,
 			primaryKey: true,
-		},
-		items: {
-			type: DataTypes.ARRAY(DataTypes.INTEGER),
-			unique: true,
-			allowNull: false,
+            references: {
+                model: Account,
+                key: "acc_id",
+            },
 		},
 		createdAt: {
 			type: "TIMESTAMP",
@@ -48,4 +46,11 @@ Wanted.init(
 	}
 );
 
-export default Wanted;
+Admin.belongsTo(Account, {
+    foreignKey: {
+        name: "acc_id",
+        allowNull: false,
+    },
+});
+
+export default Admin;

@@ -1,43 +1,35 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
+import Account from "./Account";
 
-interface AccountAttributes {
+interface DonorAttributes {
 	acc_id: number;
-	username: string;
-	password: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-export interface AccountInput extends AccountAttributes {}
-export interface AccountOutput extends Required<AccountAttributes> {}
+export interface DonorInput extends DonorAttributes {}
+export interface DonorOutput extends Required<DonorAttributes> {}
 
-class Account
-	extends Model<AccountAttributes, AccountInput>
-	implements AccountAttributes
+class Donor
+	extends Model<DonorAttributes, DonorInput>
+	implements DonorAttributes
 {
 	public acc_id!: number;
-	public username!: string;
-	public password!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
 
-Account.init(
+Donor.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
-		},
-		username: {
-			type: DataTypes.STRING,
-			unique: true,
-			allowNull: false,
-		},
-		password: {
-			type: DataTypes.STRING,
-			allowNull: false,
+            references: {
+                model: Account,
+                key: "acc_id",
+            },
 		},
 		createdAt: {
 			type: "TIMESTAMP",
@@ -54,4 +46,11 @@ Account.init(
 	}
 );
 
-export default Account;
+Donor.belongsTo(Account, {
+    foreignKey: {
+        name: "acc_id",
+        allowNull: false,
+    },
+});
+
+export default Donor;

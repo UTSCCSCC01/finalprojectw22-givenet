@@ -1,5 +1,6 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
+import Account from "./Account";
 
 interface SocialAttributes {
 	acc_id: number;
@@ -14,7 +15,7 @@ interface SocialAttributes {
 export interface SocialInput extends SocialAttributes {}
 export interface SocialOutput extends Required<SocialAttributes> {}
 
-class Social
+class SocialMedia
 	extends Model<SocialAttributes, SocialInput>
 	implements SocialAttributes
 {
@@ -27,12 +28,16 @@ class Social
 	public updatedAt!: Date;
 }
 
-Social.init(
+SocialMedia.init(
 	{
 		acc_id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
+			references: {
+				model: Account,
+				key: "acc_id",
+			},
 		},
 		website: {
 			type: DataTypes.STRING,
@@ -61,4 +66,11 @@ Social.init(
 	}
 );
 
-export default Social;
+SocialMedia.belongsTo(Account, {
+    foreignKey: {
+        name: "acc_id",
+        allowNull: false,
+    },
+});
+
+export default SocialMedia;
