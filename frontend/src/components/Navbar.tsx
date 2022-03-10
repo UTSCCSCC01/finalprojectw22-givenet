@@ -24,7 +24,17 @@ export default function Navigation() {
 						</Nav.Link>
 						<Nav.Link>
 							<Link to="/tagging" style={style}>
-								Tagging
+								Tags & Categories
+							</Link>
+						</Nav.Link>
+						<Nav.Link>
+							<Link to="/viewlistings" style={style}>
+								View Listings
+							</Link>
+						</Nav.Link>
+						<Nav.Link>
+							<Link to="/profile/listings" style={style}>
+								Create Listing
 							</Link>
 						</Nav.Link>
 						<Nav.Link>
