@@ -5,9 +5,12 @@ import "../styles/listings.css";
 type Listing = {
 	listing_id?: number;
 	acc_id: number;
-	items: Array<String>;
-    weight: Array<String>;
-    expiry: Array<Date>;
+    container: string;
+    location: string;
+    notes: string;
+    createdAt: Date;
+    updatedAt: Date;
+    items: Array<any>;  //item object
 };
 
 type Item = {
@@ -31,10 +34,6 @@ interface newListingProps {
 interface templateProp {
 	add: boolean,
 }
-
-//Maybe not necessary anymore
-var set = 0;
-var lock = 0;
 
 //Listings Display Component: Generates the table of user listings.
 function GenerateListings({data, deleteFunction}: listingProps) {
@@ -68,12 +67,12 @@ function GenerateListings({data, deleteFunction}: listingProps) {
 				{data.map((val) => (
 					<tr className="tableval" key={"tr " + val.listing_id}>
 						<td className="tableval" id= "listing_id" key={"listing " + val.listing_id}>{val.listing_id}</td>
-						<td className="tableval" key={"accid " +  val.acc_id}>{val.acc_id}</td>
-						<td className="tableval" key={"items " +  val.items.toString()}>{val.items.toString()}</td>
-						<td className="tableval" key={"weight " +  val.weight.toString()}>{val.weight.toString()}</td>
-						<td className="tableval" key={"expire " +  val.expiry.toString()}>{dateString(val.expiry)}</td>
-						<td className="tableval" key={"edit " +  val.listing_id}><button>EDIT</button></td>
-						<td className="tableval" key={"delete " +  val.listing_id}><button onClick={() => deleteFunction(val.listing_id)}>DELETE</button></td>
+						<td className="tableval" >{val.acc_id}</td>
+						<td className="tableval">{val.items.toString()}</td>
+						<td className="tableval">{val.weight.toString()}</td>
+						<td className="tableval" >{dateString(val.expiry)}</td>
+						<td className="tableval" ><button>EDIT</button></td>
+						<td className="tableval" ><button onClick={() => deleteFunction(val.listing_id)}>DELETE</button></td>
 					</tr>
 				))}
 			</tbody>
@@ -86,9 +85,6 @@ function GenerateListings({data, deleteFunction}: listingProps) {
 function ListingTemplateBuilder({add}: templateProp) {
 	const [newUserListings, setnewUserListings] = useState<Array<Item>>([] as Item[]);
 	useEffect(() => {
-		if (lock == 1) {
-			set = 1;
-		}
 	}, [newUserListings]);
 
 	//Table shell.

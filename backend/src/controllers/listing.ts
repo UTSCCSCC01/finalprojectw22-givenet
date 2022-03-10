@@ -1,11 +1,21 @@
 import express from "express";
 import {create as createItem, deleteByListingId} from "../database/dal/item";
+import Listing, { ListingOutput } from "../database/models/Listing";
+import Item from "../database/models/Item";
+
 import {
     create,
     getById,
     deleteById, getAll,
 } from "../database/dal/listing";
 
+import {
+    getByListingId
+} from "../database/dal/item";
+
+import {
+    getById as getUserbyId,
+} from "../database/dal/account_details";
 
 // These functions are simple and need no commenting.
 module.exports = {
@@ -60,11 +70,20 @@ module.exports = {
         }
     },
     getAll: async (req: express.Request, res: express.Response) => {
-        let fetched = await getAll();
-        if (fetched) {
-            return res.send(fetched)
-        } else {
+        let allListings = await getAll();
+
+        let returnListings = [];
+
+        if (!allListings) {
             return res.send(404)
         }
+        
+        for (let listing of allListings) { 
+            let ret = {...listing, item: await getByListingId(listing.listing_id), owner: await getUserbyId(listing.acc_id)}
+            
+            returnListings.push(ret);
+        }
+
+        return res.json(returnListings);
     },
 };

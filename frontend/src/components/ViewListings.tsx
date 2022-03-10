@@ -5,11 +5,13 @@ import "../styles/viewlistings.css";
 type Listing = {
 	listing_id?: number;
 	acc_id: number;
-	items: Array<String>;
-    weight: Array<String>;
-    expiry: Array<Date>;
-    acc_name?: string;
-    address?: string;
+    container: string;
+    location: string;
+    notes: string;
+    createdAt: Date;
+    updatedAt: Date;
+    items: Array<any>;  //item object
+    user: any; //user object
 };
 // Accname and address are filled out in useeffect
 
@@ -24,12 +26,14 @@ const ViewListings = () => {
     useEffect(() => {
 
         async function getListings() {
-            const response = await fetch("/user/listings" , {
+            const response = await fetch("/listing/all" , {
                 method: "GET",
             });
 
-            let objs: Array<any> = await response.json();
+            let objs: Array<Listing> = await response.json();
             // Need to query user data: wait for backend overhaul next sprint
+
+            /*
             objs.forEach((obj: any) => {
                 obj.acc_name = "John's Bakery"
                 obj.address = "123 Street"
@@ -37,6 +41,7 @@ const ViewListings = () => {
                     obj.expiry[index] = new Date(date);
                 })
             })
+            */
             setAllListings(objs)
         }
 
@@ -54,9 +59,9 @@ const ViewListings = () => {
 
                         <ListGroup.Item>Account ID: {listing.acc_id}</ListGroup.Item>
 
-                        <ListGroup.Item>Business: {listing.acc_name}</ListGroup.Item>
+                        <ListGroup.Item>Business: {listing.user.name}</ListGroup.Item>
 
-                        <ListGroup.Item>Address: {listing.address}</ListGroup.Item>
+                        <ListGroup.Item>Address: {listing.user.address}</ListGroup.Item>
 
                         <ListGroup.Item># Items: {listing.items.length}</ListGroup.Item>
 
@@ -67,8 +72,8 @@ const ViewListings = () => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                {listing.items.map((i, index) =>
-                                    <Dropdown.Item>{i} || kg: {listing.weight[index]} || Exp: {listing.expiry[index].toDateString()}</Dropdown.Item>
+                                {listing.items.map((item, i) =>
+                                    <Dropdown.Item>{i} || kg: {item.weight} || Exp: {item.expiry.toDateString()}</Dropdown.Item>
                                 )}
                             </Dropdown.Menu>
                         </Dropdown>

@@ -4,6 +4,8 @@ const router: Router = Router();
 
 const listingController = require("../controllers/listing.ts");
 
+//Route: /listing
+
 // Retrieve the listing with userid, id
 router.get("/", listingController.get);
 
