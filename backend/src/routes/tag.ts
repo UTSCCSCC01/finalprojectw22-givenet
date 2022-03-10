@@ -5,6 +5,7 @@ const router: Router = Router();
 
 const tagController = require("../controllers/tag.ts");
 
+//Route: /tag/
 // Create a new tag
 router.post("/", tagController.post);
 

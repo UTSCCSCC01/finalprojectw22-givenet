@@ -44,3 +44,11 @@ export const deleteByCategoryId = async (id: number) => {
 export const getAll = async (): Promise<TagOutput[]> => {
   return await Tag.findAll();
 };
+
+export const existsName = async (name: string): Promise<boolean> => {
+  let retval = await Tag.findAll({
+    where: {name: name}
+  });
+
+  return retval.length > 0;
+};

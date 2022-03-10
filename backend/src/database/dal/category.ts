@@ -40,3 +40,11 @@ export const deleteByItemGroupId = async (id: number): Promise<boolean> => {
 export const getAll = async (): Promise<CategoryOutput[]> => {
   return await Category.findAll();
 };
+
+export const existsName = async (name: string): Promise<boolean> => {
+  let retval = await Category.findAll({
+    where: {name: name}
+  });
+
+  return retval.length > 0;
+};

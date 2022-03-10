@@ -38,7 +38,6 @@ export default function LoginForm({}: Props) {
 			setErrorState("Please enter a password");
 			return;
 		}
-
 		const response = await fetch("/account/login", {
 			method: "POST",
 			headers: {
@@ -46,7 +45,7 @@ export default function LoginForm({}: Props) {
 			},
 			body: JSON.stringify(formState),
 		});
-
+		
 		if (response.status === 401) {
 			setToken("");
 			setErrorState("Invalid username or password");

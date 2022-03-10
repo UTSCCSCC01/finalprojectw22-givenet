@@ -11,10 +11,10 @@ import Tag from "./models/Tag";
 
 import sequelizeConnection from "./config";
 
-const force = true;
+const force = false;
 const dbInit = async () => {
 
-	await sequelizeConnection.sync({ force: true });
+	await sequelizeConnection.sync({ force });
 
 	await Category.sync({force });
 	await Item.sync({ force });

@@ -4,6 +4,8 @@ const router: Router = Router();
 
 const categoryController = require("../controllers/category.ts");
 
+//Route: /category
+
 // Create a new category
 router.post("/", categoryController.post);
 

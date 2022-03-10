@@ -8,12 +8,19 @@ import {
     getAll,
     deleteByTagId,
     getByTagId,
+    existsName
 } from "../database/dal/tag";
 
 module.exports = {
     post: async (req: express.Request, res: express.Response) => {
         try {
             const itemInput: TagInput = req.body;
+
+            const alreadyExists = await existsName(itemInput.name)
+            if (alreadyExists) {
+                return res.sendStatus(StatusCodes.CONFLICT);
+            }
+
             const newTag: TagOutput = await create(itemInput);
             res.status(StatusCodes.CREATED);
             res.json(newTag);
