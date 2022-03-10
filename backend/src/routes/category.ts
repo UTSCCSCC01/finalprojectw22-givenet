@@ -15,10 +15,10 @@ router.put("/:id", categoryController.put);
 // Remove a category
 router.delete("/:id", categoryController.delete);
 
-// Get a category by id
-router.get("/:id", categoryController.get);
-
 // Return all categories
 router.get("/all", categoryController.getAll);
+
+// Get a category by id
+router.get("/:id", categoryController.get);
 
 module.exports = router;

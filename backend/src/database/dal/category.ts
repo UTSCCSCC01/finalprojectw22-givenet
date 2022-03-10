@@ -30,11 +30,15 @@ export const getByItemGroupId = async (
   return category;
 };
 
-export const deleteByItemGroupId = async (id: number): Promise<boolean> => {
-  const numDeleted = await Category.destroy({
-    where: { category_id: id },
-  });
-  return numDeleted > 0;
+export const deleteTagWithCategoryId = async (id: number): Promise<boolean> => {
+  try {
+    await Category.destroy({
+      where: { category_id: id },
+    });
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 export const getAll = async (): Promise<CategoryOutput[]> => {

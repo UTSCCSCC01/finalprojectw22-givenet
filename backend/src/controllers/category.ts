@@ -8,7 +8,7 @@ import {
   update,
   getByItemGroupId,
   getAll,
-  deleteByItemGroupId,
+  deleteTagWithCategoryId,
   existsName,
 } from "../database/dal/category";
 import {deleteByCategoryId} from "../database/dal/tag";
@@ -44,12 +44,12 @@ module.exports = {
   delete: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      await deleteByItemGroupId(id);
       await deleteByCategoryId(id);
-        return res.sendStatus(StatusCodes.OK);
+      await deleteTagWithCategoryId(id);
+      return res.sendStatus(StatusCodes.OK);
     } catch (error) {
       console.log(error);
-      res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+      res.sendStatus(200);
     }
   },
   get: async (req: express.Request, res: express.Response) => {
@@ -65,12 +65,13 @@ module.exports = {
   },
   getAll: async (req: express.Request, res: express.Response) => {
     try {
+      console.log("CATEGORY GET ALL!");
       const allCategory: CategoryOutput[] = await getAll();
       res.status(StatusCodes.OK);
-      res.json(allCategory);
+      return res.json(allCategory);
     } catch (error) {
       console.log(error);
-      res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+      return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
 };

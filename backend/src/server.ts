@@ -49,9 +49,9 @@ const listingRouter = require("./routes/listing.ts");
 app.use("/listing", authenticateToken, listingRouter);
 
 const tagRoute = require("./routes/tag.ts");
-app.use("/tag", authenticateToken, tagRoute);
+app.use("/tag", tagRoute);
 
 const categoryRoute = require("./routes/category.ts");
-app.use("/category", authenticateToken, categoryRoute);
+app.use("/category", categoryRoute);
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

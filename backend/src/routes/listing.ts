@@ -10,10 +10,10 @@ router.get("/", listingController.get);
 // Create a new listing from the data in the post body
 router.post("/", listingController.post);
 
-// Delete the listing with id, id
-router.delete("/:id", listingController.delete);
-
 // View all listings
 router.get("/all", listingController.getAll);
+
+// Delete the listing with id, id
+router.delete("/:id", listingController.delete);
 
 module.exports = router;

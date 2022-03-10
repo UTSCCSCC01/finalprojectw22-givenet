@@ -15,10 +15,11 @@ router.put("/:id", tagController.put);
 // Remove a tag
 router.delete("/:id", tagController.delete);
 
+// Return all tags
+router.get("/all", tagController.getAll);
+
 // Get a tag by id
 router.get("/:id", tagController.get);
 
-// Return all tags
-router.get("/all", tagController.getAll);
 
 module.exports = router;

@@ -34,11 +34,12 @@ export const deleteByTagId = async (id: number): Promise<boolean> => {
 };
 
 export const deleteByCategoryId = async (id: number) => {
-  const result = await Tag.destroy({where: {category_id: id}})
-  if (!result) {
-    throw new Error(`No items for that listing exist`);
+  try {
+    await Tag.destroy({where: {category_id: id}})
+    return true;
+  } catch {
+     return false;
   }
-  return true;
 }
 
 export const getAll = async (): Promise<TagOutput[]> => {
