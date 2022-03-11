@@ -26,6 +26,16 @@ export const getById = async (id: number): Promise<ListingOutput> => {
 	return listing;
 };
 
+export const getByAccId = async (id: number): Promise<ListingOutput[]> => {
+	const listing = await Listing.findAll({where: {acc_id: id }});
+
+	if (!listing) {
+		throw new Error(`User has no listings`);
+	}
+
+	return listing;
+};
+
 export const deleteById = async (id: number) => {
 	const listing = await Listing.findByPk(id);
 

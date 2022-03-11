@@ -6,7 +6,7 @@ import Item from "../database/models/Item";
 import {
     create,
     getById,
-    deleteById, getAll,
+    deleteById, getAll, getByAccId,
 } from "../database/dal/listing";
 
 import {
@@ -27,7 +27,7 @@ module.exports = {
         } else {
             return res.send(403)
         }
-        let fetched = await getById(id);
+        let fetched = await getByAccId(id);
         if (fetched) {
             return res.send(fetched)
         } else {
@@ -44,12 +44,15 @@ module.exports = {
         }
         // Create the listing in the listing table
         const listing = {...req.body.listing, acc_id: id}
+        console.log(req.body)
         let new_listing = await create(listing);
+        
         if (!new_listing) {
             res.sendStatus(404)
         }
-        // Create all the items in the listing
+        //Create all the items in the listing
         const items = req.body.items;
+        console.log(items)
         for (let item of items) {
             let new_item = {...item, listing_id: new_listing.listing_id}
             await createItem(new_item);
