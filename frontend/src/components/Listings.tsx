@@ -101,46 +101,6 @@ export default function Listing() {
         setListings(await allListings.json());
     }
 
-    const validateFormInput = () => {
-        if (form.container === "") {
-            return setFormErrorMessage("Please provide a container!");
-        }
-        if (form.location === "") {
-            return setFormErrorMessage("Please provide a location!")
-        }
-        if (items.length === 0) {
-            return setFormErrorMessage("Please add items to your listing!")
-        }
-
-        setFormErrorMessage("");
-    }
-
-    const validateItemInput = () => {
-        if (item.name == "") {
-            return setItemErrorMessage("Please enter an item name!");
-        }
-        if (items.filter(e => e.name === item.name).length > 0) {
-            return setItemErrorMessage("That item is already in this listing!");
-        }
-        if (item.weight <= 0) {
-            return setItemErrorMessage("Weight should be a positive number!");
-        }
-        if (item.expiry < new Date()) {
-            return setItemErrorMessage("The expiry date can't be in the past!");
-        }
-        setItemErrorMessage("");
-
-        setItems([...items, item]);
-        setItem({
-            weight: 0,
-            name: "",
-            expiry: new Date(),
-            tag_id: 0,
-            tag_name: ""
-        })
-
-    }
-
     const createListing = async () => {
 
         let newListing = {
@@ -168,6 +128,60 @@ export default function Listing() {
                 authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(packagedListing)
+        });
+    }
+
+    
+    const validateFormInput = () => {
+        if (form.container === "") {
+            return setFormErrorMessage("Please provide a container!");
+        }
+        if (form.location === "") {
+            return setFormErrorMessage("Please provide a location!")
+        }
+        if (items.length === 0) {
+            return setFormErrorMessage("Please add items to your listing!")
+        }
+
+        setFormErrorMessage("");
+
+        createListing();
+    }
+
+    const validateItemInput = () => {
+        if (item.name == "") {
+            return setItemErrorMessage("Please enter an item name!");
+        }
+        if (items.filter(e => e.name === item.name).length > 0) {
+            return setItemErrorMessage("That item is already in this listing!");
+        }
+        if (item.weight <= 0) {
+            return setItemErrorMessage("Weight should be a positive number!");
+        }
+        if (item.expiry < new Date()) {
+            return setItemErrorMessage("The expiry date can't be in the past!");
+        }
+        setItemErrorMessage("");
+
+
+        setItems([...items, item]);
+        setItem({
+            weight: 0,
+            name: "",
+            expiry: new Date(),
+            tag_id: 0,
+            tag_name: ""
+        })
+
+    }
+    
+    
+    async function deleteListing (id:any) { 
+        await fetch("/listing/" + id, {
+            method: "DELETE",
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
         });
     }
 
@@ -337,7 +351,8 @@ export default function Listing() {
                             <td> {object.location} </td>
                             <td> {object.notes} </td>
                             <td> hai</td>
-                            <td><button >Delete</button> </td>
+                            <td><button onClick={() => {
+                                deleteListing(object.listing_id);}}>Delete</button> </td>
                         </tr>
 
                     ))}
