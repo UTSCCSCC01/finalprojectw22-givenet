@@ -27,12 +27,31 @@ module.exports = {
         } else {
             return res.send(403)
         }
-        let fetched = await getByAccId(id);
-        if (fetched) {
-            return res.send(fetched)
-        } else {
-            return res.send(400)
+
+        let user_listings = await getByAccId(id);
+
+        if (!user_listings) {
+            return res.send(404)
         }
+
+        let returnListings = [];
+        
+        for (let listing of user_listings) { 
+            let ret = {
+                listing_id: listing.listing_id,
+                acc_id: listing.acc_id,
+                container: listing.container,
+                location: listing.location,
+                notes: listing.notes,
+                createdAt: listing.createdAt,
+                updatedAt: listing.updatedAt,
+                items: await getByListingId(listing.listing_id),
+                user: await getUserbyId(listing.acc_id)}
+            returnListings.push(ret);
+        }
+
+        return res.json(returnListings);
+
     },
     post: async (req: express.Request, res: express.Response) => {
         const user:any = req.user;
@@ -82,11 +101,18 @@ module.exports = {
         }
         
         for (let listing of allListings) { 
-            let ret = {...listing, item: await getByListingId(listing.listing_id), owner: await getUserbyId(listing.acc_id)}
-            
+            let ret = {
+                listing_id: listing.listing_id,
+                acc_id: listing.acc_id,
+                container: listing.container,
+                location: listing.location,
+                notes: listing.notes,
+                createdAt: listing.createdAt,
+                updatedAt: listing.updatedAt,
+                items: await getByListingId(listing.listing_id),
+                user: await getUserbyId(listing.acc_id)}
             returnListings.push(ret);
         }
-
         return res.json(returnListings);
     },
 };

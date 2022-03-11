@@ -22,7 +22,6 @@ type Listing = {
 };
 // Accname and address are filled out in useeffect
 
-
 const ViewListings = () => {
 
     // This state will be used for storing data retrieved from request for all listings
@@ -33,36 +32,18 @@ const ViewListings = () => {
     useEffect(() => {
 
         async function getListings() {
+            console.log("haifirst")
             const response = await fetch("/listing/all", {
                 method: "GET",
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-
+            
             let all_listings = await response.json();
             // Need to query user data: wait for backend overhaul next sprint
-
-            const listings = [];
-            for (let listing of all_listings) {
-                let new_listing: Listing = {} as Listing;
-                let {
-                    listing_id, container, acc_id, location, notes, createdAt,
-                    updatedAt
-                } = listing.dataValues;
-                new_listing.listing_id = listing_id;
-                new_listing.container = container;
-                new_listing.acc_id = acc_id;
-                new_listing.location = location;
-                new_listing.notes = notes;
-                new_listing.updatedAt = updatedAt;
-                new_listing.createdAt = createdAt;
-                new_listing.items = listing.item;
-                new_listing.user = listing.owner;
-                listings.push(new_listing);
-            }
-            setAllListings(listings);
-            console.log(listings);
+            console.log(all_listings);
+            setAllListings(all_listings);
         }
 
         getListings();
@@ -70,13 +51,15 @@ const ViewListings = () => {
     }, [])
 
     // If listings retrieved then render listings view
+
+
     return (
         <div className="container">
         <Accordion id="lv">
             {allListings.map(listing => (
                 <Accordion.Item eventKey={listing.listing_id.toString() || "0"}>
                     <Accordion.Header>
-                        {`#${listing.listing_id} - ${listing.user.name}`}
+                        {`#${listing.listing_id} - ${listing.user.name} (${listing.items.length} item)`}
                     </Accordion.Header>
                     <Accordion.Body>
                         <h6>Name: {listing.user.name}</h6>

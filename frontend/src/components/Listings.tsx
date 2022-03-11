@@ -263,16 +263,12 @@ export default function Listing() {
                                               })
                                           }}/>
                         </Form.Group>
-                        <Form.Group as={Col} controlId="formGridPassword">
+                        <Form.Group as={Col} id={item.tag_name}>
                             <Form.Label>Tag</Form.Label>
                             <Form.Select
-                                onChange={(e) => {
-                                    setItem((old) => {
-                                        old.tag_id = +e.target.value;
-                                        old.tag_name = e.target.id;
-                                        return old;
-                                    });
-                                }}>
+                                onChange={(e) => 
+                                    setItem({...item, tag_name: e.target.id, tag_id: +e.target.value })
+                                }>
                                 {tags.map((tag, i) => (
                                     <option
                                         selected={i === 0 && !tag.tag_id}
@@ -318,7 +314,8 @@ export default function Listing() {
                     Create new listing
                 </Button>
             </Form>
-
+            
+            
             <div className="container mt-5">
                 <h4>Your listings</h4>
                 {listings.length > 0 ? <Table striped bordered hover responsive>
@@ -329,6 +326,7 @@ export default function Listing() {
                         <th scope="col">Location</th>
                         <th scope="col">Notes</th>
                         <th scope="col">Items</th>
+                        <th scope="col">Delete Listing</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -339,6 +337,7 @@ export default function Listing() {
                             <td> {object.location} </td>
                             <td> {object.notes} </td>
                             <td> hai</td>
+                            <td><button >Delete</button> </td>
                         </tr>
 
                     ))}

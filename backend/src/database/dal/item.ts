@@ -51,6 +51,7 @@ export const getAll = async (): Promise<ItemOutput[]> => {
 
 export const getByListingId = async (id: number): Promise<ItemOutput[]> => {
     const results = await Item.findAll({where: {listing_id: id}})
+    
     if (!results) {
         throw new Error("ERROR IN getByListingId");
     }
