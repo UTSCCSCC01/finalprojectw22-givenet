@@ -4,7 +4,8 @@ import {
     Container,
     Dropdown,
     Accordion,
-    Table
+    Table,
+    NavItem
 } from "react-bootstrap";
 import "../styles/viewlistings.css";
 import {TokenContext} from "../TokenContext";
@@ -22,6 +23,48 @@ type Listing = {
 };
 // Accname and address are filled out in useeffect
 
+function getNetWeight(listing: Listing) {
+    let total = 0;
+
+    for (let item of listing.items) {
+        total += item.weight;
+    }
+
+    return parseInt(total.toString()) + 'kg';
+}
+
+function getBestTags(listing: Listing) {
+    let tags = [];
+    let weights = [];
+
+    for (let item of listing.items) {
+        if (tags.indexOf(item.tag_id) == -1) {
+            tags.push(item.tag_id);
+            weights.push(item.weight);
+        } else {
+            weights[tags.indexOf(item.tag_id)] += item.weight;
+        }
+    }
+
+    let retTags = [];
+    weights.sort(function(a, b){return a - b});
+    while (retTags.length < 4 && weights.length > 0) {
+        let max = weights[weights.length - 1];
+        
+        for (let item of listing.items) {
+            if (item.weight == max) {
+                retTags.push(item.tag_id);
+                break;
+            }
+        }
+        weights.pop();
+    }
+    
+    
+
+    return '{ ' + retTags.toString() + ' }';
+}
+
 const ViewListings = () => {
 
     // This state will be used for storing data retrieved from request for all listings
@@ -32,7 +75,6 @@ const ViewListings = () => {
     useEffect(() => {
 
         async function getListings() {
-            console.log("haifirst")
             const response = await fetch("/listing/all", {
                 method: "GET",
                 headers: {
@@ -52,14 +94,13 @@ const ViewListings = () => {
 
     // If listings retrieved then render listings view
 
-
     return (
         <div className="container">
         <Accordion id="lv">
             {allListings.map(listing => (
                 <Accordion.Item eventKey={listing.listing_id.toString() || "0"}>
                     <Accordion.Header>
-                        {`#${listing.listing_id} - ${listing.user.name} (${listing.items.length} item)`}
+                        {`#${listing.listing_id} - ${getBestTags(listing)} from ${listing.user.name} (${listing.items.length} item(s)) Net Weight: ${getNetWeight(listing)}`}
                     </Accordion.Header>
                     <Accordion.Body>
                         <h6>Name: {listing.user.name}</h6>
