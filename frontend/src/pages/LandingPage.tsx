@@ -2,10 +2,10 @@ import React from "react";
 import Navbar from "../components/Navbar";
 
 export default function LandingPage() {
-	return (
-		<div>
-			<Navbar />
-			{/* <div className="landing-body">
+  return (
+    <div>
+      <Navbar />
+      {/* <div className="landing-body">
 				<div className="landing-text">
 					<h1>we make giving easy.</h1>
 					<p>
@@ -16,6 +16,6 @@ export default function LandingPage() {
 					<button>Donate Today</button>
 				</div>
 			</div> */}
-		</div>
-	);
+    </div>
+  );
 }
