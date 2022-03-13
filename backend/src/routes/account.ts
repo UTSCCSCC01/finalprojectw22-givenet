@@ -21,4 +21,7 @@ router.get("/profile", authenticateToken, profileController.get);
 // Edit account details
 router.post("/profile", authenticateToken, profileController.post);
 
+// Get list of food items commonly donated by the user
+router.get("/commonDonations", authenticateToken, authenticateController.getCommonDonationItems);
+
 module.exports = router;
