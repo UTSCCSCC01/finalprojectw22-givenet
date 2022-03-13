@@ -6,7 +6,7 @@ type profile = {
 	[id: string]: string;
 	name: string;
 	location: string;
-	hours: string;
+	operating_hours: string;
 	phone: string;
 	email: string;
 };
@@ -19,7 +19,7 @@ export default function Profile() {
 	const [profileState, setProfileState] = useState<profile>({
 		name: "",
 		location: "",
-		hours: "",
+		operating_hours: "",
 		phone: "",
 		email: "",
 	});
@@ -33,7 +33,7 @@ export default function Profile() {
 
 	// Fill the profileState form
 	const fetchUserData = async () => {
-		const response = await fetch("/user/profile", {
+		const response = await fetch("/account/profile", {
 			method: "GET",
 			headers: {
 				authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ export default function Profile() {
 			const p: profile = {
 				name: result.name,
 				location: result.location,
-				hours: result.hours,
+				operating_hours: result.operating_hours,
 				phone: result.phone,
 				email: result.email,
 			};
@@ -88,13 +88,13 @@ export default function Profile() {
 			setSuccessState("");
 			return;
 		}
-		if (profileState.hours.length === 0) {
+		if (profileState.operating_hours.length === 0) {
 			setErrorState("Please enter hours for your business");
 			setSuccessState("");
 		}
 
 		console.log("sending", JSON.stringify(profileState));
-		const response = await fetch("/user/profile", {
+		const response = await fetch("/account/profile", {
 			method: "POST",
 			headers: {
 				authorization: `Bearer ${token}`,
@@ -145,7 +145,7 @@ export default function Profile() {
 								}
 							}}
 						/>
-						{["name", "email", "phone", "hours", "location"].map(
+						{["name", "email", "phone", "operating_hours", "location"].map(
 							(field) => (
 								<Form.Group className="mb-3">
 									<Form.Label>
@@ -160,7 +160,7 @@ export default function Profile() {
 										value={(profileState as profile)[field]}
 										onChange={handleFormChange}
 										as={
-											field === "hours"
+											field === "operating_hours"
 												? "textarea"
 												: "input"
 										}
