@@ -49,6 +49,7 @@ type nameAndCount = {
 }
 
 export const getCommonDonationItemsById = async (id: number): Promise<nameAndCount[]> => {
+	/* Query that retrieves the 5 most commonly occuring donated item names donated by the given account id */
 	const [results, metadata] = await sequelizeConnection.query(`SELECT i.name, COUNT(i.name)
 													FROM
 															"Items" i JOIN "Listings" l ON i.listing_id = l.listing_id
