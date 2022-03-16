@@ -25,6 +25,11 @@ module.exports = {
       return res.send(403);
     }
 
+    // Make sure user coordinating pickup is charity
+    if (user.dataValues.type != 1) {
+        return res.send(403);
+    }
+
     // Get listing
     let listing = await getListingById(req.body.listing_id);
     let donor_id = listing.acc_id;
