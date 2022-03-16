@@ -26,7 +26,7 @@ module.exports = {
     }
 
     // Make sure user coordinating pickup is charity
-    if (user.dataValues.type != 1) {
+    if (user.dataValues.type != 2) {
         return res.send(403);
     }
 
