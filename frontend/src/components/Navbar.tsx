@@ -18,6 +18,11 @@ export default function Navigation() {
               </Link>
             </Nav.Link>
             <Nav.Link>
+              <Link to="/pickupdemo" style={style}>
+                PickupDemo
+              </Link>
+            </Nav.Link>
+            <Nav.Link>
               <Link to="/profile" style={style}>
                 Profile
               </Link>
