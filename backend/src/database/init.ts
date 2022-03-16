@@ -11,7 +11,7 @@ import Tag from "./models/Tag";
 
 import sequelizeConnection from "./config";
 
-const force = true;
+const force = false;
 const dbInit = async () => {
 
 	await sequelizeConnection.sync({ force });
