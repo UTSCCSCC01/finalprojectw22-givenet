@@ -92,6 +92,7 @@ module.exports = {
     console.log(pickups);
 
     return res.json(pickups);
+    // return res.sendStatus(200);
 
   }
 };

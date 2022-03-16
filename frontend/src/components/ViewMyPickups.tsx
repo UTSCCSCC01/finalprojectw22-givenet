@@ -19,7 +19,18 @@ type Pickup = {
   notes: string;
   createdAt: Date;
   updatedAt: Date;
+  org_name: string;
+  org_phone_number: string;
 };
+
+type profile = {
+    [id: string]: string;
+    name: string;
+    location: string;
+    operating_hours: string;
+    phone: string;
+    email: string;
+  };
 
 
 const ViewMyPickups = () => {
@@ -37,7 +48,21 @@ const ViewMyPickups = () => {
         },
       });
 
-      let all_pickups = await response.json();
+      let all_pickups_resp = await response.json();
+      let all_pickups = [];
+
+      for (let pickup of all_pickups_resp) {
+        let org_info = await fetch(`/account/profile/${pickup.org_id}`, {method: "GET"});
+        let result = await org_info.json();
+        result = JSON.parse(result);
+        console.log(result["name"]);
+        pickup.org_name = result.name;
+        pickup.org_phone_number = result.phone;
+        all_pickups.push(pickup)
+      }
+
+      console.log(all_pickups);
+
       setAllPickups(all_pickups);
     }
 
@@ -53,9 +78,11 @@ const ViewMyPickups = () => {
         {allPickups.map((pickup) => (
           <Accordion.Item eventKey={pickup.pickup_id.toString() || "0"}>
             <Accordion.Header>
-              {`#${pickup.pickup_id} -- Listing: ${pickup.listing_id} being picked up by ORG w/ ID: ${pickup.org_id}`}
+              {`#${pickup.pickup_id} -- Listing: ${pickup.listing_id} being picked up by ORG: ${pickup.org_name}`}
             </Accordion.Header>
             <Accordion.Body>
+                <h6>ORG ID: {pickup.org_id}</h6>
+                <h6>ORG Phone #: {pickup.org_phone_number}</h6>
               <h6>Time: {pickup.time}</h6>
               <h6>Pickup Req Submitted @ {pickup.createdAt}</h6>
               <p>Notes: {pickup.notes}</p>
