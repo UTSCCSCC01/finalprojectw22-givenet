@@ -49,5 +49,49 @@ module.exports = {
     }
 
     return res.send(200);
+  },
+
+  get: async (req: express.Request, res: express.Response) => {
+    const user: any = req.user;
+    let user_id;
+    if (user) {
+      user_id = Number(user.dataValues.acc_id);
+    } else {
+      return res.send(403);
+    }
+
+    // Make sure user is donor
+    // console.log(user.dataValues);
+    // if (user.dataValues.type != 1) {
+    //     return res.send(403);
+    // }
+
+    let pickups = [];
+    let allPickups = await getAll();
+    for (let pickup of allPickups) {
+        console.log(pickup.donor_id);
+        console.log(user_id);
+        if (pickup.donor_id == user_id) {
+            let temp = {
+                pickup_id: pickup.pickup_id,
+                listing_id: pickup.listing_id,
+                donor_id: pickup.donor_id,
+                org_id: pickup.org_id,
+                time: pickup.time,
+                completed: pickup.completed,
+                notes: pickup.notes,
+                createdAt: pickup.createdAt,
+                updatedAt: pickup.updatedAt
+            }
+
+            pickups.push(temp);
+        }
+    }
+
+    console.log("AAAAAAA");
+    console.log(pickups);
+
+    return res.json(pickups);
+
   }
 };

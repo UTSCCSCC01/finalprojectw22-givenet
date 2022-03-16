@@ -18,8 +18,13 @@ export default function Navigation() {
               </Link>
             </Nav.Link>
             <Nav.Link>
-              <Link to="/pickupdemo" style={style}>
-                PickupDemo
+              <Link to="/pickupcreatedemo" style={style}>
+                PickupCreateDemo
+              </Link>
+            </Nav.Link>
+            <Nav.Link>
+              <Link to="/pickupviewdemo" style={style}>
+                PickupViewDemo
               </Link>
             </Nav.Link>
             <Nav.Link>

@@ -14,6 +14,7 @@ import CreateListingPage from "./pages/CreateListingPage";
 
 // REMOVE
 import NewPickup from "./components/NewPickup"
+import ViewMyPickups from "./components/ViewMyPickups";
 
 export default function App() {
 	const [token, setToken] = useState("");
@@ -29,7 +30,8 @@ export default function App() {
 					<Route path="/profile/listings" element={<CreateListingPage />} />
 					<Route path="/tagging" element={<TaggingPage />} />
 					<Route path="/viewlistings" element={<ListingsPage />} />
-					<Route path="/pickupdemo" element={<NewPickup />} />
+					<Route path="/pickupcreatedemo" element={<NewPickup />} />
+					<Route path="/pickupviewdemo" element={<ViewMyPickups />} />
 				</Routes>
 			</TokenContext.Provider>
 		</div>
