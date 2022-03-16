@@ -38,8 +38,8 @@ export default function Navigation() {
 							</Link>
 						</Nav.Link>
 						<Nav.Link>
-							<Link to="/" style={style}>
-								Learn More
+							<Link to="/mylistings" style={style}>
+								My listings
 							</Link>
 						</Nav.Link>
 					</Nav>

@@ -99,6 +99,9 @@ export default function TaggingSystem() {
 					map[+category.category_id] = category.name.toString();
 				}
 				setCategoryNameMap(map);
+
+				console.log({map});
+
 				return responsejson;
 			}
 		} catch (error) {
@@ -152,10 +155,14 @@ export default function TaggingSystem() {
 		const fetchTagItems = async () => {
 			const tags = await getAllItemTags();
 			setTagItems(tags);
+			console.log({tags});
 		};
 		const fetchTagCategories = async () => {
 			const categories = await getAllCategories();
 			setTagCategories(categories);
+			if (categories.length > 0) {
+				setNewItemGroupID(categories[0].category_id);
+			}
 		};
 		fetchTagItems().then(r => console.log("done"));
 		fetchTagCategories().then(r => console.log("done categories"));
@@ -173,6 +180,9 @@ export default function TaggingSystem() {
 		await addCategory(newCategoryName, newCategoryDesc);
 		const categories = await getAllCategories();
 		setTagCategories(categories);
+		if (categories.length > 0) {
+			setNewItemGroupID(categories[0].category_id);
+		}
 	};
 
 	const deleteCategoryCascade = async (category_id: number) => {
@@ -224,7 +234,7 @@ export default function TaggingSystem() {
 									))}
 								</Form.Select>
 							</Form.Group>
-							<Button className="mt-1" onClick={addNewItemTag}>
+							<Button className="mt-1" onClick={addNewItemTag} disabled={tagCategories.length <= 0}>
 								Add Tag
 							</Button>
 						</Form>
@@ -269,30 +279,24 @@ export default function TaggingSystem() {
 						<Col>
 							<Card
 								style={{ width: "100%" }}
-								border="primary"
+								border="dark"
 								className="mt-1 mb-1"
 							>
 								<Card.Body>
-									<Card.Header className="mb-2">
-										{" "}
-										Item Tag{" "}
+									<Card.Header className="mb-2 bg-dark text-light">
+										Tag
 									</Card.Header>
 									<Card.Title> {tag.name} </Card.Title>
 									<Card.Subtitle>
-										Item Id: {tag.tag_id}
-									</Card.Subtitle>
-									<Card.Text>
 										Category : {
 										// @ts-ignore
 										categoryNameMap[tag.category_id]
 									}{" "}
-									</Card.Text>
+									</Card.Subtitle>
 									<Card.Text>
-										{" "}
 										Created: {tag.createdAt}{" "}
 									</Card.Text>
 									<Card.Text>
-										{" "}
 										Updated: {tag.updatedAt}{" "}
 									</Card.Text>
 									<CloseButton
@@ -316,9 +320,8 @@ export default function TaggingSystem() {
 								className="mt-1 mb-1"
 							>
 								<Card.Body>
-									<Card.Header className="mb-2">
-										{" "}
-										Item Category{" "}
+									<Card.Header className="mb-2 bg-info">
+										Category
 									</Card.Header>
 									<Card.Title>
 										{" "}

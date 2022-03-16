@@ -24,72 +24,106 @@ type Listing = {
 // Accname and address are filled out in useeffect
 
 function getNetWeight(listing: Listing) {
-    let total = 0;
-
-    for (let item of listing.items) {
-        total += item.weight;
-    }
-
-    return parseInt(total.toString()) + 'kg';
+    let total = listing.items.reduce((prev, curr) => ((+prev) + (+curr.weight)), 0);
+    return total.toString() + 'kg';
 }
 
-function getBestTags(listing: Listing) {
-    let tags = [];
-    let weights = [];
-
-    for (let item of listing.items) {
-        if (tags.indexOf(item.tag_id) == -1) {
-            tags.push(item.tag_id);
-            weights.push(item.weight);
-        } else {
-            weights[tags.indexOf(item.tag_id)] += item.weight;
-        }
-    }
-
-    let retTags = [];
-    weights.sort(function(a, b){return a - b});
-    while (retTags.length < 4 && weights.length > 0) {
-        let max = weights[weights.length - 1];
-        
-        for (let item of listing.items) {
-            if (item.weight == max) {
-                retTags.push(item.tag_id);
-                break;
-            }
-        }
-        weights.pop();
-    }
-    
-    
-
-    return '{ ' + retTags.toString() + ' }';
-}
-
-const ViewListings = () => {
+const ViewListings = (Props: any) => {
 
     // This state will be used for storing data retrieved from request for all listings
     const [allListings, setAllListings] = useState<Listing[]>([] as Listing[]);
+    const [tagNameMap, setTagNameMap] = useState({});
     const {token} = useContext(TokenContext);
+    const {isUserListings} = Props;
+
+    function getBestTags(listing: Listing) {
+        let tag_weights = listing.items.reduce((prev, curr) => {
+            if (curr.tag_id in prev) {
+                // @ts-ignore
+                prev[tagNameMap[curr.tag_id]] += +curr.weight;
+            } else {
+                // @ts-ignore
+                prev[tagNameMap[curr.tag_id]] = +curr.weight;
+            }
+            return prev;
+        }, {})
+
+        const pickHighest = (obj: any, num = 1) => {
+            const requiredObj = {};
+            Object.keys(obj).sort((a, b) => obj[b] - obj[a]).forEach((key, ind) =>
+            {
+                if(ind < num){
+                    // @ts-ignore
+                    requiredObj[key] = obj[key];
+                }
+            });
+            return requiredObj;
+        };
+        // @ts-ignore
+        let tag_weights_string = Object.keys(pickHighest(tag_weights, 3)).reduce((prev, curr) => `${prev}, ${curr}`, "").substring(1);
+
+        return `[ ${tag_weights_string} ]`;
+    }
+
+    async function getAllTags() {
+        try {
+            const allTagsResponse = await fetch("/tag/all/", {
+                method: "GET",
+                headers: {
+                    authorization: `Bearer ${token}`,
+                },
+            })
+            if (allTagsResponse.status !== 200) {
+                console.log(allTagsResponse.status);
+            } else {
+                let map = {};
+                let responsejson = await allTagsResponse.json()
+                for (let tag of responsejson) {
+                    // @ts-ignore
+                    map[+tag.tag_id] = tag.name.toString();
+                }
+
+                setTagNameMap(map);
+                console.log(123123123, map);
+
+                return responsejson;
+            }
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
 
     // Makes requests on component load and stores in state ^
     useEffect(() => {
 
         async function getListings() {
-            const response = await fetch("/listing/all", {
-                method: "GET",
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-            });
-            
+            let response;
+            if (isUserListings) {
+                response = await fetch("/listing", {
+                    method: "GET",
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                });
+            } else {
+                response = await fetch("/listing/all", {
+                    method: "GET",
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                });
+            }
+
+
             let all_listings = await response.json();
             // Need to query user data: wait for backend overhaul next sprint
             console.log(all_listings);
             setAllListings(all_listings);
         }
 
-        getListings();
-
+        getListings().then(() => console.log(""));
+        getAllTags().then(() => console.log(""));
     }, [])
 
     // If listings retrieved then render listings view
@@ -126,7 +160,9 @@ const ViewListings = () => {
                                         <td> {item.name} </td>
                                         <td> {item.weight} </td>
                                         <td> {new Date(item.expiry).toDateString()} </td>
-                                        <td> {item.tag_id} </td>
+                                        <td> { // @ts-ignore
+                                            tagNameMap[item.tag_id]
+                                        } </td>
                                     </tr>
 
                                 ))}

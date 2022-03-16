@@ -81,11 +81,13 @@ export default function Listing() {
             return {};
         } else {
             let allTags = await allItemsResponse.json();
-            setItem((old) => {
-                old.tag_id = allTags[0].tag_id;
-                old.tag_name = allTags[0].name;
-                return old;
-            })
+            if (allTags.length > 0) {
+                setItem((old) => {
+                    old.tag_id = allTags[0].tag_id;
+                    old.tag_name = allTags[0].name;
+                    return old;
+                })
+            }
             setTags(allTags);
         }
     }
@@ -129,9 +131,24 @@ export default function Listing() {
             },
             body: JSON.stringify(packagedListing)
         });
+
+        setItems([]);
+        setItem({...item,
+            expiry: new Date(),
+            name: "",
+            weight: 0,
+        });
+        setForm({
+            container: "",
+            notes: "",
+            location: ""
+        });
+
+        await loadListings();
+
     }
 
-    
+
     const validateFormInput = () => {
         if (form.container === "") {
             return setFormErrorMessage("Please provide a container!");
@@ -145,7 +162,7 @@ export default function Listing() {
 
         setFormErrorMessage("");
 
-        createListing();
+        createListing().then(r => console.log("done"));
     }
 
     const validateItemInput = () => {
@@ -158,31 +175,33 @@ export default function Listing() {
         if (item.weight <= 0) {
             return setItemErrorMessage("Weight should be a positive number!");
         }
-        if (item.expiry < new Date()) {
-            return setItemErrorMessage("The expiry date can't be in the past!");
-        }
+        // if (item.expiry <= new Date((new Date()).getDate() - 1)) {
+        //     return setItemErrorMessage("The expiry date can't be in the past!");
+        // }
         setItemErrorMessage("");
 
 
         setItems([...items, item]);
         setItem({
+            ...item,
             weight: 0,
             name: "",
             expiry: new Date(),
-            tag_id: 0,
-            tag_name: ""
         })
 
     }
-    
-    
-    async function deleteListing (id:any) { 
+
+
+    async function deleteListing(id: any) {
         await fetch("/listing/" + id, {
             method: "DELETE",
             headers: {
                 authorization: `Bearer ${token}`,
             },
         });
+
+        await loadListings();
+
     }
 
     useEffect(() => {
@@ -280,8 +299,14 @@ export default function Listing() {
                         <Form.Group as={Col} id={item.tag_name}>
                             <Form.Label>Tag</Form.Label>
                             <Form.Select
-                                onChange={(e) => 
-                                    setItem({...item, tag_name: e.target.id, tag_id: +e.target.value })
+                                onChange={(e) => {
+                                    console.log("id", e.target.children[e.target.selectedIndex].getAttribute('id'), e.target.value);
+                                    setItem({
+                                        ...item,
+                                        tag_name: e.target.children[e.target.selectedIndex].getAttribute('id') || "",
+                                        tag_id: +e.target.value
+                                    })
+                                }
                                 }>
                                 {tags.map((tag, i) => (
                                     <option
@@ -296,69 +321,77 @@ export default function Listing() {
                     </Row>
                     <Button className="mt-2" onClick={(e) => {
                         validateItemInput();
-                    }}>
+                    }} disabled={tags.length <= 0}>
                         Add item
                     </Button>
                 </div>
                 <div className="border p-5 rounded mt-3">
                     <h4>Items in the current listing</h4>
-                    <Table striped bordered hover responsive>
-                        <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Weight</th>
-                            <th scope="col">Expiry</th>
-                            <th scope="col">Tag</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {items.map(object => (
+                    {items.length <= 0 ?
+                        <p>There are no items in this listing right now!</p> :
+                        <Table striped bordered hover responsive>
+                            <thead>
                             <tr>
-                                <td> {object.name} </td>
-                                <td> {object.weight} </td>
-                                <td> {object.expiry.toDateString()} </td>
-                                <td> {object.tag_name} </td>
+                                <th scope="col">Name</th>
+                                <th scope="col">Weight</th>
+                                <th scope="col">Expiry</th>
+                                <th scope="col">Tag</th>
                             </tr>
+                            </thead>
+                            <tbody>
+                            {items.map(object => (
+                                <tr>
+                                    <td> {object.name} </td>
+                                    <td> {object.weight} </td>
+                                    <td> {object.expiry.toLocaleDateString()} </td>
+                                    <td> {object.tag_name} </td>
+                                </tr>
 
-                        ))}
-                        </tbody>
-                    </Table>
+                            ))}
+                            </tbody>
+                        </Table>}
+
                 </div>
-                <Button className="mt-2" onClick={validateFormInput}>
+                <Button className="mt-2" onClick={validateFormInput}
+                        disabled={tags.length <= 0}>
                     Create new listing
                 </Button>
             </Form>
-            
-            
-            <div className="container mt-5">
-                <h4>Your listings</h4>
-                {listings.length > 0 ? <Table striped bordered hover responsive>
-                    <thead>
-                    <tr>
-                        <th scope="col">Listing ID</th>
-                        <th scope="col">Container</th>
-                        <th scope="col">Location</th>
-                        <th scope="col">Notes</th>
-                        <th scope="col">Items</th>
-                        <th scope="col">Delete Listing</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {listings.map(object => (
-                        <tr>
-                            <td> {object.listing_id} </td>
-                            <td> {object.container} </td>
-                            <td> {object.location} </td>
-                            <td> {object.notes} </td>
-                            <td> hai</td>
-                            <td><button onClick={() => {
-                                deleteListing(object.listing_id);}}>Delete</button> </td>
-                        </tr>
 
-                    ))}
-                    </tbody>
-                </Table> : "You have no listings. Fill out the form above to add one!"}
-            </div>
+
+            {/*<div className="container mt-5">*/}
+            {/*    <h4>Your listings</h4>*/}
+            {/*    {listings.length > 0 ? <Table striped bordered hover responsive>*/}
+            {/*        <thead>*/}
+            {/*        <tr>*/}
+            {/*            <th scope="col">Listing ID</th>*/}
+            {/*            <th scope="col">Container</th>*/}
+            {/*            <th scope="col">Location</th>*/}
+            {/*            <th scope="col">Notes</th>*/}
+            {/*            <th scope="col">Items</th>*/}
+            {/*            <th scope="col">Delete Listing</th>*/}
+            {/*        </tr>*/}
+            {/*        </thead>*/}
+            {/*        <tbody>*/}
+            {/*        {listings.map(object => (*/}
+            {/*            <tr>*/}
+            {/*                <td> {object.listing_id} </td>*/}
+            {/*                <td> {object.container} </td>*/}
+            {/*                <td> {object.location} </td>*/}
+            {/*                <td> {object.notes} </td>*/}
+            {/*                <td> hai</td>*/}
+            {/*                <td>*/}
+            {/*                    <button onClick={() => {*/}
+            {/*                        deleteListing(object.listing_id);*/}
+            {/*                    }}>Delete*/}
+            {/*                    </button>*/}
+            {/*                </td>*/}
+            {/*            </tr>*/}
+
+            {/*        ))}*/}
+            {/*        </tbody>*/}
+            {/*    </Table> : "You have no listings. Fill out the form above to add one!"}*/}
+            {/*</div>*/}
         </div>
     )
 
