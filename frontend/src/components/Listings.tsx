@@ -357,41 +357,6 @@ export default function Listing() {
                     Create new listing
                 </Button>
             </Form>
-
-
-            {/*<div className="container mt-5">*/}
-            {/*    <h4>Your listings</h4>*/}
-            {/*    {listings.length > 0 ? <Table striped bordered hover responsive>*/}
-            {/*        <thead>*/}
-            {/*        <tr>*/}
-            {/*            <th scope="col">Listing ID</th>*/}
-            {/*            <th scope="col">Container</th>*/}
-            {/*            <th scope="col">Location</th>*/}
-            {/*            <th scope="col">Notes</th>*/}
-            {/*            <th scope="col">Items</th>*/}
-            {/*            <th scope="col">Delete Listing</th>*/}
-            {/*        </tr>*/}
-            {/*        </thead>*/}
-            {/*        <tbody>*/}
-            {/*        {listings.map(object => (*/}
-            {/*            <tr>*/}
-            {/*                <td> {object.listing_id} </td>*/}
-            {/*                <td> {object.container} </td>*/}
-            {/*                <td> {object.location} </td>*/}
-            {/*                <td> {object.notes} </td>*/}
-            {/*                <td> hai</td>*/}
-            {/*                <td>*/}
-            {/*                    <button onClick={() => {*/}
-            {/*                        deleteListing(object.listing_id);*/}
-            {/*                    }}>Delete*/}
-            {/*                    </button>*/}
-            {/*                </td>*/}
-            {/*            </tr>*/}
-
-            {/*        ))}*/}
-            {/*        </tbody>*/}
-            {/*    </Table> : "You have no listings. Fill out the form above to add one!"}*/}
-            {/*</div>*/}
         </div>
     )
 

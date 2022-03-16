@@ -1,7 +1,10 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 
-import Category, { CategoryInput, CategoryOutput } from "../database/models/Category";
+import Category, {
+  CategoryInput,
+  CategoryOutput,
+} from "../database/models/Category";
 
 import {
   create,
@@ -11,13 +14,13 @@ import {
   deleteTagWithCategoryId,
   existsName,
 } from "../database/dal/category";
-import {deleteByCategoryId} from "../database/dal/tag";
+import { deleteByCategoryId } from "../database/dal/tag";
 
 module.exports = {
   post: async (req: express.Request, res: express.Response) => {
     try {
       const category: CategoryInput = req.body;
-      const alreadyExists = await existsName(category.name)
+      const alreadyExists = await existsName(category.name);
       if (alreadyExists) {
         return res.sendStatus(StatusCodes.CONFLICT);
       }
