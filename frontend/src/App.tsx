@@ -12,6 +12,9 @@ import TaggingPage from "./pages/TaggingPage";
 import ListingsPage from "./pages/ListingsPage";
 import CreateListingPage from "./pages/CreateListingPage";
 
+import ViewPickupDemo from "./pages/ViewPickupDemo";
+import CreatePickupDemo from "./pages/CreatePickupDemo";
+
 export default function App() {
 	const [token, setToken] = useState("");
 	const value = useMemo(() => ({ token, setToken }), [token, setToken]);
@@ -26,6 +29,8 @@ export default function App() {
 					<Route path="/profile/listings" element={<CreateListingPage />} />
 					<Route path="/tagging" element={<TaggingPage />} />
 					<Route path="/viewlistings" element={<ListingsPage />} />
+					<Route path="/pickupcreatedemo" element={<CreatePickupDemo />} />
+					<Route path="/pickupviewdemo" element={<ViewPickupDemo />} />
 					<Route path="/mylistings" element={<MyListingsPage />} />
 				</Routes>
 			</TokenContext.Provider>

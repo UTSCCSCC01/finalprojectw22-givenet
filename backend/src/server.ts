@@ -54,4 +54,7 @@ app.use("/tag", tagRoute);
 const categoryRoute = require("./routes/category.ts");
 app.use("/category", categoryRoute);
 
+const pickupRoute = require("./routes/pickup.ts");
+app.use("/pickup", pickupRoute);
+
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

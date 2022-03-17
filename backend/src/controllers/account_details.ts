@@ -34,4 +34,18 @@ module.exports = {
       return res.send(401);
     }
   },
+  
+  getById: async (req: express.Request, res: express.Response) => {
+    const acc_id: number = +req.params.acc_id;
+
+    let fetched = await getById(acc_id);
+
+    if (fetched) {
+      return res.json(JSON.stringify(fetched));
+    } else {
+      return res.send(401);
+    }
+
+  }
+
 };
