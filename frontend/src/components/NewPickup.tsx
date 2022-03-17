@@ -9,6 +9,7 @@ type form = {
   listing_id: number;
   notes: string;
   completed: boolean;
+  time: any;
 };
 
 export default function LoginForm({}: Props) {
@@ -16,7 +17,8 @@ export default function LoginForm({}: Props) {
   const [formState, setFormState] = useState<form>({
     listing_id: 0,
     notes: "",
-    completed: false
+    completed: false,
+    time: 0
   });
   const { token } = useContext(TokenContext);
   // Error message for form errors
@@ -68,6 +70,15 @@ export default function LoginForm({}: Props) {
             placeholder="Enter listing ID"
             name="listing_id"
             value={formState.listing_id}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Date</Form.Label>
+          <Form.Control
+            onChange={handleFormStateChange}
+            type="date"
+            name="time"
+            value={formState.time}
           />
         </Form.Group>
         <Form.Group className="mb-3">
