@@ -37,7 +37,6 @@ module.exports = {
 
     // Create a row on on the pickup relation
     const pickup = { ...req.body, org_id: org_id, donor_id: donor_id, time: literal('CURRENT_TIMESTAMP') };
-    // const pickup = {listing_id: req.body.listing_id}
     console.log(pickup);
     let new_pickup = await create(pickup);
     // DEBUGGING STUFF
@@ -60,18 +59,12 @@ module.exports = {
       return res.send(403);
     }
 
-    // Make sure user is donor
-    // console.log(user.dataValues);
-    // if (user.dataValues.type != 1) {
-    //     return res.send(403);
-    // }
-
     let pickups = [];
     let allPickups = await getAll();
     for (let pickup of allPickups) {
         console.log(pickup.donor_id);
         console.log(user_id);
-        if (pickup.donor_id == user_id) {
+        if (pickup.donor_id == user_id || pickup.org_id == user_id) {
             let temp = {
                 pickup_id: pickup.pickup_id,
                 listing_id: pickup.listing_id,
@@ -88,11 +81,7 @@ module.exports = {
         }
     }
 
-    console.log("AAAAAAA");
-    console.log(pickups);
-
     return res.json(pickups);
-    // return res.sendStatus(200);
 
   }
 };
