@@ -1,6 +1,8 @@
 import { Model, DataTypes, literal } from "sequelize";
 import sequelizeConnection from "../config";
 import ItemCategory from "./Category";
+import Listing from "./Listing";
+import Tag from "./Tag";
 
 interface ItemAttributes {
   item_id: number;
@@ -40,7 +42,7 @@ Item.init(
     },
     tag_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     name: {
       type: DataTypes.STRING,

@@ -18,7 +18,7 @@ app.use(
 app.use(express.urlencoded({extended: true}));
 
 /* Initialize the database */
-dbInit().then(r => console.log("Database initialized")).catch(e => console.log("Error starting database"));
+dbInit().then(r => console.log("Database initialized")).catch(e => console.log(e));
 
 /* Authentication Middleware */
 const authenticateToken = (

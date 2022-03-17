@@ -4,7 +4,7 @@ import SignUpPage from "./pages/SignUpPage";
 import { TokenContext } from "./TokenContext";
 import { Routes, Route } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage";
-import ListingPage from "./components/Listings";
+import MyListingsPage from "./pages/MyListingsPage";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import TaggingPage from "./pages/TaggingPage";
@@ -31,6 +31,7 @@ export default function App() {
 					<Route path="/viewlistings" element={<ListingsPage />} />
 					<Route path="/pickupcreatedemo" element={<CreatePickupDemo />} />
 					<Route path="/pickupviewdemo" element={<ViewPickupDemo />} />
+					<Route path="/mylistings" element={<MyListingsPage />} />
 				</Routes>
 			</TokenContext.Provider>
 		</div>
