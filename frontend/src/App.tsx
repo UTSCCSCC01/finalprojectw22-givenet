@@ -11,6 +11,7 @@ import TaggingPage from "./pages/TaggingPage";
 
 import ListingsPage from "./pages/ListingsPage";
 import CreateListingPage from "./pages/CreateListingPage";
+import CharityWantPage from "./pages/CharityWantPage"
 
 export default function App() {
 	const [token, setToken] = useState("");
@@ -26,6 +27,7 @@ export default function App() {
 					<Route path="/profile/listings" element={<CreateListingPage />} />
 					<Route path="/tagging" element={<TaggingPage />} />
 					<Route path="/viewlistings" element={<ListingsPage />} />
+					<Route path="/wanted" element={<CharityWantPage />} />
 				</Routes>
 			</TokenContext.Provider>
 		</div>

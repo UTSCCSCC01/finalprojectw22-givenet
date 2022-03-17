@@ -263,7 +263,7 @@ export default function TaggingSystem() {
                 className="mt-1 mb-1"
               >
                 <Card.Body>
-                  <Card.Header className="mb-2"> Item Tag </Card.Header>
+                  <Card.Header> Item Tag </Card.Header>
                   <Card.Title> {tag.name} </Card.Title>
                   <Card.Subtitle>Item Id: {tag.tag_id}</Card.Subtitle>
                   <Card.Text>
