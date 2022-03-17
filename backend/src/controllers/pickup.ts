@@ -36,7 +36,7 @@ module.exports = {
 
 
     // Create a row on on the pickup relation
-    const pickup = { ...req.body, org_id: org_id, donor_id: donor_id, time: literal('CURRENT_TIMESTAMP') };
+    const pickup = { ...req.body, org_id: org_id, donor_id: donor_id };
     console.log(pickup);
     let new_pickup = await create(pickup);
     // DEBUGGING STUFF
