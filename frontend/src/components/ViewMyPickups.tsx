@@ -21,6 +21,7 @@ type Pickup = {
   updatedAt: Date;
   org_name: string;
   org_phone_number: string;
+  hours: string;
 };
 
 type profile = {
@@ -52,13 +53,26 @@ const ViewMyPickups = () => {
       let all_pickups = [];
 
       for (let pickup of all_pickups_resp) {
+        // get data of charity
         let org_info = await fetch(`/account/profile/${pickup.org_id}`, {method: "GET"});
         let result = await org_info.json();
         result = JSON.parse(result);
-        console.log(result["name"]);
+
+        let date = new Date(pickup.time.toString());
+        pickup.time = date.toLocaleDateString();
+
+        date = new Date(pickup.createdAt.toString());
+        pickup.createdAt = date.toLocaleDateString();
         pickup.org_name = result.name;
         pickup.org_phone_number = result.phone;
+
+        let donor_info = await fetch(`/account/profile/${pickup.donor_id}`, {method: "GET"});
+        result = await donor_info.json();
+        result = JSON.parse(result);
+        pickup.hours = result.operating_hours;
+
         all_pickups.push(pickup)
+
       }
 
       console.log(all_pickups);
@@ -83,8 +97,9 @@ const ViewMyPickups = () => {
             <Accordion.Body>
                 <h6>ORG ID: {pickup.org_id}</h6>
                 <h6>ORG Phone #: {pickup.org_phone_number}</h6>
-              <h6>Time: {pickup.time}</h6>
-              <h6>Pickup Req Submitted @ {pickup.createdAt}</h6>
+              <h6>Scheduled for: {pickup.time}</h6>
+              <h6>Pickup Hours: {pickup.hours}</h6>
+              <h6>Claimed on: {pickup.createdAt}</h6>
               <p>Notes: {pickup.notes}</p>
             </Accordion.Body>
           </Accordion.Item>
