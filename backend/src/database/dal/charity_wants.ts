@@ -26,22 +26,43 @@ export const getById = async (id: number): Promise<CharityWantsOutput> => {
 	return result;
 };
 
-export const deleteById = async (id: number) => {
-	const result = await CharityWants.findByPk(id);
-
-	if (!result) {
-		throw new Error(`CharityWants id does not exist`);
-	}
-	await result.destroy();
-	return true;
+export const deleteCharityWants = async (acc_id: number, item_id: number) => {
+	const numDeleted = await CharityWants.destroy({
+		where:{
+			acc_id: acc_id,
+			item_id: item_id
+		}
+	});
+	return numDeleted > 0;
 };
 
 export const getAll = async (): Promise<CharityWantsOutput[]> => {
 	const results = await CharityWants.findAll();
-
-	if (!results) {
-		throw new Error("ERROR IN FINDALL");
-	}
-
 	return results;
 };
+
+export const getByAcc = async (id: number): Promise<CharityWantsOutput[]> =>{
+	const results = await CharityWants.findAll({where: {acc_id: id}});
+	if (!results){
+		throw new Error("ERROR IN getByAcc");
+	}
+	return results;
+}
+
+export const getByItem = async (id: number): Promise<CharityWantsOutput[]> =>{
+	const results = await CharityWants.findAll({where: {item_id: id}});
+	if (!results){
+		throw new Error("ERROR IN getByItem");
+	}
+	return results;
+}
+
+export const exists = async(acc_id: number, item_id:number): Promise<boolean> =>{
+	let retval =  await CharityWants.findAll({
+		where:{
+			acc_id: acc_id,
+			item_id: item_id
+		}
+	});
+	return retval.length > 0;
+}
