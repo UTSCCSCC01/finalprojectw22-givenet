@@ -18,7 +18,7 @@ app.use(
 app.use(express.urlencoded({extended: true}));
 
 /* Initialize the database */
-dbInit().then(r => console.log("Database initialized")).catch(e => console.log("Error starting database"));
+dbInit().then(r => console.log("Database initialized")).catch(e => console.log(e));
 
 /* Authentication Middleware */
 const authenticateToken = (
@@ -54,7 +54,12 @@ app.use("/tag", tagRoute);
 const categoryRoute = require("./routes/category.ts");
 app.use("/category", categoryRoute);
 
+
 const wantedRoute = require("./routes/charity_wants.ts");
 app.use("/wanted", wantedRoute);
+
+const pickupRoute = require("./routes/pickup.ts");
+app.use("/pickup", pickupRoute);
+
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

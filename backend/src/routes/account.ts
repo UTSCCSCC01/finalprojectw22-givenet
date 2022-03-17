@@ -18,6 +18,9 @@ const profileController = require("../controllers/account_details");
 // Get account details
 router.get("/profile", authenticateToken, profileController.get);
 
+// Get account details for specified account
+router.get("/profile/:acc_id", profileController.getById);
+
 // Edit account details
 router.post("/profile", authenticateToken, profileController.post);
 
