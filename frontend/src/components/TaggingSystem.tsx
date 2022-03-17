@@ -199,7 +199,6 @@ export default function TaggingSystem() {
 		setTagItems(tags);
 	};
 
-
 	return (
 		<div className="container">
 			<h1 className="mt-5 mb-3">TAGGING SYSTEM</h1>
