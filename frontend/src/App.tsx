@@ -11,7 +11,10 @@ import TaggingPage from "./pages/TaggingPage";
 
 import ListingsPage from "./pages/ListingsPage";
 import CreateListingPage from "./pages/CreateListingPage";
+
+import ListingFiltersPage from "./pages/ListingFiltersPage";
 import CharityWantPage from "./pages/CharityWantPage"
+
 
 import ViewPickupDemo from "./pages/ViewPickupDemo";
 import CreatePickupDemo from "./pages/CreatePickupDemo";
@@ -34,6 +37,7 @@ export default function App() {
 					<Route path="/pickupcreatedemo" element={<CreatePickupDemo />} />
 					<Route path="/pickupviewdemo" element={<ViewPickupDemo />} />
 					<Route path="/mylistings" element={<MyListingsPage />} />
+					<Route path="/listingfilters" element={<ListingFiltersPage />} />
 				</Routes>
 			</TokenContext.Provider>
 		</div>
