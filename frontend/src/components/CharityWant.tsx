@@ -7,13 +7,10 @@ import { CharityWantsOutput } from "../../../backend/src/database/models/Charity
 
 export default function WantedItems() {
 	const [accountId, setAccountId] = useState(Number());
-	const [accountMap, setAccountMap] = useState({});
 	const [itemId, setItemId] = useState(Number());
 	const [tagItems, setTagItems] = useState<TagOutput[]>([]);
 	const [charityWants, setCharityWants] = useState<CharityWantsOutput[]>([]);
-	const [charityNameMap, setCharityNameMap] = useState({});
 	const [itemMap, setItemMap] = useState({});
-	const [searchName, setSearchName] = useState("");
 	const { token } = useContext(TokenContext);
 	
 	// Retrieve all item tags from the database.
@@ -120,6 +117,7 @@ export default function WantedItems() {
 			const lists = await getAllWantedLists();
 			setCharityWants(lists);
 		};
+		setItemId(1);
 		fetchTagItems().then((r) => console.log("done items"));
 		fetchWantedLists().then((r) => console.log("done wanted lists"))
 	}, []);
@@ -209,34 +207,6 @@ export default function WantedItems() {
 				))}
 			</Row>
 		</Container>
-		
-		<Container>	
-			<Form className="mt-4 mb-4">
-				<Form.Group className="mb-3">
-					<Form.Label>Search</Form.Label>
-					<Form.Select
-						onChange={(e: any) => {
-							setItemId(+e.target.value);
-							console.log(+e.target.value);
-						}}
-					>
-						{tagItems.map((item) => (
-							<option value={item.tag_id}>
-								{item.name}
-							</option>
-              			))}	
-					</Form.Select>
-				</Form.Group>
-			</Form>
-			<Button variant="primary">
-				Search
-			</Button>
-			<p>
-				Output here
-			</p>
-			</Container>
-		
-		
 		</div>
 	);
 }
