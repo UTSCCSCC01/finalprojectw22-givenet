@@ -119,7 +119,7 @@ export default function WantedItems() {
 		};
 		setItemId(1);
 		fetchTagItems().then((r) => console.log("done items"));
-		fetchWantedLists().then((r) => console.log("done wanted lists"))
+		fetchWantedLists().then((r) => console.log("done wanted lists"));
 	}, []);
 
 	const addNewCharityWant = async () =>{
