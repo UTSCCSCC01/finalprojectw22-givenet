@@ -57,6 +57,11 @@ export default function Navigation() {
 								Listing Search
 							</Link>
 						</Nav.Link>
+						<Nav.Link>
+							<Link to="/wanted" style={style}>
+								Charity Wants
+							</Link>
+						</Nav.Link>
 					</Nav>
 					<Navbar.Text>
 						<Link to="/login" style={style}>
