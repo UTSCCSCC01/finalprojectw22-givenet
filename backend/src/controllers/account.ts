@@ -104,6 +104,8 @@ module.exports = {
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
+  
+
 };
 
 const generateAccessToken = (user: AccountOutput) => {

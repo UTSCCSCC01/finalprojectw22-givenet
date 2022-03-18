@@ -1,6 +1,6 @@
 import express from "express";
 
-import { update, getById } from "../database/dal/account_details";
+import { update, getById, getAll } from "../database/dal/account_details";
 
 //These functions are simple and need no commenting.
 module.exports = {
@@ -46,6 +46,18 @@ module.exports = {
       return res.send(401);
     }
 
-  }
-
+  },
+  getAll: async (
+    req: express.Request,
+    res: express.Response
+    )=>{
+      try{
+        const allAccounts = await getAll();
+        res.status(200);
+        res.json(allAccounts);
+      }catch(error){
+        console.log(error);
+        res.send(500)
+      }
+    },
 };

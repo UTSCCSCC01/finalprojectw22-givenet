@@ -1,18 +1,21 @@
 import {useState, useContext, useEffect } from "react";
 import { Button, Form, Container, Row, Col, Card, CloseButton } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import { TagOutput } from "../../../backend/src/database/models/Tag";
 import { TokenContext } from "../TokenContext";
 import { CharityWantsOutput } from "../../../backend/src/database/models/CharityWants"
+import { AccDetailsOutput } from "../../../backend/src/database/models/AccountDetails";
 
 export default function WantedItems() {
 	const [accountId, setAccountId] = useState(Number());
+	const [accountMap, setAccountMap] = useState({});
+	const [accountList, setAccountList] = useState<AccDetailsOutput[]>([]);
 	const [itemId, setItemId] = useState(Number());
 	const [tagItems, setTagItems] = useState<TagOutput[]>([]);
 	const [charityWants, setCharityWants] = useState<CharityWantsOutput[]>([]);
 	const [itemMap, setItemMap] = useState({});
+	const [searchId, setSearchId] = useState(Number());	
+	const [searchResult, setSearchResult] = useState<CharityWantsOutput[]>([]);
 	const { token } = useContext(TokenContext);
-	
 	// Retrieve all item tags from the database.
 	async function getAllItemTags() {
 		try {
@@ -33,14 +36,14 @@ export default function WantedItems() {
 					map[+item.item_id] = item.name.toString();
 				}
 				setItemMap(map);
-				return response
+				console.log({map});
+				return response;
 		  	}
 		} catch (error) {
 		  console.log(error);
 		  return [];
 		}
-	  }
-
+	}
 	// Retrieve all Charity Wants lists from the database
 	async function getAllWantedLists(){
 		try{
@@ -58,7 +61,29 @@ export default function WantedItems() {
 			return [];
 		}
 	}
-
+	async function getAllAccount(){
+		try{
+			const allAccountsResponse = await fetch("/account/getall", {
+				method:"GET",
+			});
+			if(allAccountsResponse.status!== 200){
+				console.log(allAccountsResponse.status);
+				return [];
+			}else{
+				let map = {};
+				let response = await allAccountsResponse.json();
+				for (let account of response){
+					// @ts-ignore
+					map[+account.acc_id] = account.name.toString();
+				}
+				setAccountMap(map);
+				return response;
+			}
+		}catch(error){
+			console.log(error);
+			return[];
+		}
+	}
 	async function addCharityWant(acc_id: number, item_id: number){
 		try{
 			const newCharityWant = {
@@ -107,6 +132,23 @@ export default function WantedItems() {
 		}
 	}
 
+	async function searchCharityWantByItem(itemId: number){
+		try{
+			const wantedListResponse = await fetch("/wanted/"+String(itemId), {
+				method:"GET",
+			});
+			if(wantedListResponse.status !== 200){
+				console.log(wantedListResponse.status);
+				return [];
+			}else{
+				console.log(wantedListResponse)
+				return await wantedListResponse.json();
+			}
+		}catch(error){
+			console.log(error);
+			return [];
+		}
+	}
 	// On page load, populate  the items list and list of charity wants
 	useEffect(() => {
 		const fetchTagItems = async () =>{
@@ -117,7 +159,13 @@ export default function WantedItems() {
 			const lists = await getAllWantedLists();
 			setCharityWants(lists);
 		};
+		const fetchAccountLists = async () =>{
+			const accounts = await getAllAccount();
+			setAccountList(accounts);
+		}
 		setItemId(1);
+		setSearchId(1);
+		fetchAccountLists().then((r) => console.log("done accounts"));
 		fetchTagItems().then((r) => console.log("done items"));
 		fetchWantedLists().then((r) => console.log("done wanted lists"));
 	}, []);
@@ -134,6 +182,10 @@ export default function WantedItems() {
 		setCharityWants(lists);
 	}
 
+	const search = async () =>{
+		const lists = await searchCharityWantByItem(searchId);
+		setSearchResult(lists);
+	}
 	return (
 		<div className="container">
 			<Container className="mb-3">
@@ -207,6 +259,54 @@ export default function WantedItems() {
 				))}
 			</Row>
 		</Container>
+
+		<Container>
+            <Form className="mt-4 mb-4">
+                <Form.Group className="mb-3">
+                    <Form.Label>Search</Form.Label>
+                    <Form.Select
+                        onChange={(e: any) => {
+                            setSearchId(+e.target.value);
+                            console.log(+e.target.value);
+                        }}
+                    >
+                        {tagItems.map((item) => (
+                            <option value={item.tag_id}>
+                                {item.name}
+                            </option>
+                          ))}
+                    </Form.Select>
+                </Form.Group>
+            </Form>
+            <Button variant="primary" onClick={search}>
+                Search
+            </Button>
+            </Container>
+			<Container>
+			<Row>
+				{searchResult.map((listing: CharityWantsOutput) => (
+					<Col>
+						<Card
+							style={{width: "100%"}}
+							border="primary"
+							className="mt-1 mb-1"
+						>
+							<Card.Body>
+								<Card.Header> Results </Card.Header>
+								<Card.Title>{listing.acc_id}</Card.Title>
+								<Card.Text>
+									{
+										// @ts-ignore
+										accountMap[listing.acc_id]
+									}
+								</Card.Text>
+							</Card.Body>
+						</Card>
+					</Col>
+				))}
+			</Row>
+		</Container>
+
 		</div>
 	);
 }

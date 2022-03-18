@@ -23,3 +23,6 @@ export const getById = async (id: number): Promise<AccDetailsOutput> => {
 	}
 	return user;
 };
+export const getAll = async (): Promise<AccDetailsOutput[]> => {
+	return await AccountDetails.findAll();
+};
