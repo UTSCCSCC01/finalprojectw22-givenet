@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
-import ItemOutput from "../../../backend/src/database/models/Items";
-import ItemGroupOutput from "../../../backend/src/database/models/ItemGroups";
+import React, { useContext, useEffect, useState } from "react";
+import TagOutput from "../../../backend/src/database/models/Tag";
+import CategoryOutput from "../../../backend/src/database/models/Category";
+import { TokenContext } from "../TokenContext";
+
 import {
 	Button,
 	Card,
@@ -13,164 +15,188 @@ import {
 
 /* Helpers for CRUD operations */
 
-async function postItemTag(item_id: number, name: string, group_id: number) {
-	try {
-		const newItem = {
-			item_id: item_id,
-			name: name,
-			group: group_id,
-		};
-		const postResponse = await fetch("/item", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(newItem),
-		});
-		return postResponse.json();
-	} catch (error) {
-		console.log(error);
-		return {};
-	}
-}
-
-async function addItemTag(items: ItemOutput[], name: string, group_id: number) {
-	// Citation: https://stackoverflow.com/questions/4020796/finding-the-max-value-of-an-attribute-in-an-array-of-objects
-	const newItemID =
-		Math.max.apply(
-			Math,
-			items.map(function (o) {
-				return o.item_id;
-			})
-		) + 1;
-	return await postItemTag(newItemID, name, group_id);
-}
-
-async function getAllItemTags() {
-	try {
-		const allItemsResponse = await fetch("/allitems", {
-			method: "GET",
-		});
-		const allItemTags: ItemOutput[] = await allItemsResponse.json();
-		return allItemTags;
-	} catch (error) {
-		console.log(error);
-		return [];
-	}
-}
-
-async function deleteItemTag(tag_id: number) {
-	try {
-		const deleteItemResponse = await fetch("/item/" + String(tag_id), {
-			method: "DELETE",
-		});
-	} catch (error) {
-		console.log(error);
-	}
-}
-
-async function getAllItemCategories() {
-	try {
-		const allCategoriesResponse = await fetch("/allitemgroups", {
-			method: "GET",
-		});
-		const allItemCategories: ItemGroupOutput[] =
-			await allCategoriesResponse.json();
-		return allItemCategories;
-	} catch (error) {
-		console.log(error);
-		return [];
-	}
-}
-
-async function postCategory(category_id: number, name: string, desc: string) {
-	try {
-		const newCategory = {
-			item_group_id: category_id,
-			name: name,
-			desc: desc,
-		};
-		const postResponse = await fetch("/itemgroup", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(newCategory),
-		});
-		return postResponse.json();
-	} catch (error) {
-		console.log(error);
-		return {};
-	}
-}
-
-async function addCategory(
-	categories: ItemGroupOutput[],
-	name: string,
-	desc: string
-) {
-	// Citation: https://stackoverflow.com/questions/4020796/finding-the-max-value-of-an-attribute-in-an-array-of-objects
-	const newCategoryID =
-		Math.max.apply(
-			Math,
-			categories.map(function (o) {
-				return o.item_group_id;
-			})
-		) + 1;
-	return await postCategory(newCategoryID, name, desc);
-}
-
-async function deleteItemCategory(category_id: number) {
-	try {
-		const deleteItemCategoryResponse = await fetch(
-			"/itemgroup/" + String(category_id),
-			{
-				method: "DELETE",
-			}
-		);
-	} catch (error) {
-		console.log(error);
-	}
-}
-
 export default function TaggingSystem() {
 	// State for all the tags/categories etc.
-	const [tagItems, setTagItems] = useState<ItemOutput[]>([]);
-	const [tagCategories, setTagCategories] = useState<ItemGroupOutput[]>([]);
+	const [tagItems, setTagItems] = useState<TagOutput[]>([]);
+	const [tagCategories, setTagCategories] = useState<CategoryOutput[]>([]);
 	const [newItemName, setNewItemName] = useState("");
 	const [newItemGroupID, setNewItemGroupID] = useState(Number());
 	const [newCategoryName, setNewCategoryName] = useState("");
 	const [newCategoryDesc, setNewCategoryDesc] = useState("");
+	const [categoryNameMap, setCategoryNameMap] = useState({});
+	const { token } = useContext(TokenContext);
+
+	async function getAllItemTags() {
+		try {
+			const allItemsResponse = await fetch("/tag/all/", {
+				method: "GET",
+				headers: {
+					authorization: `Bearer ${token}`,
+				},
+			});
+			if (allItemsResponse.status !== 200) {
+				console.log(allItemsResponse.status);
+				return {};
+			} else {
+				return allItemsResponse.json();
+			}
+		} catch (error) {
+			console.log(error);
+			return [];
+		}
+	}
+	async function addItemTag(name: string, category_id: number) {
+		try {
+			const newItem = {
+				name: name,
+				category_id: category_id,
+			};
+			const postResponse = await fetch("/tag", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(newItem),
+			});
+			if (postResponse.status !== 200) {
+				return {}
+			} else {
+				return postResponse.json();
+			}
+		} catch (error) {
+			console.log(error);
+			return {};
+		}
+	}
+	async function deleteItemTag(tag_id: number) {
+		try {
+			const deleteItemResponse = await fetch("/tag/" + String(tag_id), {
+				method: "DELETE",
+				headers: {
+					authorization: `Bearer ${token}`,
+				},
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	async function getAllCategories() {
+		try {
+			const allCategoriesResponse = await fetch("/category/all/", {
+				method: "GET",
+				headers: {
+					authorization: `Bearer ${token}`,
+				},
+			})
+			if (allCategoriesResponse.status !== 200) {
+				console.log(allCategoriesResponse.status);
+			} else {
+				let map = {};
+				let responsejson = await allCategoriesResponse.json()
+				for (let category of responsejson) {
+					// @ts-ignore
+					map[+category.category_id] = category.name.toString();
+				}
+				setCategoryNameMap(map);
+
+				console.log({map});
+
+				return responsejson;
+			}
+		} catch (error) {
+			console.log(error);
+			return [];
+		}
+	}
+	async function addCategory(name: string, desc: string) {
+		try {
+			const newCategory = {
+				name: name,
+				desc: desc,
+			};
+			const postResponse = await fetch("/category", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(newCategory),
+			});
+			if (postResponse.status !== 200) {
+				return {}
+			} else {
+				return await postResponse.json();
+			}
+		} catch (error) {
+			console.log(error);
+			return {};
+		}
+	}
+	async function deleteCategory(category_id: number) {
+		try {
+			await fetch(
+				"/category/" + String(category_id),
+				{
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+						authorization: `Bearer ${token}`,
+					},
+				}
+			);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
 	// On page load, populate the item tags and categories on the page
 	useEffect(() => {
 		const fetchTagItems = async () => {
 			const tags = await getAllItemTags();
 			setTagItems(tags);
+			console.log({tags});
 		};
 		const fetchTagCategories = async () => {
-			const categories = await getAllItemCategories();
+			const categories = await getAllCategories();
 			setTagCategories(categories);
+			if (categories.length > 0) {
+				setNewItemGroupID(categories[0].category_id);
+			}
 		};
-
-		fetchTagItems();
-		fetchTagCategories();
+		fetchTagItems().then(r => console.log("done"));
+		fetchTagCategories().then(r => console.log("done categories"));
 	}, []);
 
 	// Add an item tag using the current state
 	const addNewItemTag = async () => {
-		const newItem = await addItemTag(tagItems, newItemName, newItemGroupID);
-		setTagItems([...tagItems, newItem]);
+		await addItemTag(newItemName, newItemGroupID);
+		const tags = await getAllItemTags();
+		setTagItems(tags);
 	};
 
-	// Add a new cateogory using the current state
+	// Add a new category using the current state
 	const addNewCategory = async () => {
-		const newCategory = await addCategory(
-			tagCategories,
-			newCategoryName,
-			newCategoryDesc
-		);
-		setTagCategories([...tagCategories, newCategory]);
+		await addCategory(newCategoryName, newCategoryDesc);
+		const categories = await getAllCategories();
+		setTagCategories(categories);
+		if (categories.length > 0) {
+			setNewItemGroupID(categories[0].category_id);
+		}
+	};
+
+	const deleteCategoryCascade = async (category_id: number) => {
+		await deleteCategory(category_id);
+		const categories = await getAllCategories();
+		const tags = await getAllItemTags();
+		setTagCategories(categories);
+		setTagItems(tags);
+	};
+
+	const deleteTag = async (tag_id: number) => {
+		await deleteItemTag(tag_id);
+		const tags = await getAllItemTags();
+		setTagItems(tags);
 	};
 
 	return (
@@ -190,21 +216,24 @@ export default function TaggingSystem() {
 									onChange={(e) =>
 										setNewItemName(e.target.value)
 									}
-								></Form.Control>
+								/>
 							</Form.Group>
 							<Form.Group>
 								<Form.Label> Group Id </Form.Label>
-								<Form.Control
-									type="number"
-									placeholder="Enter a group id"
-									id="addtaggroupid"
-									value={newItemGroupID}
-									onChange={(e) =>
-										setNewItemGroupID(+e.target.value)
-									}
-								></Form.Control>
+								<Form.Select
+									onChange={(e: any) => {
+									setNewItemGroupID(+e.target.value)
+									console.log(+e.target.value);
+								}}>
+									{tagCategories.map(category => (
+										<option
+											value={category.category_id}>
+											{category.name}
+										</option>
+									))}
+								</Form.Select>
 							</Form.Group>
-							<Button className="mt-1" onClick={addNewItemTag}>
+							<Button className="mt-1" onClick={addNewItemTag} disabled={tagCategories.length <= 0}>
 								Add Tag
 							</Button>
 						</Form>
@@ -221,7 +250,7 @@ export default function TaggingSystem() {
 									onChange={(e) =>
 										setNewCategoryName(e.target.value)
 									}
-								></Form.Control>
+								/>
 							</Form.Group>
 							<Form.Group>
 								<Form.Label> Description </Form.Label>
@@ -233,7 +262,7 @@ export default function TaggingSystem() {
 									onChange={(e) =>
 										setNewCategoryDesc(e.target.value)
 									}
-								></Form.Control>
+								/>
 							</Form.Group>
 							<Button className="mt-1" onClick={addNewCategory}>
 								Add Category
@@ -245,43 +274,34 @@ export default function TaggingSystem() {
 
 			<Container>
 				<Row>
-					{tagItems.map((itemTag: ItemOutput) => (
+					{tagItems.map((tag: TagOutput) => (
 						<Col>
 							<Card
 								style={{ width: "100%" }}
-								border="primary"
+								border="dark"
 								className="mt-1 mb-1"
 							>
 								<Card.Body>
-									<Card.Header className="mb-2">
-										{" "}
-										Item Tag{" "}
+									<Card.Header className="mb-2 bg-dark text-light">
+										Tag
 									</Card.Header>
-									<Card.Title> {itemTag.name} </Card.Title>
+									<Card.Title> {tag.name} </Card.Title>
 									<Card.Subtitle>
-										Item Id: {itemTag.item_id}
+										Category : {
+										// @ts-ignore
+										categoryNameMap[tag.category_id]
+									}{" "}
 									</Card.Subtitle>
 									<Card.Text>
-										{" "}
-										Group Id: {itemTag.group}{" "}
+										Created: {tag.createdAt}{" "}
 									</Card.Text>
 									<Card.Text>
-										{" "}
-										Created: {itemTag.createdAt}{" "}
-									</Card.Text>
-									<Card.Text>
-										{" "}
-										Updated: {itemTag.updatedAt}{" "}
+										Updated: {tag.updatedAt}{" "}
 									</Card.Text>
 									<CloseButton
 										className="mt-1 ml-1"
-										onClick={() => {
-											deleteItemCategory(itemTag.item_id);
-											const filteredArray =
-												tagItems.filter(
-													(item) => item !== itemTag
-												);
-											setTagItems(filteredArray);
+										onClick={async () => {
+											await deleteTag(tag.tag_id);
 										}}
 									/>
 								</Card.Body>
@@ -291,7 +311,7 @@ export default function TaggingSystem() {
 				</Row>
 
 				<Row>
-					{tagCategories.map((itemCategory: ItemGroupOutput) => (
+					{tagCategories.map((category: CategoryOutput) => (
 						<Col>
 							<Card
 								style={{ width: "100%" }}
@@ -299,31 +319,23 @@ export default function TaggingSystem() {
 								className="mt-1 mb-1"
 							>
 								<Card.Body>
-									<Card.Header className="mb-2">
-										{" "}
-										Item Category{" "}
+									<Card.Header className="mb-2 bg-info">
+										Category
 									</Card.Header>
 									<Card.Title>
 										{" "}
-										{itemCategory.name}{" "}
+										{category.name}{" "}
 									</Card.Title>
 									<Card.Subtitle>
-										ID: {itemCategory.item_group_id}{" "}
+										ID: {category.category_id}{" "}
 									</Card.Subtitle>
-									<Card.Text> {itemCategory.desc} </Card.Text>
+									<Card.Text> {category.desc} </Card.Text>
 									<CloseButton
 										className="mt-1 ml-1"
-										onClick={() => {
-											deleteItemCategory(
-												itemCategory.item_group_id
+										onClick={ async () => {
+											await deleteCategoryCascade(
+												category.category_id
 											);
-											const filteredArray =
-												tagCategories.filter(
-													(category) =>
-														category !==
-														itemCategory
-												);
-											setTagCategories(filteredArray);
 										}}
 									/>
 								</Card.Body>

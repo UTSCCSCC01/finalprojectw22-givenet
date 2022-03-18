@@ -1,5 +1,6 @@
 import Account from "../models/Account";
 import { AccountInput, AccountOutput } from "../models/Account";
+import sequelizeConnection from "../config";
 
 export const create = async (payload: AccountInput): Promise<AccountOutput> => {
 	return await Account.create(payload);
@@ -42,6 +43,29 @@ export const deleteById = async (id: number): Promise<boolean> => {
 	return !!deletedAccount;
 };
 
-export const getAll = async (): Promise<AccountOutput[]> => {
-	return await Account.findAll();
-};
+type nameAndCount = {
+	name: string,
+	count: number
+}
+
+export const getCommonDonationItemsById = async (id: number): Promise<nameAndCount[]> => {
+	/* Query that retrieves the 5 most commonly occuring donated item names donated by the given account id */
+	const [results, metadata] = await sequelizeConnection.query(`SELECT i.name, COUNT(i.name)
+													FROM
+															"Items" i JOIN "Listings" l ON i.listing_id = l.listing_id
+													WHERE
+															l.acc_id = ${id}
+													GROUP BY 
+															i.name
+													ORDER BY 
+															COUNT(i.name) DESC
+													LIMIT 5`);
+
+	if (!results) {
+		throw new Error("ERROR IN getCommonDonationItemsById");
+	}
+
+	return results as nameAndCount[];
+}
+
+

@@ -4,10 +4,10 @@ import ViewListings from '../components/ViewListings';
 
 const ListingsPage = () => {
   return (
-    <div id="subrootdiv">
+    <div>
         <Navbar />
         <h1 id="view-listings-title">ALL ACTIVE LISTINGS</h1>
-        <ViewListings />
+        <ViewListings isUserListings={false}/>
     </div>
 
   )

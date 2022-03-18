@@ -17,6 +17,16 @@ export default function Navigation() {
 								Home
 							</Link>
 						</Nav.Link>
+            <Nav.Link>
+              <Link to="/pickupcreatedemo" style={style}>
+                PickupCreateDemo
+              </Link>
+            </Nav.Link>
+            <Nav.Link>
+              <Link to="/pickupviewdemo" style={style}>
+                PickupViewDemo
+              </Link>
+            </Nav.Link>
 						<Nav.Link>
 							<Link to="/profile" style={style}>
 								Profile
@@ -24,12 +34,27 @@ export default function Navigation() {
 						</Nav.Link>
 						<Nav.Link>
 							<Link to="/tagging" style={style}>
-								Tagging
+								Tags & Categories
 							</Link>
 						</Nav.Link>
 						<Nav.Link>
-							<Link to="/" style={style}>
-								Learn More
+							<Link to="/viewlistings" style={style}>
+								View Listings
+							</Link>
+						</Nav.Link>
+						<Nav.Link>
+							<Link to="/profile/listings" style={style}>
+								Create Listing
+							</Link>
+						</Nav.Link>
+						<Nav.Link>
+							<Link to="/mylistings" style={style}>
+								My listings
+							</Link>
+						</Nav.Link>
+						<Nav.Link>
+							<Link to="/listingfilters" style={style}>
+								Listing Search
 							</Link>
 						</Nav.Link>
 					</Nav>

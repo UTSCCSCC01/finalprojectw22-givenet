@@ -1,25 +1,29 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-
-import { ItemInput, ItemOutput } from "../database/models/Items";
-import Items from "../database/models/Items";
+import { TagInput, TagOutput } from "../database/models/Tag";
 
 import {
   create,
   update,
-  getByItemId,
   getAll,
-  deleteByItemId,
-} from "../database/dal/ItemsDAL";
-import { nextTick } from "process";
+  deleteByTagId,
+  getByTagId,
+  existsName,
+} from "../database/dal/tag";
 
 module.exports = {
   post: async (req: express.Request, res: express.Response) => {
     try {
-      const itemInput: ItemInput = req.body;
-      const newItem: ItemOutput = await create(itemInput);
+      const itemInput: TagInput = req.body;
+
+      const alreadyExists = await existsName(itemInput.name);
+      if (alreadyExists) {
+        return res.sendStatus(StatusCodes.CONFLICT);
+      }
+
+      const newTag: TagOutput = await create(itemInput);
       res.status(StatusCodes.CREATED);
-      res.json(newItem);
+      res.json(newTag);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -28,9 +32,9 @@ module.exports = {
   put: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const updatedItem: ItemOutput = await update(id, req.body);
+      const updatedTag: TagOutput = await update(id, req.body);
       res.status(StatusCodes.OK);
-      res.json(updatedItem);
+      res.json(updatedTag);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
@@ -39,7 +43,7 @@ module.exports = {
   delete: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const itemIsDeleted: boolean = await deleteByItemId(id);
+      const itemIsDeleted: boolean = await deleteByTagId(id);
       if (itemIsDeleted) {
         res.sendStatus(StatusCodes.OK);
       } else {
@@ -53,7 +57,7 @@ module.exports = {
   get: async (req: express.Request, res: express.Response) => {
     const id: number = +req.params.id;
     try {
-      const item: ItemOutput = await getByItemId(id);
+      const item: TagOutput = await getByTagId(id);
       res.status(StatusCodes.OK);
       res.json(item);
     } catch (error) {
@@ -63,9 +67,9 @@ module.exports = {
   },
   getAll: async (req: express.Request, res: express.Response) => {
     try {
-      const allItems: ItemOutput[] = await getAll();
+      const allTags: TagOutput[] = await getAll();
       res.status(StatusCodes.OK);
-      res.json(allItems);
+      res.json(allTags);
     } catch (error) {
       console.log(error);
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);

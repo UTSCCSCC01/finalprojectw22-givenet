@@ -43,6 +43,7 @@ Account.init(
 		},
 		type: {
 			type: DataTypes.INTEGER,
+			allowNull: false,
 		},
 		createdAt: {
 			type: "TIMESTAMP",
@@ -54,7 +55,6 @@ Account.init(
 		},
 	},
 	{
-		// timestamps: true,
 		sequelize: sequelizeConnection,
 	}
 );
