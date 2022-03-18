@@ -68,6 +68,4 @@ export const getCommonDonationItemsById = async (id: number): Promise<nameAndCou
 	return results as nameAndCount[];
 }
 
-export const getAll = async (): Promise<AccountOutput[]> => {
-	return await Account.findAll();
-};
+
