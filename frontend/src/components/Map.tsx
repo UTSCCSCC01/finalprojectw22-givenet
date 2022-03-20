@@ -1,24 +1,72 @@
 import * as React from "react";
-import * as ReactDom from "react-dom";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
+import Geocode from "react-geocode";
 import { createCustomEqual } from "fast-equals";
 import { isLatLngLiteral } from "@googlemaps/typescript-guards";
+import { TokenContext } from "../TokenContext";
+import ListingOutput from "../../../backend/src/database/models/Listing";
+
+Geocode.setApiKey("AIzaSyCPd0i6r0BWw5YokRyTPc1Fsid5ensWImw");
+
+Geocode.setLanguage("en");
+
+Geocode.setRegion("CA");
 
 const render = (status: Status) => {
   return <h1>{status}</h1>;
 };
 
+const getLatLngsFromListings = async (listings: ListingOutput[]) => {
+   const listingLatLngs: google.maps.LatLng[] = [];
+
+   listings.forEach((listing: ListingOutput) => {
+     Geocode.fromAddress(listing.location).then(
+       (response) => {
+         const { lat, lng } = response.results[0].geometry.location;
+        listingLatLngs.push(new google.maps.LatLng(lat, lng));
+       },
+       (error) => {
+         console.error(error);
+       }
+     );
+   });
+
+   return listingLatLngs;
+}
+
 const MapContainer: React.VFC = () => {
-  const [clicks, setClicks] = React.useState<google.maps.LatLng[]>([]);
+  const [markerLatLngs, setMarkerLatLngs] = React.useState<google.maps.LatLng[]>([]);
   const [zoom, setZoom] = React.useState(3); // initial zoom
   const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
     lat: 0,
     lng: 0,
   });
 
+  // The token of the logged in user for authentication
+  const { token } = React.useContext(TokenContext);
+
+  const fetchListings = async () => {
+    const response = await fetch("/listing/all", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response.status);
+  
+    if (response.status === 200) {
+      let result: ListingOutput[] = await response.json();
+      console.log(result);
+      const listingLatLngs = await getLatLngsFromListings(result);
+      setMarkerLatLngs(listingLatLngs);
+    } else if (response.status === 404) {
+      console.log("404, unable to find listings");
+    }
+  };
+
   const onClick = (e: google.maps.MapMouseEvent) => {
     // avoid directly mutating state
-    setClicks([...clicks, e.latLng!]);
+    setMarkerLatLngs([...markerLatLngs, e.latLng!]);
   };
 
   const onIdle = (m: google.maps.Map) => {
@@ -27,52 +75,9 @@ const MapContainer: React.VFC = () => {
     setCenter(m.getCenter()!.toJSON());
   };
 
-  const form = (
-    <div
-      style={{
-        padding: "1rem",
-        flexBasis: "250px",
-        height: "100%",
-        overflow: "auto",
-      }}
-    >
-      <label htmlFor="zoom">Zoom</label>
-      <input
-        type="number"
-        id="zoom"
-        name="zoom"
-        value={zoom}
-        onChange={(event) => setZoom(Number(event.target.value))}
-      />
-      <br />
-      <label htmlFor="lat">Latitude</label>
-      <input
-        type="number"
-        id="lat"
-        name="lat"
-        value={center.lat}
-        onChange={(event) =>
-          setCenter({ ...center, lat: Number(event.target.value) })
-        }
-      />
-      <br />
-      <label htmlFor="lng">Longitude</label>
-      <input
-        type="number"
-        id="lng"
-        name="lng"
-        value={center.lng}
-        onChange={(event) =>
-          setCenter({ ...center, lng: Number(event.target.value) })
-        }
-      />
-      <h3>{clicks.length === 0 ? "Click on map to add markers" : "Clicks"}</h3>
-      {clicks.map((latLng, i) => (
-        <pre key={i}>{JSON.stringify(latLng.toJSON(), null, 2)}</pre>
-      ))}
-      <button onClick={() => setClicks([])}>Clear</button>
-    </div>
-  );
+  React.useEffect(() => {
+    fetchListings();
+  }, []);
 
   return (
     <div id="map_canvas" style={{ height: "1000px", width: "500px", margin: "0", position: "relative" }}>
@@ -84,13 +89,11 @@ const MapContainer: React.VFC = () => {
           zoom={zoom}
           style={{ flexGrow: "1", height: "100%" }}
         >
-          {clicks.map((latLng, i) => (
+          {markerLatLngs.map((latLng, i) => (
             <Marker key={i} position={latLng} />
           ))}
         </Map>
       </Wrapper>
-      {/* Basic form for controlling center and zoom of map. */}
-      {form}
     </div>
   );
 };

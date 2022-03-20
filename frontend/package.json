@@ -59,6 +59,8 @@
 		]
 	},
 	"devDependencies": {
-		"@types/google.maps": "^3.48.2"
+		"@types/google.maps": "^3.48.2",
+		"@types/react-geocode": "^0.2.0",
+		"react-geocode": "^0.2.3"
 	}
 }
