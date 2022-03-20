@@ -5,6 +5,8 @@ import { createCustomEqual } from "fast-equals";
 import { isLatLngLiteral } from "@googlemaps/typescript-guards";
 import { TokenContext } from "../TokenContext";
 import ListingOutput from "../../../backend/src/database/models/Listing";
+import { withGoogleMap, GoogleMap, Marker, InfoWindow, withScriptjs } from "react-google-maps";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 Geocode.setApiKey("AIzaSyCPd0i6r0BWw5YokRyTPc1Fsid5ensWImw");
 
@@ -12,38 +14,51 @@ Geocode.setLanguage("en");
 
 Geocode.setRegion("CA");
 
-const render = (status: Status) => {
-  return <h1>{status}</h1>;
+type MarkerInfo = {
+  position: google.maps.LatLng,
+  listing: ListingOutput
 };
 
-const getLatLngsFromListings = async (listings: ListingOutput[]) => {
-   const listingLatLngs: google.maps.LatLng[] = [];
-
-   listings.forEach((listing: ListingOutput) => {
-     Geocode.fromAddress(listing.location).then(
-       (response) => {
-         const { lat, lng } = response.results[0].geometry.location;
-        listingLatLngs.push(new google.maps.LatLng(lat, lng));
-       },
-       (error) => {
-         console.error(error);
-       }
-     );
-   });
-
-   return listingLatLngs;
-}
-
 const MapContainer: React.VFC = () => {
+  const [listings, setListings] = React.useState<ListingOutput[]>([]);
   const [markerLatLngs, setMarkerLatLngs] = React.useState<google.maps.LatLng[]>([]);
+  const [markerInfos, setMarkerInfos] = React.useState<MarkerInfo[]>([]);
   const [zoom, setZoom] = React.useState(3); // initial zoom
   const [center, setCenter] = React.useState<google.maps.LatLngLiteral>({
     lat: 0,
     lng: 0,
   });
+  const [openInfoWindowMarkerId, setOpenInfoWindowMarkerId] = React.useState<number>(-1);
 
   // The token of the logged in user for authentication
   const { token } = React.useContext(TokenContext);
+
+  const getMarkersFromListings = async () => {
+    const listingLatLngs: google.maps.LatLng[] = [];
+    const listingMarkerInfos: MarkerInfo[] = [];
+  
+    listings.forEach(async (listing: ListingOutput) => {
+      try {
+       const response = await Geocode.fromAddress(listing.location);
+       const { lat, lng } = response.results[0].geometry.location;
+       const listingLatLng = new google.maps.LatLng(lat, lng);
+       listingLatLngs.push(listingLatLng);
+       const markerInfo: MarkerInfo = {
+         position: listingLatLng,
+         listing: listing
+       };
+       
+       listingMarkerInfos.push(markerInfo);
+      }
+      catch (err) {
+        console.log('Getting latlng from address failed', err);
+      }
+    });
+  
+    console.log(listingMarkerInfos);
+  
+    setMarkerInfos(listingMarkerInfos);
+  }
 
   const fetchListings = async () => {
     const response = await fetch("/listing/all", {
@@ -57,163 +72,72 @@ const MapContainer: React.VFC = () => {
     if (response.status === 200) {
       let result: ListingOutput[] = await response.json();
       console.log(result);
-      const listingLatLngs = await getLatLngsFromListings(result);
-      setMarkerLatLngs(listingLatLngs);
+      setListings(result);
     } else if (response.status === 404) {
       console.log("404, unable to find listings");
     }
   };
 
-  const onClick = (e: google.maps.MapMouseEvent) => {
-    // avoid directly mutating state
-    setMarkerLatLngs([...markerLatLngs, e.latLng!]);
+  const handleToggleWindowOpen = (markerId: number) => {
+    setOpenInfoWindowMarkerId(markerId);
   };
 
-  const onIdle = (m: google.maps.Map) => {
-    console.log("onIdle");
-    setZoom(m.getZoom()!);
-    setCenter(m.getCenter()!.toJSON());
+  const handleToggleWindowClosed = () => {
+    setOpenInfoWindowMarkerId(-1);
   };
 
   React.useEffect(() => {
     fetchListings();
+    getMarkersFromListings();
   }, []);
 
-  return (
-    <div id="map_canvas" style={{ height: "1000px", width: "500px", margin: "0", position: "relative" }}>
-      <Wrapper apiKey={"AIzaSyCPd0i6r0BWw5YokRyTPc1Fsid5ensWImw"} render={render}>
-        <Map
-          center={center}
-          onClick={onClick}
-          onIdle={onIdle}
-          zoom={zoom}
-          style={{ flexGrow: "1", height: "100%" }}
+  console.log(markerLatLngs);
+  console.log(listings);
+  console.log(markerInfos);
+
+  console.log(markerInfos.map(( markerInfo, index ) => (
+    <Marker
+      key={index}
+      position={markerInfo.position}
+      onClick={() => handleToggleWindowOpen(index)}
+    >
+      (
+        <InfoWindow onCloseClick={() => handleToggleWindowClosed()}>
+          <div>{markerInfo.listing.notes}</div>
+        </InfoWindow>
+      )
+    </Marker>
+  )));
+
+  const MapWithMarkers = withScriptjs(withGoogleMap((props) => 
+    <GoogleMap
+      defaultCenter={center}
+      defaultZoom={zoom}
+    >
+      {markerInfos.map(( markerInfo, index ) => (
+        <Marker
+          key={index}
+          position={markerInfo.position}
+          onClick={() => handleToggleWindowOpen(index)}
         >
-          {markerLatLngs.map((latLng, i) => (
-            <Marker key={i} position={latLng} />
-          ))}
-        </Map>
-      </Wrapper>
-    </div>
-  );
-};
-interface MapProps extends google.maps.MapOptions {
-  style: { [key: string]: string };
-  onClick?: (e: google.maps.MapMouseEvent) => void;
-  onIdle?: (map: google.maps.Map) => void;
-}
-
-const Map: React.FC<MapProps> = ({
-  onClick,
-  onIdle,
-  children,
-  style,
-  ...options
-}) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const [map, setMap] = React.useState<google.maps.Map>();
-
-  React.useEffect(() => {
-    if (ref.current && !map) {
-      setMap(new window.google.maps.Map(ref.current, {}));
-    }
-  }, [ref, map]);
-
-  // because React does not do deep comparisons, a custom hook is used
-  // see discussion in https://github.com/googlemaps/js-samples/issues/946
-  useDeepCompareEffectForMaps(() => {
-    if (map) {
-      map.setOptions(options);
-    }
-  }, [map, options]);
-
-  React.useEffect(() => {
-    if (map) {
-      ["click", "idle"].forEach((eventName) =>
-        google.maps.event.clearListeners(map, eventName)
-      );
-
-      if (onClick) {
-        map.addListener("click", onClick);
-      }
-
-      if (onIdle) {
-        map.addListener("idle", () => onIdle(map));
-      }
-    }
-  }, [map, onClick, onIdle]);
+          (
+            <InfoWindow onCloseClick={() => handleToggleWindowClosed()}>
+              <div>{markerInfo.listing.notes}</div>
+            </InfoWindow>
+          )
+        </Marker>
+      ))}
+    </GoogleMap>
+  ));
 
   return (
-    <>
-      <div ref={ref} style={style} />
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          // set the map prop on the child component
-          return React.cloneElement(child, { map });
-        }
-      })}
-    </>
+    <MapWithMarkers 
+      googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPd0i6r0BWw5YokRyTPc1Fsid5ensWImw&v=3.exp&libraries=geometry,drawing,places"
+      loadingElement={<div style={{ height: `100%` }} />}
+      containerElement={<div style = {{height: `400px`}} />}
+      mapElement={<div style={{ height: `100%` }} />}
+    />
   );
 };
-
-const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
-  const [marker, setMarker] = React.useState<google.maps.Marker>();
-
-  React.useEffect(() => {
-    if (!marker) {
-      setMarker(new google.maps.Marker());
-    }
-
-    // remove marker from map on unmount
-    return () => {
-      if (marker) {
-        marker.setMap(null);
-      }
-    };
-  }, [marker]);
-
-  React.useEffect(() => {
-    if (marker) {
-      marker.setOptions(options);
-    }
-  }, [marker, options]);
-
-  return null;
-};
-
-const deepCompareEqualsForMaps = createCustomEqual(
-  (deepEqual) => (a: any, b: any) => {
-    if (
-      isLatLngLiteral(a) ||
-      a instanceof google.maps.LatLng ||
-      isLatLngLiteral(b) ||
-      b instanceof google.maps.LatLng
-    ) {
-      return new google.maps.LatLng(a).equals(new google.maps.LatLng(b));
-    }
-
-    // TODO extend to other types
-
-    // use fast-equals for other objects
-    return deepEqual(a, b);
-  }
-);
-
-function useDeepCompareMemoize(value: any) {
-  const ref = React.useRef();
-
-  if (!deepCompareEqualsForMaps(value, ref.current)) {
-    ref.current = value;
-  }
-
-  return ref.current;
-}
-
-function useDeepCompareEffectForMaps(
-  callback: React.EffectCallback,
-  dependencies: any[]
-) {
-  React.useEffect(callback, dependencies.map(useDeepCompareMemoize));
-}
 
 export default MapContainer;
