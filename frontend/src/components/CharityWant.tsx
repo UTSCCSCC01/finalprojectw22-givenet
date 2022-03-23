@@ -15,7 +15,7 @@ export default function WantedItems() {
 	const [itemMap, setItemMap] = useState({});
 	const [searchId, setSearchId] = useState(Number());	
 	const [searchResult, setSearchResult] = useState<CharityWantsOutput[]>([]);
-	const { token } = useContext(TokenContext);
+	const token = localStorage.getItem("token");
 	// Retrieve all item tags from the database.
 	async function getAllItemTags() {
 		try {

@@ -24,7 +24,7 @@ export default function TaggingSystem() {
 	const [newCategoryName, setNewCategoryName] = useState("");
 	const [newCategoryDesc, setNewCategoryDesc] = useState("");
 	const [categoryNameMap, setCategoryNameMap] = useState({});
-	const { token } = useContext(TokenContext);
+	const token = localStorage.getItem("token");
 
 	async function getAllItemTags() {
 		try {

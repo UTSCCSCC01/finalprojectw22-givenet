@@ -20,10 +20,9 @@ export default function LoginForm({}: Props) {
     completed: false,
     time: 0
   });
-  const { token } = useContext(TokenContext);
+  const token = localStorage.getItem("token");
   // Error message for form errors
   const [errorState, setErrorState] = useState("");
-  const navigate = useNavigate();
 
   // Modify state when the form changes
   const handleFormStateChange = (e: any) => {

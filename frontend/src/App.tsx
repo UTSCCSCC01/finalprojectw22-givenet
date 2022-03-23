@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import { TokenContext } from "./TokenContext";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import ProfilePage from "./pages/ProfilePage";
 import MyListingsPage from "./pages/MyListingsPage";
 
@@ -20,13 +20,23 @@ import ViewPickupDemo from "./pages/ViewPickupDemo";
 import CreatePickupDemo from "./pages/CreatePickupDemo";
 
 export default function App() {
-	const [token, setToken] = useState("");
-	const value = useMemo(() => ({ token, setToken }), [token, setToken]);
+	const navigate = useNavigate();
+
+	if (!localStorage.getItem("token") && 
+			window.location.pathname !== "/login" && 
+			window.location.pathname !== "/signup" &&
+			window.location.pathname !== "/") {
+		
+		console.log("NO token");
+		navigate("/login");
+	} 
+
 	return (
 		<div className="App">
 			<header className="App-header"></header>
-			<TokenContext.Provider value={value}>
 				<Routes>
+					<Route path="/" element={<SignUpPage />} />
+					<Route path="/signup" element={<SignUpPage />} />
 					<Route path="/" element={<SignUpPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/profile" element={<ProfilePage />} />
@@ -39,7 +49,6 @@ export default function App() {
 					<Route path="/mylistings" element={<MyListingsPage />} />
 					<Route path="/listingfilters" element={<ListingFiltersPage />} />
 				</Routes>
-			</TokenContext.Provider>
 		</div>
 	);
 }
