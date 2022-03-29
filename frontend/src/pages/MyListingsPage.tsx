@@ -8,8 +8,13 @@ export default function CreateListingPage() {
         <div>
             <Navbar/>
             <div className="container">
-                <h1 className="mt-5">My Listings</h1>
-                <ViewListings isUserListings={true} isActive={true}/>
+                <h1 className="mt-5">Active Listings</h1>
+                <ViewListings type={1}/>
+                <h1 className="mt-5">Unclaimed Listings</h1>
+                <ViewListings type={3}/>
+                <h1 className="mt-5">All Listings</h1>
+                <ViewListings type={2}/>
+
             </div>
         </div>
     );
