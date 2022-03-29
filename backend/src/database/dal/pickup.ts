@@ -26,6 +26,20 @@ export const getById = async (id: number): Promise<PickupOutput> => {
 	return result;
 };
 
+export const completeById = async (id: number): Promise<Boolean> => {
+	const result = await Pickup.findByPk(id);
+	
+	if (!result) {
+		return false;
+	}
+	
+	result.set({"completed": true});
+	result.set({"updatedAt": new Date()})
+	result.save();
+
+	return true;
+};
+
 export const deleteById = async (id: number) => {
 	const result = await Pickup.findByPk(id);
 
@@ -41,6 +55,32 @@ export const getAll = async (): Promise<PickupOutput[]> => {
 
 	if (!results) {
 		throw new Error("ERROR IN FINDALL");
+	}
+
+	return results;
+};
+
+export const getCompletedPickupsFor = async (accid: number, acctype: number): Promise<PickupOutput[]> => {
+	let results;
+
+	if (acctype == 1) {
+		results = await Pickup.findAll({
+			where: {
+			  donor_id: accid,
+			  completed: true
+			}
+		  });
+	} else {
+		results = await Pickup.findAll({
+			where: {
+			  org_id: accid,
+			  completed: true
+			}
+		  });
+	}
+
+	if (!results) {
+		throw new Error("ERROR can't retrive completed pickups");
 	}
 
 	return results;

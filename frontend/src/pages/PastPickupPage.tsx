@@ -1,15 +1,14 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import Listing from "../components/Listings";
-import ViewListings from "../components/ViewListings";
+import DonationHistory from "../components/DonationHistory";
 
 export default function CreateListingPage() {
     return (
         <div>
             <Navbar/>
             <div className="container">
-                <h1 className="mt-5">My Listings</h1>
-                <ViewListings isUserListings={true} isActive={true}/>
+                <h1 className="mt-5">Completed Pickups</h1>
+                <DonationHistory />
             </div>
         </div>
     );

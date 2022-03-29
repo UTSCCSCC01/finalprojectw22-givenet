@@ -61,7 +61,6 @@ module.exports = {
     }
     // Create the listing in the listing table
     const listing = { ...req.body.listing, acc_id: id };
-    console.log(req.body);
     let new_listing = await create(listing);
 
     if (!new_listing) {

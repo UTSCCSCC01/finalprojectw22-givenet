@@ -41,49 +41,59 @@ const ViewMyPickups = () => {
 
   // Makes requests on component load and stores in state ^
   useEffect(() => {
-    async function getPickups() {
-      const response = await fetch("/pickup", {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-
-      let all_pickups_resp = await response.json();
-      let all_pickups = [];
-
-      for (let pickup of all_pickups_resp) {
-        // get data of charity
-        let org_info = await fetch(`/account/profile/${pickup.org_id}`, {method: "GET"});
-        let result = await org_info.json();
-        result = JSON.parse(result);
-
-        let date = new Date(pickup.time.toString());
-        pickup.time = date.toLocaleDateString();
-
-        date = new Date(pickup.createdAt.toString());
-        pickup.createdAt = date.toLocaleDateString();
-        pickup.org_name = result.name;
-        pickup.org_phone_number = result.phone;
-
-        let donor_info = await fetch(`/account/profile/${pickup.donor_id}`, {method: "GET"});
-        result = await donor_info.json();
-        result = JSON.parse(result);
-        pickup.hours = result.operating_hours;
-
-        all_pickups.push(pickup)
-
-      }
-
-      console.log(all_pickups);
-
-      setAllPickups(all_pickups);
-    }
-
     getPickups();
-    console.log(allPickups);
   }, []);
 
+  async function getPickups() {
+    const response = await fetch("/pickup", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    let all_pickups_resp = await response.json();
+    let all_pickups = [];
+
+    for (let pickup of all_pickups_resp) {
+      // get data of charity
+      let org_info = await fetch(`/account/profile/${pickup.org_id}`, {method: "GET"});
+      let result = await org_info.json();
+      result = JSON.parse(result);
+
+      let date = new Date(pickup.time.toString());
+      pickup.time = date.toLocaleDateString();
+
+      date = new Date(pickup.createdAt.toString());
+      pickup.createdAt = date.toLocaleDateString();
+      pickup.org_name = result.name;
+      pickup.org_phone_number = result.phone;
+
+      let donor_info = await fetch(`/account/profile/${pickup.donor_id}`, {method: "GET"});
+      result = await donor_info.json();
+      result = JSON.parse(result);
+      pickup.hours = result.operating_hours;
+
+      all_pickups.push(pickup)
+
+    }
+    setAllPickups(all_pickups);
+  }
+
+
+  async function setCompleted(id: number) {
+    const response = await fetch("/pickup/completePickup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({"id": id})
+    });
+
+
+    getPickups();
+  }
   // If listings retrieved then render listings view
 
   return (
@@ -101,6 +111,7 @@ const ViewMyPickups = () => {
               <h6>Pickup Hours: {pickup.hours}</h6>
               <h6>Claimed on: {pickup.createdAt}</h6>
               <p>Notes: {pickup.notes}</p>
+              <button onClick={() => setCompleted(pickup.pickup_id)}>Finish Pickup</button>
             </Accordion.Body>
           </Accordion.Item>
         ))}
