@@ -28,13 +28,13 @@ function getNetWeight(listing: Listing) {
     return total.toString() + 'kg';
 }
 
-const ViewListings = (Props: any) => {
+const ViewListings = (props: any) => {
 
     // This state will be used for storing data retrieved from request for all listings
     const [allListings, setAllListings] = useState<Listing[]>([] as Listing[]);
     const [tagNameMap, setTagNameMap] = useState({});
     const {token} = useContext(TokenContext);
-    const {isUserListings} = Props;
+    const {type} = props;
 
     function getBestTags(listing: Listing) {
         let tag_weights = listing.items.reduce((prev, curr) => {
@@ -99,26 +99,32 @@ const ViewListings = (Props: any) => {
 
         async function getListings() {
             let response;
-            if (isUserListings) {
-                response = await fetch("/listing", {
+            console.log(type);
+            if (type == 1) {
+                response = await fetch("/listing/completed/false", {
+                    method: "GET",
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                });
+            } else if (type == 2) {
+                response = await fetch("/listing/", {
                     method: "GET",
                     headers: {
                         authorization: `Bearer ${token}`,
                     },
                 });
             } else {
-                response = await fetch("/listing/all", {
+                response = await fetch("listing/unclaimed/", {
                     method: "GET",
                     headers: {
                         authorization: `Bearer ${token}`,
                     },
                 });
-            }
-
+            };
 
             let all_listings = await response.json();
             // Need to query user data: wait for backend overhaul next sprint
-            console.log(all_listings);
             setAllListings(all_listings);
         }
 
@@ -130,7 +136,8 @@ const ViewListings = (Props: any) => {
 
     return (
         <div className="container">
-        <Accordion id="lv">
+        {allListings.length > 0 ? (
+            <Accordion id="lv">
             {allListings.map(listing => (
                 <Accordion.Item eventKey={listing.listing_id.toString() || "0"}>
                     <Accordion.Header>
@@ -173,6 +180,9 @@ const ViewListings = (Props: any) => {
                 </Accordion.Item>
             ))}
         </Accordion>
+        ):
+        (<div>No listings to show </div>
+        )}
         </div>
     )
 

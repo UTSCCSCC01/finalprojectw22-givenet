@@ -11,6 +11,11 @@ import {
   getByAccId,
 } from "../database/dal/listing";
 
+import {
+  inPickup,
+  inPickupCompleted,
+} from "../database/dal/pickup";
+
 import { getByListingId } from "../database/dal/item";
 
 import { getById as getUserbyId } from "../database/dal/account_details";
@@ -61,7 +66,6 @@ module.exports = {
     }
     // Create the listing in the listing table
     const listing = { ...req.body.listing, acc_id: id };
-    console.log(req.body);
     let new_listing = await create(listing);
 
     if (!new_listing) {
@@ -69,7 +73,6 @@ module.exports = {
     }
     //Create all the items in the listing
     const items = req.body.items;
-    console.log(items);
     for (let item of items) {
       let new_item = { ...item, listing_id: new_listing.listing_id };
       await createItem(new_item);
@@ -88,6 +91,75 @@ module.exports = {
       return res.sendStatus(404);
     }
   },
+
+  //GetAllVariation returns only listings that have not been grabbed.
+  getAllValid: async (req: express.Request, res: express.Response) => {
+    let allListings = await getAll();
+
+    let returnListings = [];
+
+    if (!allListings) {
+      return res.send(404);
+    }
+
+    for (let listing of allListings) {
+      let exists = await inPickup(listing.listing_id);
+      if (!exists) {
+        let ret = {
+          listing_id: listing.listing_id,
+          acc_id: listing.acc_id,
+          container: listing.container,
+          location: listing.location,
+          notes: listing.notes,
+          createdAt: listing.createdAt,
+          updatedAt: listing.updatedAt,
+          items: await getByListingId(listing.listing_id),
+          user: await getUserbyId(listing.acc_id),
+        };
+        returnListings.push(ret);
+      }
+    }
+    return res.json(returnListings);
+  },
+
+  getCompleted: async (req: express.Request, res: express.Response) => {
+    const user: any = req.user;
+    let id;
+
+    if (user) {
+      id = Number(user.dataValues.acc_id);
+    } else {
+      return res.send(403);
+    }
+
+    let user_listings = await getByAccId(id);
+    let type = Boolean(req.params.type);
+    let returnListings = [];
+
+    if (!user_listings) {
+      return res.send(404);
+    }
+
+    for (let listing of user_listings) {
+      let exists = await inPickupCompleted(listing.listing_id, type);
+      if (exists) {
+        let ret = {
+          listing_id: listing.listing_id,
+          acc_id: listing.acc_id,
+          container: listing.container,
+          location: listing.location,
+          notes: listing.notes,
+          createdAt: listing.createdAt,
+          updatedAt: listing.updatedAt,
+          items: await getByListingId(listing.listing_id),
+          user: await getUserbyId(listing.acc_id),
+        };
+        returnListings.push(ret);
+      }
+    }
+    return res.json(returnListings);
+  },
+
   getAll: async (req: express.Request, res: express.Response) => {
     let allListings = await getAll();
 
@@ -110,6 +182,45 @@ module.exports = {
         user: await getUserbyId(listing.acc_id),
       };
       returnListings.push(ret);
+    }
+    return res.json(returnListings);
+  },
+
+  getUnclaimed: async (req: express.Request, res: express.Response) => {
+    const user: any = req.user;
+    let id;
+
+    if (user) {
+      id = Number(user.dataValues.acc_id);
+    } else {
+      return res.send(403);
+    }
+
+    let user_listings = await getByAccId(id);
+    let type = Boolean(req.params.type);
+    let returnListings = [];
+
+    if (!user_listings) {
+      return res.send(404);
+    }
+
+    for (let listing of user_listings) {
+      let exists = await inPickup(listing.listing_id);
+      console.log(exists);
+      if (!exists) {
+        let ret = {
+          listing_id: listing.listing_id,
+          acc_id: listing.acc_id,
+          container: listing.container,
+          location: listing.location,
+          notes: listing.notes,
+          createdAt: listing.createdAt,
+          updatedAt: listing.updatedAt,
+          items: await getByListingId(listing.listing_id),
+          user: await getUserbyId(listing.acc_id),
+        };
+        returnListings.push(ret);
+      }
     }
     return res.json(returnListings);
   },

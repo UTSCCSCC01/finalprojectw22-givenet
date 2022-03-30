@@ -19,6 +19,8 @@ import CharityWantPage from "./pages/CharityWantPage"
 import ViewPickupDemo from "./pages/ViewPickupDemo";
 import CreatePickupDemo from "./pages/CreatePickupDemo";
 
+import PastPickups from "./pages/PastPickupPage";
+
 export default function App() {
 	const [token, setToken] = useState("");
 	const value = useMemo(() => ({ token, setToken }), [token, setToken]);
@@ -38,6 +40,7 @@ export default function App() {
 					<Route path="/pickupviewdemo" element={<ViewPickupDemo />} />
 					<Route path="/mylistings" element={<MyListingsPage />} />
 					<Route path="/listingfilters" element={<ListingFiltersPage />} />
+					<Route path="/pickups/past" element={<PastPickups />} />
 				</Routes>
 			</TokenContext.Provider>
 		</div>
