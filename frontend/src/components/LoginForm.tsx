@@ -11,12 +11,13 @@ type form = {
 };
 
 export default function LoginForm({}: Props) {
+  
   // Login form state
   const [formState, setFormState] = useState<form>({
     username: "",
     password: "",
   });
-  const { setToken } = useContext(TokenContext);
+  
   // Error message for form errors
   const [errorState, setErrorState] = useState("");
   const navigate = useNavigate();
@@ -47,11 +48,11 @@ export default function LoginForm({}: Props) {
     });
 
     if (response.status === 401) {
-      setToken("");
+      localStorage.setItem("token", "");
       setErrorState("Invalid username or password");
     } else {
       const { accessToken } = await response.json();
-      setToken(accessToken);
+      localStorage.setItem("token", accessToken);
       setErrorState("");
       navigate("/profile");
     }

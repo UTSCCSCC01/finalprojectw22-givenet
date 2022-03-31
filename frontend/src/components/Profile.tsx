@@ -48,7 +48,8 @@ export default function Profile() {
     nameAndCount[]
   >([]);
   // The token of the logged in user for authentication
-  const { token } = useContext(TokenContext);
+  const token = localStorage.getItem("token");
+  console.log(token);
 
   // Fill the profileState form
   const fetchUserData = async () => {
