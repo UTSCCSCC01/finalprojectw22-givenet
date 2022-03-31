@@ -26,6 +26,7 @@ export default function TaggingSystem() {
 	const [categoryNameMap, setCategoryNameMap] = useState({});
 	const { token } = useContext(TokenContext);
 
+	//Fetch all existing item tags from the database
 	async function getAllItemTags() {
 		try {
 			const allItemsResponse = await fetch("/tag/all/", {
@@ -45,6 +46,7 @@ export default function TaggingSystem() {
 			return [];
 		}
 	}
+	//Add an item tag that the user created
 	async function addItemTag(name: string, category_id: number) {
 		try {
 			const newItem = {
@@ -69,6 +71,7 @@ export default function TaggingSystem() {
 			return {};
 		}
 	}
+	//Delete a specefic item tag based on its id
 	async function deleteItemTag(tag_id: number) {
 		try {
 			const deleteItemResponse = await fetch("/tag/" + String(tag_id), {
@@ -81,6 +84,7 @@ export default function TaggingSystem() {
 			console.log(error);
 		}
 	}
+	//Fetch al existing categories from the database.
 	async function getAllCategories() {
 		try {
 			const allCategoriesResponse = await fetch("/category/all/", {
@@ -109,6 +113,7 @@ export default function TaggingSystem() {
 			return [];
 		}
 	}
+	//Add a category that the user made
 	async function addCategory(name: string, desc: string) {
 		try {
 			const newCategory = {
@@ -133,6 +138,7 @@ export default function TaggingSystem() {
 			return {};
 		}
 	}
+	//Delete a category entirely.
 	async function deleteCategory(category_id: number) {
 		try {
 			await fetch(
@@ -185,6 +191,7 @@ export default function TaggingSystem() {
 		}
 	};
 
+	//Delete all tags that belogn to this category but cascade it
 	const deleteCategoryCascade = async (category_id: number) => {
 		await deleteCategory(category_id);
 		const categories = await getAllCategories();
@@ -193,12 +200,16 @@ export default function TaggingSystem() {
 		setTagItems(tags);
 	};
 
+
+	//Function for deleting a tag by id
 	const deleteTag = async (tag_id: number) => {
 		await deleteItemTag(tag_id);
 		const tags = await getAllItemTags();
 		setTagItems(tags);
 	};
 
+
+	//Page structure below using data fetched
 	return (
 		<div className="container">
 			<h1 className="mt-5 mb-3">TAGGING SYSTEM</h1>

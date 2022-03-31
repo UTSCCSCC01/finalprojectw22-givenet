@@ -65,6 +65,8 @@ const ViewListings = (props: any) => {
         return `[ ${tag_weights_string} ]`;
     }
 
+
+    //Fetch all tags so we can map the ids for explanatory tags over base ids
     async function getAllTags() {
         try {
             const allTagsResponse = await fetch("/tag/all/", {
@@ -100,6 +102,8 @@ const ViewListings = (props: any) => {
         async function getListings() {
             let response;
             console.log(type);
+            //Take in a prop from the page and fetch 3 variants of information from the database.
+            //1 is unclaimed, 2 is finished, 3 is claimed but not finished.
             if (type == 1) {
                 response = await fetch("/listing/completed/false", {
                     method: "GET",

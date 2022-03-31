@@ -14,7 +14,6 @@ export default function CreateListingPage() {
                 <ViewListings type={3}/>
                 <h1 className="mt-5">All Listings</h1>
                 <ViewListings type={2}/>
-
             </div>
         </div>
     );
