@@ -8,6 +8,7 @@ import {
   Button,
   Form,
   Alert,
+  Dropdown,
 } from "react-bootstrap";
 import TagOutput from "../../../backend/src/database/models/Tag";
 import { TokenContext } from "../TokenContext";
@@ -26,6 +27,8 @@ export default function MyDonations() {
     const [donationItems, setDonationItems] = useState<
         nameAndCount[]
     >([]);
+    // for frequency selection
+    const [frequency, setFrequency] = useState("");
     // The token of the logged in user for authentication
     const { token } = useContext(TokenContext);
     // Retrieve the items donated by this account.
@@ -83,6 +86,22 @@ export default function MyDonations() {
         ) : (
             "You have no donated items. Create a listing to start donating!"
         )}
+        <h4>How often do you want to donate?</h4>
+        <Form className="w-100">
+            <Form.Group>
+                <Form.Label> Select how often you donate </Form.Label>
+                <Form.Select
+                    onChange={(e: any) => {
+                    setFrequency(e.target.value)
+                    console.log(frequency);
+                }}>
+                    <option> Weekly </option>
+                    <option> Daily </option>
+                    <option> Monthly </option>
+                </Form.Select>
+            </Form.Group>
+        </Form>
+        <br/><br/>
       </div>
       )
 }
