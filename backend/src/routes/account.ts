@@ -30,6 +30,9 @@ router.post("/profile", authenticateToken, profileController.post);
 // Get list of food items commonly donated by the user
 router.get("/commonDonations", authenticateToken, authenticateController.getCommonDonationItems);
 
+// Get all food items commonly donated by the user
+router.get("/allDonations", authenticateToken, authenticateController.getAllTheDonationItems);
+
 // Get all accounts for search
 router.get("/getAll", profileController.getAll)
 

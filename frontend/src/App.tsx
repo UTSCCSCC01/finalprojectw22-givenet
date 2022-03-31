@@ -19,6 +19,9 @@ import CharityWantPage from "./pages/CharityWantPage"
 import ViewPickupDemo from "./pages/ViewPickupDemo";
 import CreatePickupDemo from "./pages/CreatePickupDemo";
 
+import PastPickups from "./pages/PastPickupPage";
+import MyDonationsPage from "./pages/MyDonationsPage";
+
 export default function App() {
 	const navigate = useNavigate();
 
@@ -48,6 +51,8 @@ export default function App() {
 					<Route path="/pickupviewdemo" element={<ViewPickupDemo />} />
 					<Route path="/mylistings" element={<MyListingsPage />} />
 					<Route path="/listingfilters" element={<ListingFiltersPage />} />
+					<Route path="/pickups/past" element={<PastPickups />} />
+					<Route path="/mydonations" element={<MyDonationsPage />} />
 				</Routes>
 		</div>
 	);

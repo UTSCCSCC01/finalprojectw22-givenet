@@ -175,9 +175,11 @@ export default function Listing() {
         if (item.weight <= 0) {
             return setItemErrorMessage("Weight should be a positive number!");
         }
-        // if (item.expiry <= new Date((new Date()).getDate() - 1)) {
-        //     return setItemErrorMessage("The expiry date can't be in the past!");
-        // }
+        console.log(item.expiry);
+        console.log((new Date()));
+        if (item.expiry <= new Date((new Date()))) {
+             return setItemErrorMessage("The expiry date must be atleast tomorrow!");
+        }
         setItemErrorMessage("");
 
 
