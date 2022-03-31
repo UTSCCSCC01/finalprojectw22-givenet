@@ -8,6 +8,7 @@ import {
   NavItem,
 } from "react-bootstrap";
 import { TokenContext } from "../TokenContext";
+import NewPickup from "./NewPickup";
 
 type Pickup = {
   pickup_id: number;
@@ -38,9 +39,11 @@ const ViewMyPickups = () => {
   // This state will be used for storing data retrieved from request for all listings
   const [allPickups, setAllPickups] = useState<Pickup[]>([] as Pickup[]);
   const { token } = useContext(TokenContext);
+  const [isUser, setIsUser] = useState<Boolean>( true );
 
   // Makes requests on component load and stores in state ^
   useEffect(() => {
+    fetchCommonDonationItems();
     getPickups();
   }, []);
 
@@ -80,6 +83,21 @@ const ViewMyPickups = () => {
     setAllPickups(all_pickups);
   }
 
+  const fetchCommonDonationItems = async () => {
+    const response = await fetch("/account/commonDonations", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response.status);
+    if (response.status === 200) {
+      setIsUser(true)
+    } else if (response.status === 412) {
+      setIsUser(false)
+    } 
+  };
+
 
   async function setCompleted(id: number) {
     const response = await fetch("/pickup/completePickup", {
@@ -94,10 +112,14 @@ const ViewMyPickups = () => {
 
     getPickups();
   }
-  // If listings retrieved then render listings view
+
+
+  // If account is user type don't render create pickups
 
   return (
     <div className="container">
+      {isUser ? null : <NewPickup  setAllPickups={setAllPickups} />}
+      <h1 id="view-listings-title">In Progress</h1>
       <Accordion id="lv">
         {allPickups.map((pickup) => (
           <Accordion.Item eventKey={pickup.pickup_id.toString() || "0"}>
