@@ -9,6 +9,7 @@ import {
   getByUsername,
   getById as getAccountById,
   getCommonDonationItemsById,
+  getAllDonationItems,
 } from "../database/dal/account";
 import { getByAccId as getListingsByAccId } from "../database/dal/listing";
 import { AccDetailsInput } from "../database/models/AccountDetails";
@@ -104,8 +105,33 @@ module.exports = {
       res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
     }
   },
-  
 
+  getAllTheDonationItems: async (
+    req: express.Request,
+    res: express.Response
+  ) => {
+    const user: any = req.user;
+    let id;
+    if (user) {
+      id = Number(user.dataValues.acc_id);
+    } else {
+      return res.sendStatus(StatusCodes.FORBIDDEN);
+    }
+
+    try {
+      const account: AccountOutput = await getAccountById(id);
+      if (account.type != 1) {
+        return res.sendStatus(StatusCodes.PRECONDITION_FAILED);
+      }
+      const commonlyDonatedItems = await getAllDonationItems(id);
+      res.status(StatusCodes.OK);
+      res.json({ items: commonlyDonatedItems });
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  },
+  
 };
 
 const generateAccessToken = (user: AccountOutput) => {

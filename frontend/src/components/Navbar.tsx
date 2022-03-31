@@ -62,6 +62,11 @@ export default function Navigation() {
 								Past Pickup
 							</Link>
 						</Nav.Link>
+						<Nav.Link>
+							<Link to="/mydonations" style={style}>
+								My Donations
+							</Link>
+						</Nav.Link>
 					</Nav>
 					<Navbar.Text>
 						<Link to="/login" style={style}>

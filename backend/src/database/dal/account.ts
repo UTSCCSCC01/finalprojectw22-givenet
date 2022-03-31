@@ -68,4 +68,23 @@ export const getCommonDonationItemsById = async (id: number): Promise<nameAndCou
 	return results as nameAndCount[];
 }
 
+export const getAllDonationItems = async (id: number): Promise<nameAndCount[]> => {
+	/* Query that retrieves all donation items */
+	const [results, metadata] = await sequelizeConnection.query(`SELECT i.name, COUNT(i.name)
+													FROM
+															"Items" i JOIN "Listings" l ON i.listing_id = l.listing_id
+													WHERE
+															l.acc_id = ${id}
+													GROUP BY 
+															i.name
+													ORDER BY 
+															COUNT(i.name) DESC`);
+
+	if (!results) {
+		throw new Error("ERROR IN getCommonDonationItemsById");
+	}
+
+	return results as nameAndCount[];
+}
+
 
