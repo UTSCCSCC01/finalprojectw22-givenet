@@ -30,7 +30,7 @@ export default function MyDonations() {
     // for frequency selection
     const [frequency, setFrequency] = useState("");
     // The token of the logged in user for authentication
-    const { token } = useContext(TokenContext);
+    const token = localStorage.getItem("token");
     // Retrieve the items donated by this account.
     const fetchDonationItems = async () => {
         const response = await fetch("/account/allDonations", {

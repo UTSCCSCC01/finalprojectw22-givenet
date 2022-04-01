@@ -33,7 +33,7 @@ const ViewListings = (props: any) => {
     // This state will be used for storing data retrieved from request for all listings
     const [allListings, setAllListings] = useState<Listing[]>([] as Listing[]);
     const [tagNameMap, setTagNameMap] = useState({});
-    const {token} = useContext(TokenContext);
+    const token = localStorage.getItem("token");
     const {type} = props;
 
     function getBestTags(listing: Listing) {

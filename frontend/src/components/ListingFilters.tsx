@@ -35,7 +35,7 @@ const ListingFilters = (Props: any) => {
     const [tagNameMap, setTagNameMap] = useState({});
     const [searchState, setSearchState] = useState(0);
     const [filterState, setFilterState] = useState("");
-    const {token} = useContext(TokenContext);
+    const token = localStorage.getItem("token");
     const {isUserListings} = Props;
 
     function getBestTags(listing: Listing) {

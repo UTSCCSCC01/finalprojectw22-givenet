@@ -67,7 +67,7 @@ export default function Listing() {
 
     const [listings, setListings] = useState<Listing[]>([]);
 
-    const {token} = useContext(TokenContext);
+    const token = localStorage.getItem("token");
 
     const loadTags = async () => {
         const allItemsResponse = await fetch("/tag/all/", {

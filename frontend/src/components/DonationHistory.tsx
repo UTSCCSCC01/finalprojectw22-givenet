@@ -24,7 +24,7 @@ type Pickup = {
   cleanCreated: String;
 }
 export default function DonationHistory() {
-    const {token} = useContext(TokenContext);
+  const token = localStorage.getItem("token");
     const [pastPickups, setpastPickups] = useState<Pickup[]>([] as Pickup[]);
     const [isUser, setisUser] = useState<boolean>(false);
 

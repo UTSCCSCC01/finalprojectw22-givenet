@@ -56,7 +56,7 @@ export default function Navigation() {
 							<NavDropdown.Item href="/viewlistings">All Listings</NavDropdown.Item>
 							<NavDropdown.Item href="/profile/listings">Create Listings</NavDropdown.Item>
 							<NavDropdown.Item href="/mylistings">My Listings</NavDropdown.Item>
-							<NavDropdown.Item href="/listingsfilters">Search Listings</NavDropdown.Item>
+							<NavDropdown.Item href="/listingfilters">Search Listings</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
 					<Navbar.Text>
