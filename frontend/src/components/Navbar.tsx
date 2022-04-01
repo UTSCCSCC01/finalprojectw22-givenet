@@ -58,6 +58,11 @@ export default function Navigation() {
 							<NavDropdown.Item href="/mylistings">My Listings</NavDropdown.Item>
 							<NavDropdown.Item href="/listingfilters">Search Listings</NavDropdown.Item>
 						</NavDropdown>
+           <Nav.Link>
+							<Link to="/wanted" style={style}>
+								Charity Wants
+							</Link>
+						</Nav.Link>
 					</Nav>
 					<Navbar.Text>
 						{getAuthState()}
