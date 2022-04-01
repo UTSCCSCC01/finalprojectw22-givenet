@@ -204,6 +204,8 @@ module.exports = {
       return res.send(403);
     }
 
+    console.log("user id" + id);
+
     let user_listings = await getByAccId(id);
     let type = Boolean(req.params.type);
     let returnListings = [];
