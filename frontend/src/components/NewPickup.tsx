@@ -3,7 +3,9 @@ import { Alert, Button, Form } from "react-bootstrap";
 import { TokenContext } from "../TokenContext";
 import { useNavigate } from "react-router-dom";
 
-type Props = {};
+// interface Props {
+//   setAllPickups: any
+// }
 
 type form = {
   listing_id: number;
@@ -12,7 +14,7 @@ type form = {
   time: any;
 };
 
-export default function LoginForm({}: Props) {
+export default function LoginForm({setAllPickups}: {setAllPickups: any}) {
   // Login form state
   const [formState, setFormState] = useState<form>({
     listing_id: 0,
@@ -50,9 +52,49 @@ export default function LoginForm({}: Props) {
     if (response.status === 401) {
      console.log("401");
     }
+
+    getPickups();
   };
 
-  //Page and css displayer below 
+  // Populate pickups data
+  async function getPickups() {
+    const response = await fetch("/pickup", {
+      method: "GET",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+
+    let all_pickups_resp = await response.json();
+    let all_pickups = [];
+
+    for (let pickup of all_pickups_resp) {
+      // get data of charity
+      let org_info = await fetch(`/account/profile/${pickup.org_id}`, {method: "GET"});
+      let result = await org_info.json();
+      result = JSON.parse(result);
+
+      let date = new Date(pickup.time.toString());
+      pickup.time = date.toLocaleDateString();
+
+      date = new Date(pickup.createdAt.toString());
+      pickup.createdAt = date.toLocaleDateString();
+      pickup.org_name = result.name;
+      pickup.org_phone_number = result.phone;
+
+      let donor_info = await fetch(`/account/profile/${pickup.donor_id}`, {method: "GET"});
+      result = await donor_info.json();
+      result = JSON.parse(result);
+      pickup.hours = result.operating_hours;
+
+      all_pickups.push(pickup)
+
+    }
+    // Update state to trigger re-render
+    setAllPickups(all_pickups);
+
+
+  }
   return (
     <div className="container">
       <h1 className="pt-5">Create Pickup</h1>

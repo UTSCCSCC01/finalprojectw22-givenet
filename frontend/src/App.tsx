@@ -16,8 +16,7 @@ import ListingFiltersPage from "./pages/ListingFiltersPage";
 import CharityWantPage from "./pages/CharityWantPage"
 
 
-import ViewPickupDemo from "./pages/ViewPickupDemo";
-import CreatePickupDemo from "./pages/CreatePickupDemo";
+import Pickup from "./pages/Pickup";
 
 import PastPickups from "./pages/PastPickupPage";
 import MyDonationsPage from "./pages/MyDonationsPage";
@@ -47,8 +46,7 @@ export default function App() {
 					<Route path="/tagging" element={<TaggingPage />} />
 					<Route path="/viewlistings" element={<ListingsPage />} />
 					<Route path="/wanted" element={<CharityWantPage />} />
-					<Route path="/pickupcreatedemo" element={<CreatePickupDemo />} />
-					<Route path="/pickupviewdemo" element={<ViewPickupDemo />} />
+					<Route path="/pickups" element={<Pickup />} />
 					<Route path="/mylistings" element={<MyListingsPage />} />
 					<Route path="/listingfilters" element={<ListingFiltersPage />} />
 					<Route path="/pickups/past" element={<PastPickups />} />

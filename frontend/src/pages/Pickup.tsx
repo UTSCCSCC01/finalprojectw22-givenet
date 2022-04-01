@@ -1,15 +1,17 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Navbar from "../components/Navbar";
 import ViewMyPickups from "../components/ViewMyPickups";
+import NewPickup from "../components/NewPickup";
 
-const ViewPickupDemo = () => {
+
+const Pickup = () => {
+
   return (
     <div id="subrootdiv">
       <Navbar />
-      <h1 id="view-listings-title">MY PICKUPS</h1>
       <ViewMyPickups />
     </div>
   );
 };
 
-export default ViewPickupDemo;
+export default Pickup;
