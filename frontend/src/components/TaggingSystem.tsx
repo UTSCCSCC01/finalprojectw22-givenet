@@ -13,8 +13,6 @@ import {
 	Row,
 } from "react-bootstrap";
 
-/* Helpers for CRUD operations */
-
 export default function TaggingSystem() {
 	// State for all the tags/categories etc.
 	const [tagItems, setTagItems] = useState<TagOutput[]>([]);
@@ -26,6 +24,7 @@ export default function TaggingSystem() {
 	const [categoryNameMap, setCategoryNameMap] = useState({});
 	const { token } = useContext(TokenContext);
 
+	// Retrieves all item tags from the database
 	async function getAllItemTags() {
 		try {
 			const allItemsResponse = await fetch("/tag/all/", {
@@ -45,6 +44,7 @@ export default function TaggingSystem() {
 			return [];
 		}
 	}
+	// Adds the given item tag info to the database
 	async function addItemTag(name: string, category_id: number) {
 		try {
 			const newItem = {
@@ -69,6 +69,7 @@ export default function TaggingSystem() {
 			return {};
 		}
 	}
+	// Deletes the tag with the given tag id from the database
 	async function deleteItemTag(tag_id: number) {
 		try {
 			const deleteItemResponse = await fetch("/tag/" + String(tag_id), {
@@ -81,6 +82,7 @@ export default function TaggingSystem() {
 			console.log(error);
 		}
 	}
+	// Gets all category names
 	async function getAllCategories() {
 		try {
 			const allCategoriesResponse = await fetch("/category/all/", {
@@ -109,6 +111,7 @@ export default function TaggingSystem() {
 			return [];
 		}
 	}
+	// Adds a new categroy with the given information
 	async function addCategory(name: string, desc: string) {
 		try {
 			const newCategory = {
@@ -133,6 +136,7 @@ export default function TaggingSystem() {
 			return {};
 		}
 	}
+	// Deletes the category with the given id
 	async function deleteCategory(category_id: number) {
 		try {
 			await fetch(
