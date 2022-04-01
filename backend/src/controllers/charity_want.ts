@@ -55,6 +55,7 @@ module.exports = {
             res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
         }
     },
+    //Variation of get, grabs all charities that want an item.
     getByItem: async (req: express.Request, res: express.Response)=>{
         const itemId = +req.params.id;
         try{
@@ -66,6 +67,7 @@ module.exports = {
             res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
         }
     },
+    //Variation of get, grabs all items that a donation center wants
     getByAcc: async (req: express.Request, res: express.Response) =>{
         try{
             const newInput = req.body;

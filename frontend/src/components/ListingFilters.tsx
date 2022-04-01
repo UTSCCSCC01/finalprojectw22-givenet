@@ -35,7 +35,7 @@ const ListingFilters = (Props: any) => {
     const [tagNameMap, setTagNameMap] = useState({});
     const [searchState, setSearchState] = useState(0);
     const [filterState, setFilterState] = useState("");
-    const {token} = useContext(TokenContext);
+    const token = localStorage.getItem("token");
     const {isUserListings} = Props;
 
     function getBestTags(listing: Listing) {
@@ -129,15 +129,21 @@ const ListingFilters = (Props: any) => {
 
             let listings = await response.json();
             var present = false;
+            
             for (var i=0; i < listings.length; i++) {
                 present = false;
-                for (var j=0; j < listings[i].items.length; j++) {
-                    if (listings[i].items[j].name.toLowerCase() == filterState.toLowerCase())
+                let tags = getBestTags(listings[i]);
+                tags = tags.slice(1, -1);
+                let tagList = tags.split(",");
+                for (var j=0; j < tagList.length; j++) {
+                    if (tagList[j].trim().toLowerCase().includes(filterState.toLowerCase()))
                         present = true;
                 }
                 if (!present)
                     delete listings[i];
                 }
+
+
             // Need to query user data: wait for backend overhaul next sprint
             setListings(listings);
         }

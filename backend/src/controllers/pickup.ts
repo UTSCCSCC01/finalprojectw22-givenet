@@ -10,7 +10,9 @@ import {
   create,
   getById,
   deleteById,
-  getAll
+  getAll,
+  getCompletedPickupsFor,
+  completeById
 } from "../database/dal/pickup";
 
 
@@ -37,7 +39,6 @@ module.exports = {
 
     // Create a row on on the pickup relation
     const pickup = { ...req.body, org_id: org_id, donor_id: donor_id };
-    console.log(pickup);
     let new_pickup = await create(pickup);
     // DEBUGGING STUFF
     // .then(response => {console.log(response)}).catch(error => console.log(error))
@@ -50,6 +51,7 @@ module.exports = {
     return res.send(200);
   },
 
+  //Get all pickups that pertain to a user.
   get: async (req: express.Request, res: express.Response) => {
     const user: any = req.user;
     let user_id;
@@ -62,26 +64,68 @@ module.exports = {
     let pickups = [];
     let allPickups = await getAll();
     for (let pickup of allPickups) {
-        console.log(pickup.donor_id);
-        console.log(user_id);
         if (pickup.donor_id == user_id || pickup.org_id == user_id) {
+          if (pickup.completed == false) {
             let temp = {
-                pickup_id: pickup.pickup_id,
-                listing_id: pickup.listing_id,
-                donor_id: pickup.donor_id,
-                org_id: pickup.org_id,
-                time: pickup.time,
-                completed: pickup.completed,
-                notes: pickup.notes,
-                createdAt: pickup.createdAt,
-                updatedAt: pickup.updatedAt
-            }
-
-            pickups.push(temp);
+              pickup_id: pickup.pickup_id,
+              listing_id: pickup.listing_id,
+              donor_id: pickup.donor_id,
+              org_id: pickup.org_id,
+              time: pickup.time,
+              completed: pickup.completed,
+              notes: pickup.notes,
+              createdAt: pickup.createdAt,
+              updatedAt: pickup.updatedAt
+          }
+          pickups.push(temp);
+          }
         }
     }
 
     return res.json(pickups);
 
-  }
+  },
+  //Mark a pickup as completed.
+  completePickups: async (req: express.Request, res: express.Response) => {
+    const user: any = req.user;
+    let user_id;
+    if (user) {
+      user_id = Number(user.dataValues.acc_id);
+    } else {
+      return res.send(403);
+    }
+
+    let pickups = [];
+    //Find the pickup and mark it as completed.
+    let allPickups = await getCompletedPickupsFor(user_id, user.dataValues.type);
+    for (let pickup of allPickups) {
+      let temp = {
+        pickup_id: pickup.pickup_id,
+        listing_id: pickup.listing_id,
+        donor_id: pickup.donor_id,
+        org_id: pickup.org_id,
+        time: pickup.time,
+        completed: pickup.completed,
+        notes: pickup.notes,
+        createdAt: pickup.createdAt,
+        updatedAt: pickup.updatedAt
+      }
+      pickups.push(temp);
+    }
+
+    return res.json(pickups);
+  },
+
+  //Mark a pickupid as completed.
+  setPickupCompleted: async (req: express.Request, res: express.Response) => {
+    let pickup_id:number = req.body.id;
+
+    
+    if (pickup_id) {
+      res.send(200);
+      return await completeById(pickup_id);
+    }
+    res.send(404);
+    return false;
+  },
 };

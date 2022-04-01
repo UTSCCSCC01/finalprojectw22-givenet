@@ -48,7 +48,8 @@ export default function Profile() {
     nameAndCount[]
   >([]);
   // The token of the logged in user for authentication
-  const { token } = useContext(TokenContext);
+  const token = localStorage.getItem("token");
+  console.log(token);
 
   // Fill the profileState form
   const fetchUserData = async () => {
@@ -62,9 +63,6 @@ export default function Profile() {
     if (response.status === 200) {
       let result = await response.json();
       result = JSON.parse(result);
-      console.log(result);
-      console.log(typeof result);
-      console.log(result.name);
       const p: profile = {
         name: result.name,
         location: result.location,

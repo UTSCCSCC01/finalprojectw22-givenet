@@ -1,13 +1,13 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import Profile from "../components/Profile";
+import MyDonations from "../components/MyDonations";
 type Props = {};
 
-export default function ProfilePage({}: Props) {
+export default function MyDonationsPage({}: Props) {
   return (
     <div>
       <Navbar />
-      <Profile />
+      <MyDonations />
     </div>
   );
 }
