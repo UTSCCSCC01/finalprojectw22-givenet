@@ -24,14 +24,17 @@ type Pickup = {
   cleanCreated: String;
 }
 export default function DonationHistory() {
-    const {token} = useContext(TokenContext);
+  const token = localStorage.getItem("token");
     const [pastPickups, setpastPickups] = useState<Pickup[]>([] as Pickup[]);
     const [isUser, setisUser] = useState<boolean>(false);
 
+    //Get past donations
     useEffect(() => {
         RetrievePastDonations();
       }, []);
 
+    
+    //Get the donations for the user and set data.
     async function RetrievePastDonations() {
         const response = await fetch("/pickup/pastPickups/", {
             method: "GET",
@@ -52,6 +55,8 @@ export default function DonationHistory() {
         return;
     }
 
+
+    //Build the css structure
     return(
         <div className="container">
             {pastPickups.length > 0 ? (

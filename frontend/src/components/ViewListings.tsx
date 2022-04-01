@@ -33,7 +33,7 @@ const ViewListings = (props: any) => {
     // This state will be used for storing data retrieved from request for all listings
     const [allListings, setAllListings] = useState<Listing[]>([] as Listing[]);
     const [tagNameMap, setTagNameMap] = useState({});
-    const {token} = useContext(TokenContext);
+    const token = localStorage.getItem("token");
     const {type} = props;
 
     function getBestTags(listing: Listing) {
@@ -65,6 +65,8 @@ const ViewListings = (props: any) => {
         return `[ ${tag_weights_string} ]`;
     }
 
+
+    //Fetch all tags so we can map the ids for explanatory tags over base ids
     async function getAllTags() {
         try {
             const allTagsResponse = await fetch("/tag/all/", {
@@ -99,7 +101,9 @@ const ViewListings = (props: any) => {
 
         async function getListings() {
             let response;
-            console.log(type);
+            //Take in a prop from the page and fetch 3 variants of information from the database.
+            //1 is unclaimed, 2 is finished, 3 is claimed but not finished.
+
             if (type == 1) {
                 response = await fetch("/listing/completed/false", {
                     method: "GET",
@@ -114,22 +118,29 @@ const ViewListings = (props: any) => {
                         authorization: `Bearer ${token}`,
                     },
                 });
-            } else {
+            } else if (type == 3) {
                 response = await fetch("listing/unclaimed/", {
                     method: "GET",
                     headers: {
                         authorization: `Bearer ${token}`,
                     },
                 });
-            };
+            } else {
+                response = await fetch("listing/all/", {
+                    method: "GET",
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                });
+            }
 
             let all_listings = await response.json();
             // Need to query user data: wait for backend overhaul next sprint
             setAllListings(all_listings);
         }
 
-        getListings().then(() => console.log(""));
-        getAllTags().then(() => console.log(""));
+        getListings().then(() => console.log("listings loaded"));
+        getAllTags().then(() => console.log("tags loaded"));
     }, [])
 
     // If listings retrieved then render listings view

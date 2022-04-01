@@ -22,7 +22,7 @@ export default function LoginForm({setAllPickups}: {setAllPickups: any}) {
     completed: false,
     time: 0
   });
-  const { token } = useContext(TokenContext);
+  const token = localStorage.getItem("token");
   // Error message for form errors
   const [errorState, setErrorState] = useState("");
 
@@ -95,7 +95,6 @@ export default function LoginForm({setAllPickups}: {setAllPickups: any}) {
 
 
   }
-
   return (
     <div className="container">
       <h1 className="pt-5">Create Pickup</h1>

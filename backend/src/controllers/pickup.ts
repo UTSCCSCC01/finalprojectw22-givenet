@@ -51,6 +51,7 @@ module.exports = {
     return res.send(200);
   },
 
+  //Get all pickups that pertain to a user.
   get: async (req: express.Request, res: express.Response) => {
     const user: any = req.user;
     let user_id;
@@ -84,6 +85,7 @@ module.exports = {
     return res.json(pickups);
 
   },
+  //Mark a pickup as completed.
   completePickups: async (req: express.Request, res: express.Response) => {
     const user: any = req.user;
     let user_id;
@@ -94,6 +96,7 @@ module.exports = {
     }
 
     let pickups = [];
+    //Find the pickup and mark it as completed.
     let allPickups = await getCompletedPickupsFor(user_id, user.dataValues.type);
     for (let pickup of allPickups) {
       let temp = {
@@ -113,6 +116,7 @@ module.exports = {
     return res.json(pickups);
   },
 
+  //Mark a pickupid as completed.
   setPickupCompleted: async (req: express.Request, res: express.Response) => {
     let pickup_id:number = req.body.id;
 

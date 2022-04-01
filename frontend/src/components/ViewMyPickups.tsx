@@ -28,9 +28,9 @@ type Pickup = {
 const ViewMyPickups = () => {
   // This state will be used for storing data retrieved from request for all listings
   const [allPickups, setAllPickups] = useState<Pickup[]>([] as Pickup[]);
-  const { token } = useContext(TokenContext);
   // Used to conditionally render account type: false = render create pickup section
   const [isUser, setIsUser] = useState<Boolean>( true );
+  const token = localStorage.getItem("token");
 
   // Makes requests on component load and stores in state ^
   useEffect(() => {

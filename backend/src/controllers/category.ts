@@ -16,6 +16,7 @@ import {
 } from "../database/dal/category";
 import { deleteByCategoryId } from "../database/dal/tag";
 
+//Default functions need no explaining
 module.exports = {
   post: async (req: express.Request, res: express.Response) => {
     try {

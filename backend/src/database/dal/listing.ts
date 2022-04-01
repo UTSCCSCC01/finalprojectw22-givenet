@@ -49,9 +49,10 @@ export const deleteById = async (id: number) => {
 export const getAll = async (): Promise<ListingOutput[]> => {
 	const listings = await Listing.findAll();
 
+	console.log("im retriving all");
 	if (!listings) {
 		throw new Error("ERROR IN FINDALL");
 	}
-
+	console.log("im returning all");
 	return listings;
 };

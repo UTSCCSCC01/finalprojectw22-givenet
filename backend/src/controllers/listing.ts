@@ -92,8 +92,9 @@ module.exports = {
     }
   },
 
-  //GetAllVariation returns only listings that have not been grabbed.
+  //A variation of GetAll returns only listings that have not been claimed yet.
   getAllValid: async (req: express.Request, res: express.Response) => {
+    //Get user listings
     let allListings = await getAll();
 
     let returnListings = [];
@@ -102,6 +103,7 @@ module.exports = {
       return res.send(404);
     }
 
+    //Check if listings is in pickup, if it is its already claimed so dont return it.
     for (let listing of allListings) {
       let exists = await inPickup(listing.listing_id);
       if (!exists) {
@@ -122,6 +124,7 @@ module.exports = {
     return res.json(returnListings);
   },
 
+  //A variation of GetAll returns only listings that have been fully completed FOR A USER
   getCompleted: async (req: express.Request, res: express.Response) => {
     const user: any = req.user;
     let id;
@@ -130,8 +133,9 @@ module.exports = {
       id = Number(user.dataValues.acc_id);
     } else {
       return res.send(403);
-    }
+    } 
 
+    //Get user listings
     let user_listings = await getByAccId(id);
     let type = Boolean(req.params.type);
     let returnListings = [];
@@ -140,6 +144,7 @@ module.exports = {
       return res.send(404);
     }
 
+    //Return only listings that are in pickup and marked as completed in the database
     for (let listing of user_listings) {
       let exists = await inPickupCompleted(listing.listing_id, type);
       if (exists) {
@@ -160,6 +165,7 @@ module.exports = {
     return res.json(returnListings);
   },
 
+  //Get all listings in the database.
   getAll: async (req: express.Request, res: express.Response) => {
     let allListings = await getAll();
 
@@ -169,6 +175,7 @@ module.exports = {
       return res.send(404);
     }
 
+    //Format listings and return
     for (let listing of allListings) {
       let ret = {
         listing_id: listing.listing_id,
@@ -186,6 +193,7 @@ module.exports = {
     return res.json(returnListings);
   },
 
+  //A variation of GetAll returns only listings have not been claimed yet.
   getUnclaimed: async (req: express.Request, res: express.Response) => {
     const user: any = req.user;
     let id;
@@ -195,6 +203,8 @@ module.exports = {
     } else {
       return res.send(403);
     }
+
+    console.log("user id" + id);
 
     let user_listings = await getByAccId(id);
     let type = Boolean(req.params.type);
@@ -206,7 +216,6 @@ module.exports = {
 
     for (let listing of user_listings) {
       let exists = await inPickup(listing.listing_id);
-      console.log(exists);
       if (!exists) {
         let ret = {
           listing_id: listing.listing_id,
