@@ -48,11 +48,10 @@ export default function Navigation() {
 								Tags & Categories
 							</Link>
 						</Nav.Link>
-						<Nav.Link>
-              <Link to="/pickups" style={style}>
-                Pickups
-              </Link>
-            </Nav.Link>
+					<NavDropdown title="Pickups" className="me-auto">
+							<NavDropdown.Item href="/pickups">Pickups</NavDropdown.Item>
+							<NavDropdown.Item href="/pickups/past">Past Pickups</NavDropdown.Item>
+						</NavDropdown>
 						<NavDropdown title="Listings" className="me-auto">
 							<NavDropdown.Item href="/viewlistings">All Listings</NavDropdown.Item>
 							<NavDropdown.Item href="/profile/listings">Create Listings</NavDropdown.Item>
