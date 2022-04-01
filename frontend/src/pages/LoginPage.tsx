@@ -3,7 +3,6 @@ import LoginForm from "../components/LoginForm";
 import Navbar from "../components/Navbar";
 import { TokenContext } from "../TokenContext";
 import { useNavigate } from "react-router-dom";
-import MapContainer from "../components/Map";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -18,7 +17,6 @@ export default function LoginPage() {
     <div id="subrootdiv">
       <Navbar />
       <LoginForm />
-      <MapContainer />
     </div>
   );
 }
