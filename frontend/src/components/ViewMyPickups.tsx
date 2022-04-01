@@ -25,20 +25,11 @@ type Pickup = {
   hours: string;
 };
 
-type profile = {
-    [id: string]: string;
-    name: string;
-    location: string;
-    operating_hours: string;
-    phone: string;
-    email: string;
-  };
-
-
 const ViewMyPickups = () => {
   // This state will be used for storing data retrieved from request for all listings
   const [allPickups, setAllPickups] = useState<Pickup[]>([] as Pickup[]);
   const { token } = useContext(TokenContext);
+  // Used to conditionally render account type: false = render create pickup section
   const [isUser, setIsUser] = useState<Boolean>( true );
 
   // Makes requests on component load and stores in state ^
@@ -47,6 +38,7 @@ const ViewMyPickups = () => {
     getPickups();
   }, []);
 
+  // Populate pickups data
   async function getPickups() {
     const response = await fetch("/pickup", {
       method: "GET",
@@ -83,6 +75,10 @@ const ViewMyPickups = () => {
     setAllPickups(all_pickups);
   }
 
+  // This request is a bit overkill as of now: theres no dedicated route
+  // for getting account type at the moment. Could add if other stuff uses?
+  // TODO: Consider transferring common donation items to user's
+  // pickups page?
   const fetchCommonDonationItems = async () => {
     const response = await fetch("/account/commonDonations", {
       method: "GET",
@@ -98,7 +94,8 @@ const ViewMyPickups = () => {
     } 
   };
 
-
+  // Using route intended for something else to get account type
+  // ... this is a bit bad
   async function setCompleted(id: number) {
     const response = await fetch("/pickup/completePickup", {
       method: "POST",
@@ -114,8 +111,7 @@ const ViewMyPickups = () => {
   }
 
 
-  // If account is user type don't render create pickups
-
+  // If account is user type don't render create pickups: just show in progress pickups from them
   return (
     <div className="container">
       {isUser ? null : <NewPickup  setAllPickups={setAllPickups} />}

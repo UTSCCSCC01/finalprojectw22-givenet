@@ -56,6 +56,7 @@ export default function LoginForm({setAllPickups}: {setAllPickups: any}) {
     getPickups();
   };
 
+  // Populate pickups data
   async function getPickups() {
     const response = await fetch("/pickup", {
       method: "GET",
@@ -89,11 +90,11 @@ export default function LoginForm({setAllPickups}: {setAllPickups: any}) {
       all_pickups.push(pickup)
 
     }
+    // Update state to trigger re-render
     setAllPickups(all_pickups);
 
 
   }
-
 
   return (
     <div className="container">
