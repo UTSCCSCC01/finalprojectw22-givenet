@@ -282,11 +282,42 @@ export default function TaggingSystem() {
 					</Col>
 				</Row>
 			</Container>
-
+							
 			<Container>
 				<Row>
-					{tagItems.map((tag: TagOutput) => (
-						<Col>
+					{tagItems.map((tag: TagOutput, i) => (
+						i % 5 == 0 ?		
+							<> 	
+								<div className="w-100"></div>
+								<Col>
+								<Card
+									style={{ width: "100%" }}
+									border="dark"
+									className="mt-1 mb-1">
+									<Card.Body>
+										<Card.Header className="mb-2 bg-dark text-light">
+											Tag
+										</Card.Header>
+										<Card.Title> {tag.name} </Card.Title>
+										<Card.Subtitle>
+											{
+											// @ts-ignore
+											categoryNameMap[tag.category_id]
+										}{" "}
+										</Card.Subtitle>
+
+										<CloseButton
+											className="mt-1 ml-1"
+											onClick={async () => {
+												await deleteTag(tag.tag_id);
+											}}
+										/>
+									</Card.Body>
+								</Card>
+								</Col>
+							</>		
+						:
+							<Col>
 							<Card
 								style={{ width: "100%" }}
 								border="dark"
@@ -298,17 +329,12 @@ export default function TaggingSystem() {
 									</Card.Header>
 									<Card.Title> {tag.name} </Card.Title>
 									<Card.Subtitle>
-										Category : {
+										{
 										// @ts-ignore
 										categoryNameMap[tag.category_id]
 									}{" "}
 									</Card.Subtitle>
-									<Card.Text>
-										Created: {tag.createdAt}{" "}
-									</Card.Text>
-									<Card.Text>
-										Updated: {tag.updatedAt}{" "}
-									</Card.Text>
+
 									<CloseButton
 										className="mt-1 ml-1"
 										onClick={async () => {
@@ -318,11 +344,44 @@ export default function TaggingSystem() {
 								</Card.Body>
 							</Card>
 						</Col>
+					
 					))}
-				</Row>
+					</Row>
+
 
 				<Row>
-					{tagCategories.map((category: CategoryOutput) => (
+					{tagCategories.map((category: CategoryOutput, i) => (
+						i % 3 == 0 ?
+						<> 	
+								<div className="w-100"></div>
+							<Col>
+								<Card
+									style={{ width: "100%" }}
+									border="dark"
+									className="mt-1 mb-1"
+								>
+									<Card.Body>
+										<Card.Header className="mb-2 bg-info">
+											Category
+										</Card.Header>
+										<Card.Title>
+											{" "}
+											{category.name}{" "}
+										</Card.Title>
+										<Card.Text> {category.desc} </Card.Text>
+										<CloseButton
+											className="mt-1 ml-1"
+											onClick={ async () => {
+												await deleteCategoryCascade(
+													category.category_id
+												);
+											}}
+										/>
+									</Card.Body>
+								</Card>
+							</Col>
+						</>
+						:
 						<Col>
 							<Card
 								style={{ width: "100%" }}
@@ -337,9 +396,6 @@ export default function TaggingSystem() {
 										{" "}
 										{category.name}{" "}
 									</Card.Title>
-									<Card.Subtitle>
-										ID: {category.category_id}{" "}
-									</Card.Subtitle>
 									<Card.Text> {category.desc} </Card.Text>
 									<CloseButton
 										className="mt-1 ml-1"

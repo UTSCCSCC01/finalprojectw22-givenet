@@ -6,8 +6,9 @@ import ViewListings from '../components/ViewListings';
 
 const ListingsPage = () => {
   return (
+    <div>
+      <Navbar />
     <div className="container">
-        <Navbar />
         <h1 id="view-listings-title">ALL ACTIVE LISTINGS</h1>
         <ViewListings isUserListings={false}/>
         <Container>
@@ -20,6 +21,8 @@ const ListingsPage = () => {
         </Container>
         <br /><br /><br /><br />
     </div>
+    </div>
+    
 
   )
 }
